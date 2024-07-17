@@ -24,7 +24,7 @@ export default function MiieLogin() {
       const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-          const response = await fetch('login', {
+          const response = await fetch('/login-endpoint', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
