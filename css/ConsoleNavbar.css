@@ -1,0 +1,60 @@
+/* styles/global.css */
+
+.navbar {
+    background: #5255FC;
+    border-bottom: 1px solid #6e6e6e;
+    border-top: 1px solid #6e6e6e;
+    padding: 10px;
+    height:60px;
+    display: flex; 
+    align-items: center; 
+  }
+  
+  .menu {
+    list-style-type: none;
+    margin: 0;
+    margin-left:12px;
+    padding: 0;
+    display: flex; 
+  }
+
+  .activeCol{
+    color: rgb(203 213 225);
+  }
+
+  .hovCol span button:hover{
+    color: #fffd78;
+  }
+
+  .hovColSub:hover{
+    color: #fffd78;
+  }
+  
+  .menu-item {
+    display: inline-block;
+    margin-right: 20px;
+    position: relative;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .submenu {
+    display: none;
+    position: absolute;
+    background: #5255FC;
+    padding: 10px;
+    border-radius: 5px;
+    width: 200px; 
+    left: 0; 
+  }
+  
+  .menu-item:hover .submenu {
+    display: block;
+  }
+  
+  .submenu-item {
+    margin-bottom: 5px;
+  }
+  
+ 
+  
