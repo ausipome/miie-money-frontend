@@ -1,7 +1,8 @@
 'use client'
 
+import Link from 'next/link';
 import React, { useState } from 'react';
-import useForm from '../hooks/useForm';
+import useForm from '../../hooks/useForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
@@ -85,8 +86,8 @@ export default function MiieLogin() {
                 </div>
 
                 <button type="submit" className="stdButton">Login</button>
-            <h3 className='text-center my-6'>Forgot your Password?</h3>
-            <h3 className='text-center my-6 text-[#5752FC]'><span className='text-slate-400'>Don't have an account? </span>Sign up here!</h3>
+                <Link href="/forgotpassword"><h3 className='text-center my-6'>Forgot your Password?</h3></Link>
+            <h3 className='text-center my-6 text-[#5752FC]'><span className='text-slate-400'>Don't have an account? </span><Link href="/signup">Sign up here!</Link></h3>
             </div>
             </form>
             </div>

@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  font-family: 'Nunito', sans-serif;
+  background-color: #000000;
+}
+
 /* Standard button */
 .stdButton{
   background: linear-gradient(to right, #5752FC, #C91AFE);
@@ -65,9 +70,5 @@
 
 
 .headerStyle {
-  width: 100%;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  background-color: rgba(232, 246, 254, 0.787);
+  background-color: rgba(147, 181, 207, 0.787);
 };

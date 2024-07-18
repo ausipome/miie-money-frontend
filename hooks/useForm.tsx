@@ -1,7 +1,7 @@
 import { useState, ChangeEvent } from 'react';
 
 interface FormValues {
-  [key: string]: string | number | boolean;
+  [key: string]: string | number | readonly string[] | undefined
 }
 
 type FormUpdater = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
