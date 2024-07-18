@@ -21,11 +21,34 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={roboto.className}>
-      <header className="headerStyle border-slate-400 border-b-1 border-solid">
-      <div className="ml-4">
-        <Image src="/icon_01_background.png" alt="Miie Money logo which is a pink and blue smile formed in the shape of an M" width={60} height={60} />
+    
+      <nav className="headerStyle p-4">
+    <div className="w-full mx-auto flex justify-between items-center">
+      {/* Left side */}
+      <div className="flex items-center">
+        <div className="flex-shrink-0">
+        <Image src="/miie-money-side.png" 
+        alt="Miie Money logo which is a pink and blue smile formed in the shape of an M" 
+        width={200}
+        height={50} 
+        layout="fixed" />
+        </div>
       </div>
-    </header>
+      
+      {/* Middle (centered) */}
+      <div className="flex flex-grow justify-center">
+        <div className="flex-shrink-0">
+    
+        </div>
+      </div>
+      
+      {/* Right side (optional) */}
+      <div className="flex items-center">
+        {/* Your right side content here */}
+      </div>
+    </div>
+  </nav>
+
         {children}
         </body>
     </html>
