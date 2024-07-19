@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import Image from 'next/image';
 import './globals.css';
+import { config } from '@fortawesome/fontawesome-svg-core'
+import '@fortawesome/fontawesome-svg-core/styles.css'
+config.autoAddCss = false
 
 const roboto = Roboto({
   weight: '400',
@@ -21,7 +24,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={roboto.className}>
-    
       <nav className="headerStyle p-4">
     <div className="w-full mx-auto flex justify-between items-center">
       {/* Left side */}
