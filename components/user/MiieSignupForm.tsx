@@ -4,8 +4,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import useForm from '../../hooks/useForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-
+import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons'
 export default function MiieSignupForm() {
 
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -15,16 +14,16 @@ export default function MiieSignupForm() {
     };
 
     const { values, handleChange } = useForm({
-        firstName: '',
-        surname: '',
+        fullName: '',
         email: '',
         password: '',
+        country: '',
       });
     
       const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-          const response = await fetch('post-job', {
+          const response = await fetch('signup-endpoint', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -51,25 +50,13 @@ export default function MiieSignupForm() {
 
                 <div className='text-left'>
 
-                <label htmlFor="firstName" className="block text-gray-900 text-sm">First Name</label>
+                <label htmlFor="fullName" className="block text-gray-900 text-sm">Full Name</label>
                 <input
                     type="text"
-                    id="firstName"
-                    name="firstName"
-                    placeholder='First Name'
-                    value={values.firstName}
-                    onChange={handleChange}
-                    className="stdInput"
-                    required
-                />
-
-                <label htmlFor="surname" className="block text-gray-900 text-sm">Surname</label>
-                <input
-                    type="text"
-                    id="surname"
-                    name="surname"
-                    placeholder='Surname'
-                    value={values.surname}
+                    id="fullName"
+                    name="fullName"
+                    placeholder='Full Name'
+                    value={values.fullName}
                     onChange={handleChange}
                     className="stdInput"
                     required
@@ -114,7 +101,7 @@ export default function MiieSignupForm() {
                 className="toggle-password"
                 onClick={togglePasswordVisibility}
                 >
-                    <FontAwesomeIcon icon={passwordVisible ? faEyeSlash : faEye} />
+                {passwordVisible ? <FontAwesomeIcon icon={byPrefixAndName.fal['eye-slash']} /> : <FontAwesomeIcon icon={byPrefixAndName.fal['eye']} /> }
                 </span>
                 </div>
                 </div>

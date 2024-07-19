@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import useForm from '../../hooks/useForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons'
 
 
 export default function MiieLogin() {
@@ -80,7 +80,7 @@ export default function MiieLogin() {
                 className="toggle-password"
                 onClick={togglePasswordVisibility}
                 >
-                    <FontAwesomeIcon icon={passwordVisible ? faEyeSlash : faEye} />
+                    {passwordVisible ? <FontAwesomeIcon icon={byPrefixAndName.fal['eye-slash']} /> : <FontAwesomeIcon icon={byPrefixAndName.fal['eye']} /> }
                 </span>
                 </div>
                 </div>
