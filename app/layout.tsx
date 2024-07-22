@@ -1,4 +1,4 @@
-import { AuthProvider } from '../context/AuthContext';
+import { AuthProvider } from '../hooks/useAuth';
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import Image from 'next/image';

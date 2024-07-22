@@ -1,13 +1,17 @@
-//test secure page
+// pages/dashboard.tsx
 
-import ProtectedRoute from '../../components/ProtectedRoute';
+import React from 'react';
+import PrivateRoute from '../../components/PrivateRoute';
 
-const SecurePage = () => {
-  return (
-    <ProtectedRoute>
-      <div>Only logged-in users can see this page.</div>
-    </ProtectedRoute>
-  );
+const Dashboard = () => {
+    return (
+        <PrivateRoute>
+            <div>
+                <h1>Dashboard</h1>
+                <p>Welcome to the dashboard!</p>
+            </div>
+        </PrivateRoute>
+    );
 };
 
-export default SecurePage;
+export default Dashboard;
