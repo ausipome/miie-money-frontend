@@ -1,3 +1,4 @@
+import { AuthProvider } from '../context/AuthContext';
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import Image from 'next/image';
@@ -22,6 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <AuthProvider>
     <html lang="en">
       <body className={roboto.className}>
       <nav className="headerStyle p-4">
@@ -54,5 +56,6 @@ export default function RootLayout({
         {children}
         </body>
     </html>
+    </AuthProvider>
   );
 }
