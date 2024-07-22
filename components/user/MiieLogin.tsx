@@ -31,15 +31,16 @@ export default function MiieLogin() {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(values),
+            credentials: 'include',
           });
           if (response.ok) {
-            console.log('Form submitted successfully');
-            const data = await response.json();
-            console.log(data.token);
+            console.log('Logged in successfully');
           } else {
+            setError(response.statusText);
             console.error('Form submission error:', response.statusText);
           }
         } catch (error) {
+          setError('Network error');
           console.error('Form submission error:', error);
         }
       };
@@ -86,6 +87,7 @@ export default function MiieLogin() {
                 </div>
 
                 <button type="submit" className="stdButton">Login</button>
+                <p className="text-red-500">{error}</p>
                 <Link href="/forgotpassword"><h3 className='text-center my-6'>Forgot your Password?</h3></Link>
             <h3 className='text-center my-6 text-[#5752FC]'><span className='text-slate-400'>Don't have an account? </span><Link href="/signup">Sign up here!</Link></h3>
             </div>
