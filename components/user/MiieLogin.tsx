@@ -23,7 +23,7 @@ export default function MiieLogin() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            await login(values.email, values.password);
+            await login(values);
             console.log('Logged in successfully');
         } catch (error) {
             setError('Invalid email or password');

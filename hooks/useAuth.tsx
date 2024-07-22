@@ -24,18 +24,19 @@ export const AuthProvider = ({ children }) => {
         checkAuth();
     }, []);
 
-    const login = async (email, password) => {
+    const login = async (values) => {
         try {
             const response = await fetch('/login-endpoint', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ values }),
                 credentials: 'include',
             });
             if (response.ok) {
                 const data = await response.json();
+                console.log('Login successful:', data);
                 setIsAuthenticated(true);
                 setXsrfToken(data.xsrfToken);
             } else {
