@@ -1,9 +1,8 @@
-// components/PrivateRoute.tsx
 'use client';
 
 import React, { ReactNode, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation'; // Next.js 13+ router
-import { useAuth } from '../hooks/useAuth'; // Adjust the import path based on your project structure
+import { useRouter } from 'next/navigation'; 
+import { useAuth } from '../hooks/useAuth'; 
 
 interface PrivateRouteProps {
     children: ReactNode;

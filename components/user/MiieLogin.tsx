@@ -3,7 +3,7 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useForm from '../../hooks/useForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
@@ -17,6 +17,11 @@ export default function MiieLogin() {
         password: '',
     });
     const { login } = useAuth();
+    const { logout } = useAuth();
+
+    useEffect(() => {
+        logout();
+    },[]);
 
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);

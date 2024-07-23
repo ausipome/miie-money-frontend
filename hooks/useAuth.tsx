@@ -1,8 +1,8 @@
-// context/AuthProvider.tsx
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation'; 
 
 interface AuthContextType {
     isAuthenticated: boolean | null;
@@ -16,6 +16,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
     const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
+    const router = useRouter();
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -58,6 +59,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const data = await response.json();
                 setIsAuthenticated(true);
                 setXsrfToken(data.csrfToken);
+                router.push('/console'); // Redirect to console page
             } else {
                 throw new Error('Login failed');
             }
@@ -68,6 +70,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const logout = async () => {
+        if (xsrfToken) {
         try {
             await fetch('/logout-endpoint', {
                 method: 'POST',
@@ -78,6 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             Cookies.remove('XSRF-TOKEN');
         } catch (error) {
             console.error('Logout error:', error);
+        }
         }
     };
 
