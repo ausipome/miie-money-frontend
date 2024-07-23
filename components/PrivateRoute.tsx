@@ -1,18 +1,40 @@
+// components/PrivateRoute.tsx
 'use client';
 
-import React, { useEffect } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation'; // Next.js 13+ router
+import { useAuth } from '../hooks/useAuth'; // Adjust the import path based on your project structure
 
-const PrivateRoute = ({ children }) => {
+interface PrivateRouteProps {
+    children: ReactNode;
+}
+
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     const { isAuthenticated } = useAuth();
+    const router = useRouter();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!isAuthenticated) {
-           console.log(isAuthenticated);
-        }
-    }, [isAuthenticated]);
+        const checkAuth = async () => {
+            if (isAuthenticated === null) {
+                // Still loading, wait for authentication status to be determined
+                return;
+            }
+            if (!isAuthenticated) {
+                router.push('/login'); // Redirect to login page
+            } else {
+                setLoading(false);
+            }
+        };
 
-    return isAuthenticated ? children : null;
+        checkAuth();
+    }, [isAuthenticated, router]);
+
+    if (loading) {
+        return <div>Loading...</div>; // You might want to show a loading spinner or some placeholder
+    }
+
+    return <>{children}</>;
 };
 
 export default PrivateRoute;

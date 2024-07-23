@@ -1,3 +1,5 @@
+// components/MiieLogin.tsx
+
 'use client';
 
 import Link from 'next/link';
@@ -23,7 +25,7 @@ export default function MiieLogin() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            await login(values);
+            await login(values.email, values.password);
             console.log('Logged in successfully');
         } catch (error) {
             setError('Invalid email or password');

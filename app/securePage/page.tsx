@@ -1,17 +1,15 @@
-// pages/dashboard.tsx
+// app/page.tsx (or any other page/component that needs protection)
+'use client';
 
-import React from 'react';
-import PrivateRoute from '../../components/PrivateRoute';
+import PrivateRoute from '../../components/PrivateRoute'; // Adjust the import path based on your project structure
 
-const Dashboard = () => {
+const ProtectedPage: React.FC = () => {
     return (
         <PrivateRoute>
-            <div>
-                <h1>Dashboard</h1>
-                <p>Welcome to the dashboard!</p>
-            </div>
+            <h1>This is a protected page</h1>
+            <p>Only authenticated users can see this.</p>
         </PrivateRoute>
     );
 };
 
-export default Dashboard;
+export default ProtectedPage;

@@ -1,44 +1,63 @@
+// context/AuthProvider.tsx
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 
-const AuthContext = createContext(null);
+interface AuthContextType {
+    isAuthenticated: boolean | null;
+    xsrfToken: string;
+    login: (email: string, password: string) => Promise<void>;
+    logout: () => Promise<void>;
+}
 
-export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [xsrfToken, setXsrfToken] = useState('');
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+    const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
 
     useEffect(() => {
-        // Check if user is authenticated on initial load
         const checkAuth = async () => {
-            const response = await fetch('/api/check-auth', {
-                method: 'GET',
-                credentials: 'include',
-            });
-            if (response.ok) {
-                const data = await response.json();
-                setIsAuthenticated(true);
-                setXsrfToken(data.xsrfToken);
+            if (xsrfToken) {
+                try {
+                    const response = await fetch('/api/check-auth', {
+                        method: 'GET',
+                        headers: {
+                            'X-CSRF-Token': xsrfToken, 
+                        },
+                        credentials: 'include',
+                    });
+                    if (response.ok) {
+                        setIsAuthenticated(true);
+                    } else {
+                        setIsAuthenticated(false);
+                    }
+                } catch (error) {
+                    console.error('Check auth error:', error);
+                    setIsAuthenticated(false);
+                }
+            } else {
+                setIsAuthenticated(false);
             }
         };
         checkAuth();
-    }, []);
+    }, [xsrfToken]);
 
-    const login = async (values) => {
+    const login = async (email: string, password: string) => {
         try {
             const response = await fetch('/login-endpoint', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ values }),
+                body: JSON.stringify({ email, password }),
                 credentials: 'include',
             });
             if (response.ok) {
                 const data = await response.json();
-                console.log('Login successful:', data);
                 setIsAuthenticated(true);
-                setXsrfToken(data.xsrfToken);
+                setXsrfToken(data.csrfToken);
             } else {
                 throw new Error('Login failed');
             }
@@ -49,12 +68,17 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = async () => {
-        await fetch('/logout-endpoint', {
-            method: 'POST',
-            credentials: 'include',
-        });
-        setIsAuthenticated(false);
-        setXsrfToken('');
+        try {
+            await fetch('/logout-endpoint', {
+                method: 'POST',
+                credentials: 'include',
+            });
+            setIsAuthenticated(false);
+            setXsrfToken('');
+            Cookies.remove('XSRF-TOKEN');
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
     };
 
     return (
@@ -64,4 +88,4 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext) as AuthContextType;
