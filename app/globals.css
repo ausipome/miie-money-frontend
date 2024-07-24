@@ -35,7 +35,6 @@ body {
   outline: none; 
   color: slategray;
   background: rgb(245, 247, 249);
-  margin-bottom: 1rem;
 }
 
 .stdInput:focus {
@@ -62,7 +61,7 @@ body {
 .toggle-password {
   position: absolute;
   right: 15px;
-  top: 35%;
+  top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
   user-select: none; 

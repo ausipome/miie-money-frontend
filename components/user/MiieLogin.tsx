@@ -51,11 +51,11 @@ export default function MiieLogin() {
                             placeholder="Email"
                             value={values.email}
                             onChange={handleChange}
-                            className="stdInput"
+                            className="stdInput mb-4"
                             required
                         />
                         <label htmlFor="password" className="block text-gray-900 text-sm">Password</label>
-                        <div className="password-container">
+                        <div className="password-container mb-4">
                             <input
                                 type={passwordVisible ? 'text' : 'password'}
                                 id="password"
