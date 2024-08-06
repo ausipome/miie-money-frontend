@@ -4,36 +4,36 @@ import React, { useState, useEffect } from 'react';
 import useForm from '../../hooks/useForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
+import { useSearchParams } from 'next/navigation';
 
 export default function MiieResetPassword() {
-    const [authToken, setAuthToken] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [error, setError] = useState('');
+    const searchParams = useSearchParams();
+    const [authToken, setAuthToken] = useState<string | undefined>(undefined);
 
-    useEffect(() => {
-        if (token) {
-          setAuthToken(token);
-          console.log("Token from URL:", token);
-        }
-      }, [token]);
-
-      export const getServerSideProps = async (context) => {
-        const { token } = context.query;
-        return {
-          props: {
-            token: token || '',
-          },
-        };
-
-    const togglePasswordVisibility = () => {
-        setPasswordVisible(!passwordVisible);
-    };
-
-    const { values, handleChange } = useForm({
+    const { values, handleChange, setValues } = useForm({
         email: '',
         newPassword: '',
         token: authToken,
     });
+
+  useEffect(() => {
+    const token = searchParams.get('token');
+    if (token) {
+      setAuthToken(token);
+      console.log("Token from URL:", token);
+      setValues((prevValues) => ({
+        ...prevValues,
+        token: authToken,
+    }));
+    }
+  }, [searchParams,authToken, setValues]);
+
+
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+    };
 
     const handleReset = async (e: any) => {
         e.preventDefault();
@@ -48,7 +48,7 @@ export default function MiieResetPassword() {
             if (res.ok) {
                 setError('Password Changed');
             } else {
-                setError('Error changing password');
+                setError(res.statusText);
             }
         } catch (error) {
             setError('Error changing password');
@@ -57,7 +57,7 @@ export default function MiieResetPassword() {
 
     return (
         <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded shadow-md">
-            <h2 className="text-2xl font-semibold mb-4 text-slate-300">Login</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-slate-300">Reset</h2>
             <form onSubmit={handleReset} className="max-w-md mx-auto">
                 <div className="mb-4 text-center">
                     <div className="text-left">
@@ -79,7 +79,7 @@ export default function MiieResetPassword() {
                                 type={passwordVisible ? 'text' : 'newPassword'}
                                 id="newPassword"
                                 name="newPassword"
-                                placeholder="newPassword"
+                                placeholder="New Password"
                                 value={values.newPassword}
                                 onChange={handleChange}
                                 className="stdInput password-input"
