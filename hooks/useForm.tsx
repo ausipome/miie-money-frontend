@@ -20,6 +20,7 @@ const useForm = (initialValues: FormValues) => {
   return {
     values,
     handleChange,
+    setValues,
   };
 };
 
