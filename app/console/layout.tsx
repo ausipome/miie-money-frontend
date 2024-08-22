@@ -1,5 +1,5 @@
 import ConsoleNavbar from "@/components/ConsoleNavbar";
-import PrivateRoute from '../../components/PrivateRoute';
+import PrivateRoute from '../../components/user/PrivateRoute';
 
 export default function DashboardLayout({
   children, // will be a page or nested layout

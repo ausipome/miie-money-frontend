@@ -32,7 +32,7 @@ export default function MiieForgotPassword() {
 
     return (
         <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded shadow-md">
-            <h2 className="text-2xl font-semibold mb-4 text-slate-300">Login</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-slate-300">Request Reset</h2>
             <form onSubmit={handleForgot} className="max-w-md mx-auto">
                 <div className="mb-4 text-center">
                     <div className="text-left">

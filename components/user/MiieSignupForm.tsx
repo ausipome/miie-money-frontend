@@ -11,6 +11,13 @@ export default function MiieSignupForm() {
     const [passwordError, setPasswordError] = useState<string>('');
     const [emailError, setEmailError] = useState<string>('');
 
+    const { values, handleChange } = useForm({
+        fullName: '',
+        email: '',
+        password: '',
+        country: 'United Kingdom',
+    });
+
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
     };
@@ -48,13 +55,6 @@ export default function MiieSignupForm() {
         }
         return '';
     };
-
-    const { values, handleChange } = useForm({
-        fullName: '',
-        email: '',
-        password: '',
-        country: 'United Kingdom',
-    });
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newEmail = e.target.value;
