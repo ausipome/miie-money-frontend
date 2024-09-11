@@ -34,8 +34,8 @@ export default function RootLayout({
         <Image src="/miie-money-side.png" 
         alt="Miie Money logo which is a pink and blue smile formed in the shape of an M" 
         width={200}
-        height={50} 
-        layout="fixed" />
+        height={40} 
+        style={{ width: '200px', height: '40px' }} />
         </div>
       </div>
       

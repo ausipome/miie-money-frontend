@@ -15,7 +15,6 @@ export default function MiieSignupForm() {
         fullName: '',
         email: '',
         password: '',
-        country: 'United Kingdom',
     });
 
     const togglePasswordVisibility = () => {
@@ -113,19 +112,6 @@ export default function MiieSignupForm() {
                             placeholder='Full Name'
                             value={values.fullName}
                             onChange={handleChange}
-                            className="stdInput"
-                            required
-                        />
-                        </div>
-
-                        <label htmlFor="country" className="block text-gray-900 text-sm">Country</label>
-                        <div className="mb-4">
-                        <input
-                            type="text"
-                            id="country"
-                            name="country"
-                            value="United Kingdom"
-                            disabled
                             className="stdInput"
                             required
                         />
