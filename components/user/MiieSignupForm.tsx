@@ -10,6 +10,7 @@ export default function MiieSignupForm() {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [passwordError, setPasswordError] = useState<string>('');
     const [emailError, setEmailError] = useState<string>('');
+    const [submitError, setSubmitError] = useState<string>('');
 
     const { values, handleChange } = useForm({
         fullName: '',
@@ -71,6 +72,7 @@ export default function MiieSignupForm() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setSubmitError('');
         const passwordValidationError = validatePassword(values.password);
         const emailValidationError = validateEmail(values.email);
         if (passwordValidationError || emailValidationError) {
@@ -90,7 +92,11 @@ export default function MiieSignupForm() {
                 console.log('Form submitted successfully');
                 console.log(response);
             } else {
-                console.error('Form submission error:', response.statusText);
+                response.json().then(data => {
+                    setSubmitError(data.error);
+                }).catch(() => {
+                    setSubmitError(response.statusText);
+                });
             }
         } catch (error) {
             console.error('Form submission error:', error);
@@ -156,6 +162,7 @@ export default function MiieSignupForm() {
 
                     <h3 className='text-center my-6 text-[#5752FC] mt-4'><span className='text-slate-400'>Already have an account? </span><Link href="/login">Login in here!</Link></h3>
                     <button type="submit" className="stdButton">Sign Up</button>
+                    {submitError && <div style={{ color: 'red' }}>{submitError}</div>}
                 </div>
             </form>
         </div>
