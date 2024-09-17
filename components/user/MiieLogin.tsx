@@ -16,8 +16,7 @@ export default function MiieLogin() {
         email: '',
         password: '',
     });
-    const { login } = useAuth();
-    const { logout } = useAuth();
+    const { login, logout, submitError  } = useAuth();
 
     useEffect(() => {
         logout();
@@ -30,10 +29,10 @@ export default function MiieLogin() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            await login(values.email, values.password);
+           await login(values.email, values.password);
             console.log('Logged in successfully');
-        } catch (error) {
-            setError('Invalid email or password');
+        } catch (error: any) {
+            setError(submitError);
         }
     };
 

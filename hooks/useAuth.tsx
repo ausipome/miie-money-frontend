@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 interface AuthContextType {
     isAuthenticated: boolean | null;
     xsrfToken: string;
+    submitError: string | null;
     login: (email: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
 }
@@ -16,6 +17,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
     const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
+    const [submitError, setSubmitError] = useState<string | null>(null);
     const router = useRouter();
 
     useEffect(() => {
@@ -61,7 +63,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 setXsrfToken(data.csrfToken);
                 router.push('/console'); // Redirect to console page
             } else {
-                throw new Error('Login failed');
+                const errorData = await response.json();
+                setSubmitError(errorData.error || 'Login failed');
             }
         } catch (error) {
             console.error('Login error:', error);
@@ -86,7 +89,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, xsrfToken, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, xsrfToken, login, logout, submitError }}>
             {children}
         </AuthContext.Provider>
     );
