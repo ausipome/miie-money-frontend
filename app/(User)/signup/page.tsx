@@ -1,5 +1,4 @@
 
-import React from 'react';
 import MiieSignup from '../../../components/user/MiieSignupForm';
 
 export default function Page() {

@@ -8,6 +8,7 @@ interface AuthContextType {
     isAuthenticated: boolean | null;
     xsrfToken: string;
     submitError: string | null;
+    setSubmitError: React.Dispatch<React.SetStateAction<string | null>>;
     login: (email: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
 }
@@ -89,7 +90,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, xsrfToken, login, logout, submitError }}>
+        <AuthContext.Provider value={{ isAuthenticated, xsrfToken, login, logout, submitError, setSubmitError }}>
             {children}
         </AuthContext.Provider>
     );
