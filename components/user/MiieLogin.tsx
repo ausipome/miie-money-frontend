@@ -11,12 +11,11 @@ import { useAuth } from '../../hooks/useAuth';
 
 export default function MiieLogin() {
     const [passwordVisible, setPasswordVisible] = useState(false);
-    const [error, setError] = useState('');
     const { values, handleChange } = useForm({
         email: '',
         password: '',
     });
-    const { login, logout, submitError  } = useAuth();
+    const { login, logout, submitError, setSubmitError } = useAuth();
 
     useEffect(() => {
         logout();
@@ -26,15 +25,16 @@ export default function MiieLogin() {
         setPasswordVisible(!passwordVisible);
     };
 
-    const handleLogin = async (e) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        setSubmitError('');
         try {
-           await login(values.email, values.password);
-            console.log('Logged in successfully');
+          await login(values.email, values.password);
+          console.log('Logged in successfully');
         } catch (error: any) {
-            setError(submitError);
+            
         }
-    };
+      };
 
     return (
         <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded shadow-md">
@@ -74,7 +74,7 @@ export default function MiieLogin() {
                         </div>
                     </div>
                     <button type="submit" className="stdButton">Login</button>
-                    <p className="text-red-500">{error}</p>
+                    {submitError && <div style={{ color: 'red' }}>{submitError}</div>}
                     <Link href="/forgotpassword"><h3 className="text-center my-6">Forgot your Password?</h3></Link>
                     <h3 className="text-center my-6 text-[#5752FC]"><span className="text-slate-400">Don't have an account? </span><Link href="/signup">Sign up here!</Link></h3>
                 </div>
