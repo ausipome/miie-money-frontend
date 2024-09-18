@@ -16,9 +16,9 @@ export default function MiieConfirmEmail() {
                         method: 'GET',
                     });
                     if (response.ok) {
-                        setMessage('Email confirmed successfully!');
+                        setMessage('Thank you! Your email has successfully been confirmed.');
                     } else {
-                        setMessage('Failed to confirm email.');
+                        setMessage('There has been an error confirming your email. Please try again later.');
                     }
                 } catch (error) {
                     console.error('Error confirming email:', error);
@@ -30,5 +30,11 @@ export default function MiieConfirmEmail() {
         }
     }, [token]);
 
-    return <div style={{fontSize:'5em',color:'white'}}>{message}</div>;
+    return (
+        <div className="flex mt-10 justify-center">
+        <div className="w-2/3 bg-white text-3xl p-8 rounded-lg shadow-lg text-center">
+            {message}
+        </div>
+    </div>
+      );
 }
