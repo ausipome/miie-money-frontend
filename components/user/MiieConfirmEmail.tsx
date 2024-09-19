@@ -22,17 +22,16 @@ export default function MiieConfirmEmail() {
                     }
                 } catch (error) {
                     console.error('Error confirming email:', error);
-                    setMessage('An error occurred while confirming email.');
+                    setMessage('There has been an error confirming your email. Please try again later.');
                 }
             };
-
             confirmEmail();
         }
-    }, [token]);
+    }, []); 
 
     return (
         <div className="flex mt-10 justify-center">
-        <div className="w-2/3 bg-white text-3xl p-8 rounded-lg shadow-lg text-center">
+        <div className="text-sky-500 w-2/3 bg-white text-3xl p-8 rounded-lg shadow-lg text-center">
             {message}
         </div>
     </div>
