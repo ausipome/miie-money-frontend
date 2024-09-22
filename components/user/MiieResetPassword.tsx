@@ -8,6 +8,7 @@ import { useSearchParams } from 'next/navigation';
 
 export default function MiieResetPassword() {
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [passwordError, setPasswordError] = useState<string>('');
     const [error, setError] = useState('');
     const searchParams = useSearchParams();
     const [authToken, setAuthToken] = useState<string | undefined>(undefined);
@@ -35,8 +36,47 @@ export default function MiieResetPassword() {
         setPasswordVisible(!passwordVisible);
     };
 
+    const validatePassword = (newPassword: string): string => {
+        const minLength = 8;
+        const hasUpperCase = /[A-Z]/.test(newPassword);
+        const hasLowerCase = /[a-z]/.test(newPassword);
+        const hasNumber = /[0-9]/.test(newPassword);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(newPassword);
+
+        if (newPassword.length < minLength) {
+            return `Password must be at least ${minLength} characters long.`;
+        }
+        if (!hasUpperCase) {
+            return 'Password must contain at least one uppercase letter.';
+        }
+        if (!hasLowerCase) {
+            return 'Password must contain at least one lowercase letter.';
+        }
+        if (!hasNumber) {
+            return 'Password must contain at least one number.';
+        }
+        if (!hasSpecialChar) {
+            return 'Password must contain at least one special character.';
+        }
+
+        return '';
+    };
+
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const checkPassword = e.target.value;
+        handleChange(e);
+        const validationError = validatePassword(checkPassword);
+        setPasswordError(validationError);
+    };
+
     const handleReset = async (e: any) => {
         e.preventDefault();
+        setError('');
+        const passwordValidationError = validatePassword(values.newPassword);
+        if (passwordValidationError) {
+            setPasswordError(passwordValidationError);
+            return;
+        }
         try {
             const res = await fetch('/reset-password', {
                 method: 'POST',
@@ -81,7 +121,7 @@ export default function MiieResetPassword() {
                                 name="newPassword"
                                 placeholder="New Password"
                                 value={values.newPassword}
-                                onChange={handleChange}
+                                onChange={handlePasswordChange}
                                 className="stdInput password-input"
                                 required
                             />
@@ -92,7 +132,7 @@ export default function MiieResetPassword() {
                                 {passwordVisible ? <FontAwesomeIcon icon={byPrefixAndName.fal['eye-slash']} /> : <FontAwesomeIcon icon={byPrefixAndName.fal['eye']} />}
                             </span>
                         </div>
-                        
+                        {passwordError && <div style={{ color: 'red' }}>{passwordError}</div>}
                     </div>
                     <button type="submit" className="stdButton">Reset Password</button>
                     <p className="text-red-500">{error}</p>

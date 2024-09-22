@@ -4,7 +4,7 @@
 
 body {
   font-family: 'Nunito', sans-serif;
-  background-color: black;
+  background-color: white;
 }
 
 /* Standard button */
@@ -69,5 +69,5 @@ body {
 
 
 .headerStyle {
-  background-color: rgba(176, 209, 234, 0.787);
+  background-color: rgba(76, 116, 146, 0.787);
 };

@@ -21,7 +21,7 @@ export default function MiieForgotPassword() {
                 body: JSON.stringify(values),
             });
             if (res.ok) {
-                setError('Password reset email sent');
+                setError('If the email exists, a reset link has been sent.');
             } else {
                 setError('Invalid email');
             }
