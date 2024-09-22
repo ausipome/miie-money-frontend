@@ -62,7 +62,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const data = await response.json();
                 setIsAuthenticated(true);
                 setXsrfToken(data.csrfToken);
-                router.push('/console'); // Redirect to console page
+                router.push('/account'); // Redirect to console page
             } else {
                 const errorData = await response.json();
                 setSubmitError(errorData.error || 'Login failed');
