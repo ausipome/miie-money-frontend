@@ -130,7 +130,7 @@ export default function MiieResetPassword() {
                     </div>
                     <button type="submit" className="stdButton">Reset Password</button>
                     <p className="text-red-500">{error}</p>
-                    {status && (<h3 className='text-center my-6 text-[#5752FC] mt-4'><Link href="/login">Login in</Link></h3>)}
+                    {status && (<p className='text-center text-[#000000]'>You can now <Link className='text-[#2923dc]' href="/login">Login in</Link> with your new password</p>)}
                 </div>
             </form>
         </div>
