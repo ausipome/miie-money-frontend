@@ -19,7 +19,7 @@ export default function MiieLogin() {
 
     useEffect(() => {
         logout();
-    });
+    }, []);
 
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);

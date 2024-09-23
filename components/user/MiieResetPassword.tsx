@@ -5,6 +5,7 @@ import useForm from '../../hooks/useForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 export default function MiieResetPassword() {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -12,24 +13,28 @@ export default function MiieResetPassword() {
     const [error, setError] = useState('');
     const searchParams = useSearchParams();
     const [authToken, setAuthToken] = useState<string | undefined>(undefined);
+    const [email, setEmail] = useState<string | undefined>(undefined);
+    const [status, setStatus] = useState<boolean>(false);
 
     const { values, handleChange, setValues } = useForm({
-        email: '',
         newPassword: '',
         token: authToken,
+        email: email,
     });
 
   useEffect(() => {
     const token = searchParams.get('token');
-    if (token) {
+    const resetEmail = searchParams.get('email');
+    if (token && resetEmail) {
       setAuthToken(token);
-      console.log("Token from URL:", token);
+      setEmail(resetEmail);
       setValues((prevValues) => ({
         ...prevValues,
         token: authToken,
+        email: email,
     }));
     }
-  }, [searchParams,authToken, setValues]);
+  }, [searchParams,authToken, email, setValues]);
 
 
     const togglePasswordVisibility = () => {
@@ -87,6 +92,7 @@ export default function MiieResetPassword() {
             });
             if (res.ok) {
                 setError('Password Changed');
+                setStatus(true);
             } else {
                 setError(res.statusText);
             }
@@ -101,19 +107,7 @@ export default function MiieResetPassword() {
             <form onSubmit={handleReset} className="max-w-md mx-auto">
                 <div className="mb-4 text-center">
                     <div className="text-left">
-                        <label htmlFor="email" className="block text-gray-900 text-sm">Email</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="Email"
-                            value={values.email}
-                            onChange={handleChange}
-                            className="stdInput mb-4"
-                            required
-                        />
-
-                        <label htmlFor="newPassword" className="block text-gray-900 text-sm">New Password</label>
+                        <label htmlFor="newPassword" className="block text-gray-900 text-sm mb-2">Please set your new password</label>
                         <div className="password-container mb-4">
                             <input
                                 type={passwordVisible ? 'text' : 'newPassword'}
@@ -136,6 +130,7 @@ export default function MiieResetPassword() {
                     </div>
                     <button type="submit" className="stdButton">Reset Password</button>
                     <p className="text-red-500">{error}</p>
+                    {status && (<h3 className='text-center my-6 text-[#5752FC] mt-4'><Link href="/login">Login in</Link></h3>)}
                 </div>
             </form>
         </div>
