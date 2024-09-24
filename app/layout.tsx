@@ -6,6 +6,7 @@ import Link from 'next/link';
 import './globals.css';
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import IsLoggedIn from '@/components/user/IsLoggedIn';
 config.autoAddCss = false
 
 const roboto = Roboto({
@@ -61,7 +62,7 @@ export default function RootLayout({
       
       {/* Right side (optional) */}
       <div className="flex items-center">
-        {/* Your right side content here */}
+        <IsLoggedIn />
       </div>
     </div>
   </nav>
