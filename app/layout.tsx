@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { AuthProvider } from '../hooks/useAuth';
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
@@ -7,6 +8,7 @@ import './globals.css';
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import IsLoggedIn from '@/components/user/IsLoggedIn';
+import ProgressBar from '@/components/ProgressBar';
 config.autoAddCss = false
 
 const roboto = Roboto({
@@ -19,11 +21,7 @@ export const metadata: Metadata = {
   description: "Get Paid Instantly, Invoice Customers Securely, and Manage Your Business Finances Online.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <AuthProvider>
     <html lang="en">
@@ -44,11 +42,11 @@ export default function RootLayout({
       </div>
       
       {/* Middle (centered) */}
-      <div className="flex flex-grow justify-left ml-20 text-lg">
+      <div className="flex flex-grow justify-left ml-20 text-xl">
         <div className="flex-shrink-0 flex items-center space-x-4">
           <div className="relative group">
             <Link href="#" className="text-white py-2 hover:text-gray-700 px-4 rounded">Components</Link>
-            <div className="absolute hidden group-hover:block bg-white shadow-lg mt-2 rounded">
+            <div className="absolute hidden group-hover:block bg-white shadow-lg mt-2 rounded text-lg">
               <Link href="/component1" className="block hover:text-gray-500 px-4 py-2 text-black hover:bg-gray-200">Component 1</Link>
               <Link href="/component2" className="block hover:text-gray-500 px-4 py-2 text-black hover:bg-gray-200">Component 2</Link>
               <Link href="/component3" className="block hover:text-gray-500 px-4 py-2 text-black hover:bg-gray-200">Component 3</Link>
@@ -66,7 +64,7 @@ export default function RootLayout({
       </div>
     </div>
   </nav>
-
+        <ProgressBar />
         {children}
         </body>
     </html>

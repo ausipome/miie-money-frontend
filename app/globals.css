@@ -71,3 +71,8 @@ body {
 .headerStyle {
   background-color: rgba(90, 135, 170, 0.787);
 };
+/* nprogress styles */
+#nprogress .bar {
+  background: #29d;
+  height: 200px;
+}
