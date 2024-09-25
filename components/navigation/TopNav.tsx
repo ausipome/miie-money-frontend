@@ -6,7 +6,7 @@ import NavProgressBar from "./ProgressBar";
 
 export default function TopNav() {
     return (
-    <nav className="fixed top-3 w-full bg-[rgba(90,135,170,0.787)] rounded-full p-4">
+    <nav className="fixed top-3 w-[97%] left-[1.5%] bg-[rgba(90,135,170,0.787)] rounded-full p-4">
         <div className="w-full mx-auto flex justify-between items-center">
       {/* Left side */}
       <div className="flex items-center">
