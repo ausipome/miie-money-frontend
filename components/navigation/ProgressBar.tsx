@@ -1,12 +1,11 @@
 'use client';
 
 import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
+import '../../app/globals.css';
 
 const NavProgressBar = () => {
   return (
     <ProgressBar 
-    height="5px"
-    color="#000000"
     options={{ showSpinner: false }}
     shallowRouting />
   );

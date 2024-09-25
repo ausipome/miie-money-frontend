@@ -6,9 +6,8 @@ import NavProgressBar from "./ProgressBar";
 
 export default function TopNav() {
     return (
-        <div className="fixed w-full top-3">
-        <nav className="bg-[rgba(90,135,170,0.787)] rounded-full ml-3 mr-3 p-4">
-    <div className="w-full mx-auto flex justify-between items-center">
+    <nav className="fixed top-3 w-full bg-[rgba(90,135,170,0.787)] rounded-full p-4">
+        <div className="w-full mx-auto flex justify-between items-center">
       {/* Left side */}
       <div className="flex items-center">
         <div className="flex-shrink-0">
@@ -44,9 +43,8 @@ export default function TopNav() {
       <div className="flex items-center">
         <IsLoggedIn />
       </div>
+      <NavProgressBar />
     </div>
   </nav>
-  <NavProgressBar />
-  </div>
     );
    }
