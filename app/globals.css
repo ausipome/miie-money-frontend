@@ -69,10 +69,11 @@ body {
 }
 
 #nprogress .bar {
+  position: absolute !important;
   background: #000000 !important;
-  height: 3px !important;
+  height: 4px !important;
   top:85px !important;
-  left: 2.5% !important;
+  left: 1.5% !important;
   width: 97% !important;
 }
 

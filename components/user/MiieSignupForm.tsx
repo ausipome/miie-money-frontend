@@ -5,12 +5,14 @@ import React, { useState } from 'react';
 import useForm from '../../hooks/useForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
+import {Spinner} from "@nextui-org/spinner";
 
 export default function MiieSignupForm() {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [passwordError, setPasswordError] = useState<string>('');
     const [emailError, setEmailError] = useState<string>('');
     const [submitError, setSubmitError] = useState<string>('');
+    const [status, setStatus] = useState<boolean>(false);
 
     const { values, handleChange } = useForm({
         fullName: '',
@@ -71,6 +73,7 @@ export default function MiieSignupForm() {
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        setStatus(true);
         e.preventDefault();
         setSubmitError('');
         const passwordValidationError = validatePassword(values.password);
@@ -91,15 +94,19 @@ export default function MiieSignupForm() {
             if (response.ok) {
                 console.log('Form submitted successfully');
                 console.log(response);
+                setStatus(false);
             } else {
                 response.json().then(data => {
                     setSubmitError(data.error);
+                    setStatus(false);
                 }).catch(() => {
                     setSubmitError(response.statusText);
+                    setStatus(false);
                 });
             }
         } catch (error) {
             console.error('Form submission error:', error);
+            setStatus(false);
         }
     };
 
@@ -161,10 +168,11 @@ export default function MiieSignupForm() {
                     </div>
 
                     <h3 className='text-center my-6 text-[#5752FC] mt-4'><span className='text-slate-400'>Already have an account? </span><Link href="/login">Login in here!</Link></h3>
-                    <button type="submit" className="stdButton">Sign Up</button>
+                    <button type="submit" className="stdButton">{status ? <Spinner size="lg" color="warning"/> : "Sign Up"}</button>
                     {submitError && <div style={{ color: 'red' }}>{submitError}</div>}
                 </div>
             </form>
         </div>
     );
 }
+
