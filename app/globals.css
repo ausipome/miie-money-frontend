@@ -5,6 +5,7 @@
 body {
   font-family: 'Nunito', sans-serif;
   background-color: white;
+  margin-top: 100px;
 }
 
 /* Standard button */
@@ -65,14 +66,4 @@ body {
   transform: translateY(-50%);
   cursor: pointer;
   user-select: none; 
-}
-
-
-.headerStyle {
-  background-color: rgba(90, 135, 170, 0.787);
-};
-/* nprogress styles */
-#nprogress .bar {
-  background: #29d;
-  height: 200px;
 }

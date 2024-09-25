@@ -10,7 +10,7 @@ export default function IsLoggedIn() {
 
     return (
         <>
-            {isAuthenticated ? <><Link className="text-white py-2 hover:text-gray-700 px-4 text-3xl mr-4" href="account"><FontAwesomeIcon icon={byPrefixAndName.fal['user']} /></Link></> : <><Link className="text-white py-2 hover:text-gray-700 px-4 text-xl" href="signup">Signup</Link><Link className="text-white py-2 hover:text-gray-700 px-4 text-xl" href="login">Login</Link></>}
+            {isAuthenticated ? <><Link className="text-white py-2 hover:text-gray-700 px-4 text-2xl mr-4" href="account"><FontAwesomeIcon icon={byPrefixAndName.fal['user']} /></Link></> : <><Link className="text-white py-2 hover:text-gray-700 px-4 text-xl" href="signup">Signup</Link><Link className="text-white py-2 hover:text-gray-700 px-4 text-xl" href="login">Login</Link></>}
         </>
     );
 }
