@@ -1,3 +1,5 @@
+import MiieCompany from "@/components/miieUser/MiieCompany";
+
 export default function Page() {
-    return <div>Account</div>
+    return <MiieCompany />
 }

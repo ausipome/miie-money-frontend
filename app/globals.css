@@ -70,13 +70,13 @@ body {
 
 #nprogress .bar {
   position: absolute !important;
-  background: #000000 !important;
-  height: 4px !important;
-  top:85px !important;
+  background: #020344 !important;
+  height: 5px !important;
+  top:85px !important;    
   left: 1.5% !important;
   width: 97% !important;
 }
 
 #nprogress .peg {
-  box-shadow: 0 0 10px #000, 0 0 5px #000 !important;
+  box-shadow: 0 0 10px #020344, 0 0 5px #020344 !important;
 }

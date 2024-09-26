@@ -1,4 +1,4 @@
-import MiieSignupForm from "@/components/user/MiieSignupForm";
+import MiieSignupForm from "@/components/miieUser/MiieSignupForm";
 
 
 export default function Page() {

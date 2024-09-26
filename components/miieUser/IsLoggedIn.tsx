@@ -1,3 +1,5 @@
+'use client';
+
 import { useAuth } from '../../hooks/useAuth'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';

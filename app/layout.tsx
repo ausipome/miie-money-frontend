@@ -6,6 +6,7 @@ import './globals.css';
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import TopNav from '@/components/navigation/TopNav';
+import NavProgressBar from '@/components/navigation/ProgressBar';
 config.autoAddCss = false
 
 const roboto = Roboto({
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body className={roboto.className}>
         <TopNav />
+        <NavProgressBar />
         {children}
         </body>
     </html>
