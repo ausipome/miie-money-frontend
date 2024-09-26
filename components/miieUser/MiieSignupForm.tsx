@@ -168,7 +168,7 @@ export default function MiieSignupForm() {
                     </div>
 
                     <h3 className='text-center my-6 text-[#5752FC] mt-4'><span className='text-slate-400'>Already have an account? </span><Link href="/login">Login in here!</Link></h3>
-                    <button type="submit" className="stdButton">{status ? <Spinner size="lg" color="warning"/> : "Sign Up"}</button>
+                    <button type="submit" className="stdButton">Sign Up {<Spinner color="warning" size="sm"/>}</button>
                     {submitError && <div style={{ color: 'red' }}>{submitError}</div>}
                 </div>
             </form>
