@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { AuthProvider } from '../hooks/useAuth';
+import {NextUIProvider} from "@nextui-org/system";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import './globals.css';
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
+    <NextUIProvider>
     <AuthProvider>
     <html lang="en">
       <body className={roboto.className}>
@@ -30,5 +32,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </body>
     </html>
     </AuthProvider>
+    </NextUIProvider>
   );
 }
