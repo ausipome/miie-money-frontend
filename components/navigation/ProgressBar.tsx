@@ -7,7 +7,7 @@ const NavProgressBar = () => {
   return (
     <ProgressBar 
     options={{ showSpinner: false }}
-    shallowRouting />
+    />
   );
 };
 

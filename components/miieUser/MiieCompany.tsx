@@ -1,10 +1,8 @@
 'use client'
 
-import React, { useState } from 'react';
 import useForm from '../../hooks/useForm';
 
 export default function MiieCompany() {
-
 
     const { values, handleChange } = useForm({
         businessType: '',
@@ -53,7 +51,7 @@ export default function MiieCompany() {
         return (
 
             <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded shadow-md">
-            <h2 className="text-2xl font-semibold mb-4 text-slate-300">Sign Up</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-slate-300">Required Information</h2>
             <form onSubmit={handleSubmit} className="max-w-md mx-auto">
             <div className="mb-4 text-center">
 
@@ -71,17 +69,6 @@ export default function MiieCompany() {
                     required
                 />
 
-                <label htmlFor="country" className="block text-gray-900 text-sm">Country</label>
-                <input
-                    type="text"
-                    id="country"
-                    name="country"
-                    value="United Kingdom"
-                    disabled
-                    className="stdInput"
-                    required
-                />
-
                 <label htmlFor="email" className="block text-gray-900 text-sm">Email</label>
                 <input
                     type="email"
@@ -94,28 +81,7 @@ export default function MiieCompany() {
                     required
                 />
 
-                <label htmlFor="password" className="block text-gray-900 text-sm">Password</label>
-                <div className="password-container">
-                <input
-                    type={passwordVisible ? 'text' : 'password'}
-                    id="password"
-                    name="password"
-                    placeholder='Password'
-                    value={values.password}
-                    onChange={handleChange}
-                    className="stdInput password-input"
-                    required
-                />
-                <span
-                className="toggle-password"
-                onClick={togglePasswordVisibility}
-                >
-                {passwordVisible ? <FontAwesomeIcon icon={byPrefixAndName.fal['eye-slash']} /> : <FontAwesomeIcon icon={byPrefixAndName.fal['eye']} /> }
-                </span>
                 </div>
-                </div>
-
-                <h3 className='text-center my-6 text-[#5752FC]'><span className='text-slate-400'>Already have an account? </span><Link href="/login">Login in here!</Link></h3>
                 <button type="submit" className="stdButton">Sign Up</button>
             </div>
             </form>

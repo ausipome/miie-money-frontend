@@ -1,4 +1,4 @@
-import MiieConfirmEmail from '../../../components/user/MiieConfirmEmail';
+import MiieConfirmEmail from '../../../components/miieUser/MiieConfirmEmail';
 
 export default function Page() {
     return <MiieConfirmEmail />

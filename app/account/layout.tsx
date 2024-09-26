@@ -1,4 +1,4 @@
-import PrivateRoute from '../../components/user/PrivateRoute';
+import PrivateRoute from '../../components/miieUser/PrivateRoute';
 
 export default function DashboardLayout({
   children, // will be a page or nested layout

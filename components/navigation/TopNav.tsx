@@ -1,11 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import IsLoggedIn from "../user/IsLoggedIn";
-import NavProgressBar from "./ProgressBar";
-
+import IsLoggedIn from "../miieUser/IsLoggedIn";
 
 export default function TopNav() {
     return (
+      <div>
     <nav className="fixed top-3 w-[97%] left-[1.5%] bg-[rgba(90,135,170,0.787)] rounded-full p-4">
         <div className="w-full mx-auto flex justify-between items-center">
       {/* Left side */}
@@ -43,8 +42,8 @@ export default function TopNav() {
       <div className="flex items-center">
         <IsLoggedIn />
       </div>
-      <NavProgressBar />
     </div>
   </nav>
+  </div>
     );
    }
