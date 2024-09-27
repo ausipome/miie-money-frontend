@@ -2,15 +2,18 @@
 
 import React, { useState } from 'react';
 import useForm from '../../hooks/useForm';
+import { Spinner } from '@nextui-org/spinner';
 
 
 export default function MiieForgotPassword() {
     const [error, setError] = useState('');
+    const [status, setStatus] = useState<boolean>(false);
     const { values, handleChange } = useForm({
         email: '',
     });
 
     const handleForgot = async (e: any) => {
+        setStatus(true);
         e.preventDefault();
         try {
             const res = await fetch('/forgot-password', {
@@ -22,11 +25,14 @@ export default function MiieForgotPassword() {
             });
             if (res.ok) {
                 setError('If the email exists, a reset link has been sent.');
+                setStatus(false);
             } else {
                 setError('Invalid email');
+                setStatus(false);
             }
         } catch (error) {
             setError('Invalid email');
+            setStatus(false);
         }
     };
 
@@ -49,7 +55,7 @@ export default function MiieForgotPassword() {
                         />
                         
                     </div>
-                    <button type="submit" className="stdButton">Request Reset Token</button>
+                    <button type="submit" className="stdButton">Request Reset Token {status && <Spinner style={{marginLeft:"4px",marginTop:"2px"}} color="warning" size="sm"/>}</button>
                     <p className="text-red-500">{error}</p>
                 </div>
             </form>

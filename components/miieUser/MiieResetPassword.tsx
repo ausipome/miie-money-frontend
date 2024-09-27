@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import {Spinner} from "@nextui-org/spinner";
 
 export default function MiieResetPassword() {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -15,6 +16,7 @@ export default function MiieResetPassword() {
     const [authToken, setAuthToken] = useState<string | undefined>(undefined);
     const [email, setEmail] = useState<string | undefined>(undefined);
     const [status, setStatus] = useState<boolean>(false);
+    const [statusText, setStatusText] = useState<boolean>(false);
 
     const { values, handleChange, setValues } = useForm({
         newPassword: '',
@@ -75,11 +77,13 @@ export default function MiieResetPassword() {
     };
 
     const handleReset = async (e: any) => {
+        setStatus(true);
         e.preventDefault();
         setError('');
         const passwordValidationError = validatePassword(values.newPassword);
         if (passwordValidationError) {
             setPasswordError(passwordValidationError);
+            setStatus(false);
             return;
         }
         try {
@@ -92,12 +96,15 @@ export default function MiieResetPassword() {
             });
             if (res.ok) {
                 setError('Password Changed');
-                setStatus(true);
+                setStatusText(true);
+                setStatus(false);
             } else {
                 setError(res.statusText);
+                setStatus(false);
             }
         } catch (error) {
             setError('Error changing password');
+            setStatus(false);
         }
     };
 
@@ -128,9 +135,9 @@ export default function MiieResetPassword() {
                         </div>
                         {passwordError && <div style={{ color: 'red' }}>{passwordError}</div>}
                     </div>
-                    <button type="submit" className="stdButton">Reset Password</button>
+                    <button type="submit" className="stdButton">Reset Password {status && <Spinner style={{marginLeft:"4px",marginTop:"2px"}} color="warning" size="sm"/>}</button>
                     <p className="text-red-500">{error}</p>
-                    {status && (<p className='text-center text-[#000000]'>You can now <Link className='text-[#2923dc]' href="/login">Login in</Link> with your new password</p>)}
+                    {statusText && (<p className='text-center text-[#000000]'>You can now <Link className='text-[#2923dc]' href="/login">Login in</Link> with your new password</p>)}
                 </div>
             </form>
         </div>

@@ -22,16 +22,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <NextUIProvider>
+    
     <AuthProvider>
     <html lang="en">
       <body className={roboto.className}>
+      <NextUIProvider>
         <TopNav />
         <NavProgressBar />
         {children}
+        </NextUIProvider>
         </body>
     </html>
     </AuthProvider>
-    </NextUIProvider>
+  
   );
 }
