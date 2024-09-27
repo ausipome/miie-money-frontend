@@ -8,9 +8,11 @@ import useForm from '../../hooks/useForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
 import { useAuth } from '../../hooks/useAuth';
+import { Spinner } from '@nextui-org/spinner';
 
 export default function MiieLogin() {
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [status, setStatus] = useState<boolean>(false);
     const { values, handleChange } = useForm({
         email: '',
         password: '',
@@ -26,13 +28,15 @@ export default function MiieLogin() {
     };
 
     const handleLogin = async (e: React.FormEvent) => {
+        setStatus(true);
         e.preventDefault();
         setSubmitError('');
         try {
           await login(values.email, values.password);
           console.log('Logged in successfully');
+          setStatus(false);
         } catch (error: any) {
-            
+            setStatus(false);
         }
       };
 
@@ -73,7 +77,7 @@ export default function MiieLogin() {
                             </span>
                         </div>
                     </div>
-                    <button type="submit" className="stdButton">Login</button>
+                    <button type="submit" className="stdButton">Login {status && <Spinner style={{marginLeft:"4px",marginTop:"2px"}} color="warning" size="sm"/>}</button>
                     {submitError && <div style={{ color: 'red' }}>{submitError}</div>}
                     <Link href="/forgotpassword"><h3 className="text-center my-6">Forgot your Password?</h3></Link>
                     <h3 className="text-center my-6 text-[#5752FC]"><span className="text-slate-400">Don't have an account? </span><Link href="/signup">Sign up here!</Link></h3>
