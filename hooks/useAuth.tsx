@@ -8,6 +8,7 @@ interface AuthContextType {
     isAuthenticated: boolean | null;
     xsrfToken: string;
     submitError: string | null;
+    emailAddress: string ;
     setSubmitError: React.Dispatch<React.SetStateAction<string | null>>;
     login: (email: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
@@ -19,6 +20,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
     const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
     const [submitError, setSubmitError] = useState<string | null>(null);
+    const [emailAddress, setEmailAddress] = useState(Cookies.get('email') || '');
     const router = useRouter();
 
     useEffect(() => {
@@ -62,6 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const data = await response.json();
                 setIsAuthenticated(true);
                 setXsrfToken(data.csrfToken);
+                setEmailAddress(email);
                 router.push('/account'); // Redirect to console page
             } else {
                 const errorData = await response.json();
@@ -83,6 +86,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setIsAuthenticated(false);
             setXsrfToken('');
             Cookies.remove('XSRF-TOKEN');
+            setEmailAddress('');
         } catch (error) {
             console.error('Logout error:', error);
         }
@@ -90,7 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, xsrfToken, login, logout, submitError, setSubmitError }}>
+        <AuthContext.Provider value={{ isAuthenticated, xsrfToken, emailAddress, login, logout, submitError, setSubmitError }}>
             {children}
         </AuthContext.Provider>
     );
