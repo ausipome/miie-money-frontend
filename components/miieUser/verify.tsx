@@ -1,11 +1,15 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import useCheckUser from '../../hooks/useCheckUser';
 
 export default function CreateStripeAccount() {
   const [accountId, setAccountId] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const { userData, loading, error, setError, setLoading} = useCheckUser();
+
+    useEffect(() => {
+      console.log(userData);
+    }, [userData]);
 
   const handleCreateAccount = async () => {
     setLoading(true);
@@ -32,6 +36,14 @@ export default function CreateStripeAccount() {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+}
+
+if (error) {
+    return <div>Error: {error.message}</div>;
+}
 
   return (
     <div style={{ padding: '20px' }}>
