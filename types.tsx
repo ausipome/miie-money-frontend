@@ -1,13 +1,10 @@
 // types.ts
 
 export interface UserData {
-    id: string;
-    name: string;
-    email: string;
+    stripe_account_id: string;
+    fullName: string;
     message: string;
 }
-
-export type Loading = boolean;
 
 export interface Error {
     message: string;
@@ -19,8 +16,5 @@ export type SetLoading = (loading: boolean) => void;
 
 export interface UseCheckUserResult {
     userData: UserData | null;
-    loading: Loading;
     error: Error | null;
-    setError: SetError;
-    setLoading: SetLoading;
 }
