@@ -1,13 +1,19 @@
+'use client';
+
+// hooks/useCheckUser.tsx
 import { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 import { UserData, Error, UseCheckUserResult } from '../types';
 
-const useCheckUser = (email: string, xsrfToken: string): UseCheckUserResult => {
+const useCheckUser = (): UseCheckUserResult => {
     const [userData, setUserData] = useState<UserData | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
-        const checkUser = async (email: string) => {
+        const xsrfToken = Cookies.get('xsrfToken');
+        const email = Cookies.get('email');
+
+        const checkUser = async (email: string, xsrfToken: string) => {
             try {
                 const response = await fetch('/api/account/get-account', {
                     method: 'POST',
@@ -26,19 +32,17 @@ const useCheckUser = (email: string, xsrfToken: string): UseCheckUserResult => {
                 } else {
                     setError({ message: data.message });
                 }
-            } catch (error:any) {
+            } catch (error: any) {
                 setError({ message: error.message });
-            } finally {
-                setLoading(false);
             }
         };
 
-        if (email) {
-            checkUser(email);
+        if (email && xsrfToken) {
+            checkUser(email, xsrfToken);
         }
-    }, [email, xsrfToken]);
+    }, []);
 
-    return { userData, loading, error, setError, setLoading };
+    return { userData, error };
 };
 
 export default useCheckUser;
