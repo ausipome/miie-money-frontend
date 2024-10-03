@@ -2,17 +2,19 @@
 
 // hooks/useCheckUser.tsx
 import { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
 import { UserData, Error, UseCheckUserResult } from '../types';
 
-const useCheckUser = (): UseCheckUserResult => {
+const useCheckUser = (email: string | undefined, xsrfToken: string | undefined): UseCheckUserResult => {
+
+    console.log('useCheckUser', email, xsrfToken);
+
     const [userData, setUserData] = useState<UserData | null>(null);
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
-        const xsrfToken = Cookies.get('xsrfToken');
-        const email = Cookies.get('email');
 
+        console.log('Rendering CheckUser');
+       
         const checkUser = async (email: string, xsrfToken: string) => {
             try {
                 const response = await fetch('/api/account/get-account', {
