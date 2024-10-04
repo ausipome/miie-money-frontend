@@ -17,4 +17,5 @@ export type SetLoading = (loading: boolean) => void;
 export interface UseCheckUserResult {
     userData: UserData | null;
     error: Error | null;
+    loading: boolean;
 }

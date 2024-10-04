@@ -3,22 +3,14 @@
 
 import React, { useState, useEffect } from 'react';
 import useCheckUser from '../../hooks/useCheckUser';
-import Cookies from 'js-cookie';
+
 
 const UserProfile: React.FC = () => {
-    const [xsrfToken, setXsrfToken] = useState<string | null>(null);
-    const [email, setEmail] = useState<string | null>(null);
+    
 
-    useEffect(() => {
-        const token = Cookies.get('XSRF-TOKEN');
-        const emailAddress = Cookies.get('email');
-        setXsrfToken(token || null);
-        setEmail(emailAddress || null);
-    }, []);
+    const { userData, error, loading } = useCheckUser();
 
-    const { userData, error } = useCheckUser(email ?? undefined, xsrfToken ?? undefined);
-
-    if (!xsrfToken || !email) {
+    if (loading) {
         return <div>Loading...</div>;
     }
 

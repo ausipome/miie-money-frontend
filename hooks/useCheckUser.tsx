@@ -3,19 +3,25 @@
 // hooks/useCheckUser.tsx
 import { useState, useEffect } from 'react';
 import { UserData, Error, UseCheckUserResult } from '../types';
+import Cookies from 'js-cookie';
 
-const useCheckUser = (email: string | undefined, xsrfToken: string | undefined): UseCheckUserResult => {
+const useCheckUser = (): UseCheckUserResult => {
+    const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
+    const [email, setEmail] = useState(Cookies.get('email') || '');
+    const [userData, setUserData] = useState<UserData | null>(null);
+    const [error, setError] = useState<Error | null>(null);
+    const [loading, setLoading] = useState(true);
 
     console.log('useCheckUser', email, xsrfToken);
 
-    const [userData, setUserData] = useState<UserData | null>(null);
-    const [error, setError] = useState<Error | null>(null);
+    
 
     useEffect(() => {
 
         console.log('Rendering CheckUser');
        
         const checkUser = async (email: string, xsrfToken: string) => {
+            setLoading(true);
             try {
                 const response = await fetch('/api/account/get-account', {
                     method: 'POST',
@@ -31,11 +37,14 @@ const useCheckUser = (email: string | undefined, xsrfToken: string | undefined):
 
                 if (response.ok) {
                     setUserData(data);
+                    setLoading(false);
                 } else {
                     setError({ message: data.message });
+                    setLoading(false);
                 }
             } catch (error: any) {
                 setError({ message: error.message });
+                setLoading(false);
             }
         };
 
@@ -44,7 +53,7 @@ const useCheckUser = (email: string | undefined, xsrfToken: string | undefined):
         }
     }, []);
 
-    return { userData, error };
+    return { userData, error, loading };
 };
 
 export default useCheckUser;
