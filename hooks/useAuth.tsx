@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 
 interface AuthContextType {
     isAuthenticated: boolean | null;
+    loading: boolean;
     xsrfToken: string;
     submitError: string | null;
     emailAddress: string ;
@@ -18,6 +19,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
     const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [emailAddress, setEmailAddress] = useState(Cookies.get('email') || '');
@@ -36,15 +38,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     });
                     if (response.ok) {
                         setIsAuthenticated(true);
+                        setLoading(false);
                     } else {
                         setIsAuthenticated(false);
+                        setLoading(false);
                     }
                 } catch (error) {
                     console.error('Check auth error:', error);
                     setIsAuthenticated(false);
+                    setLoading(false);
                 }
             } else {
                 setIsAuthenticated(false);
+                setLoading(false);
             }
         };
         checkAuth();
@@ -65,12 +71,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 setIsAuthenticated(true);
                 setXsrfToken(data.csrfToken);
                 setEmailAddress(email);
-                router.push('/account'); // Redirect to console page
+                setLoading(false);
+                router.push('/account'); // Redirect to account page
             } else {
                 const errorData = await response.json();
                 setSubmitError(errorData.error || 'Login failed');
+                setLoading(false);
             }
         } catch (error) {
+            setLoading(false);
             console.error('Login error:', error);
             throw error;
         }
@@ -83,18 +92,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 method: 'POST',
                 credentials: 'include',
             });
+            setLoading(false);
             setIsAuthenticated(false);
             setXsrfToken('');
             Cookies.remove('XSRF-TOKEN');
             setEmailAddress('');
         } catch (error) {
+            setLoading(false);
             console.error('Logout error:', error);
         }
         }
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, xsrfToken, emailAddress, login, logout, submitError, setSubmitError }}>
+        <AuthContext.Provider value={{ isAuthenticated, xsrfToken, emailAddress, login, logout, submitError, setSubmitError, loading }}>
             {children}
         </AuthContext.Provider>
     );

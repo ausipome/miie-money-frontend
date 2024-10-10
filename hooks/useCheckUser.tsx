@@ -10,16 +10,9 @@ const useCheckUser = (): UseCheckUserResult => {
     const [email, setEmail] = useState(Cookies.get('email') || '');
     const [userData, setUserData] = useState<UserData | null>(null);
     const [error, setError] = useState<Error | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    console.log('useCheckUser', email, xsrfToken);
-
-    
+    const [loading, setLoading] = useState(true);  
 
     useEffect(() => {
-
-        console.log('Rendering CheckUser');
-       
         const checkUser = async (email: string, xsrfToken: string) => {
             setLoading(true);
             try {
@@ -53,7 +46,7 @@ const useCheckUser = (): UseCheckUserResult => {
         }
     }, []);
 
-    return { userData, error, loading };
+    return { userData, error, loading, setLoading };
 };
 
 export default useCheckUser;
