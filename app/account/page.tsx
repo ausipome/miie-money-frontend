@@ -1,5 +1,5 @@
-import MiieCompany from "@/components/miieUser/MiieCompany";
+import AccountMain from "@/components/account/AccountMain";
 
 export default function Page() {
-    return <MiieCompany />
+    return <AccountMain />;
 }

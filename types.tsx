@@ -18,4 +18,5 @@ export interface UseCheckUserResult {
     userData: UserData | null;
     error: Error | null;
     loading: boolean;
+    setLoading: SetLoading;
 }

@@ -1,7 +1,7 @@
-import UserProfile from "@/components/miieUser/UserData";
+import StripeVerification from "@/components/user/StripeVerification";
 
 export default function Page() {
     return (
-        <UserProfile />      
+        <StripeVerification />      
     )
 }
