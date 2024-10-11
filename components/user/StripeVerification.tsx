@@ -18,6 +18,7 @@ export default function StripeVerification() {
     const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
     const [email, setEmail] = useState(Cookies.get('email') || '');
     const [stripeAccountId, setStripeAccountId] = useState<string | undefined>(undefined);
+    const [countryCode, setCountryCode] = useState<string>('gb');
     const [status, setStatus] = useState<boolean>(false);
     const { userData, error, loading, setLoading } = useCheckUser();
     const [stripeConnectInstance, setStripeConnectInstance] = useState<StripeConnectInstance | undefined>(undefined);
@@ -38,7 +39,7 @@ export default function StripeVerification() {
                   },
                   credentials: 'include',
                   body: JSON.stringify({
-                    account: stripeAccountId,
+                    stripe_account_id: stripeAccountId,
                   }),
               });
       
@@ -81,7 +82,7 @@ export default function StripeVerification() {
                     'X-CSRF-Token': xsrfToken,
                 },
                 credentials: 'include',
-                body: JSON.stringify({ email }),
+                body: JSON.stringify({ email, countryCode }),
             });
 
             if (response.ok) {
@@ -94,6 +95,36 @@ export default function StripeVerification() {
         } catch (error: any) {
             setStatus(false);
         }
+    };
+
+    const updateAccount = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('/api/account/update-connected', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': xsrfToken,
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+              stripe_account_id: stripeAccountId,
+              email: email,
+            }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('update Success', data);
+        } else {
+          setLoading(false);
+        }
+    } catch (error: any) {
+      setLoading(false);
+    }finally{
+      setLoading(false);
+      router.push('/account');
+    }
     };
 
     if (loading) { 
@@ -128,28 +159,47 @@ export default function StripeVerification() {
     if (!stripeAccountId){ 
       return(
         <>
-            <div className="bg-blue-500 text-white p-4 rounded-md shadow-md my-2 text-xl w-3/4 mx-auto">
-               <p className="text-center">
-               Please create your Stripe account to complete the setup and enable payment processing on your account.
-                </p>
-            </div>
-                <div className="flex justify-center mt-4">
-                <button
-                  onClick={createConnected}
-                  id="createConnected"
-                  className="stdButton px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center"
-                >
-                  Create
-                  {status && (
-                    <Spinner
-                      style={{ marginLeft: "4px", marginTop: "2px" }}
-                      color="warning"
-                      size="sm"
-                    />
-                  )}
-                </button>
-              </div>
-              </>
+        <div className="bg-blue-500 text-white p-4 rounded-md shadow-md my-2 text-xl w-3/4 mx-auto">
+          <p className="text-center">
+            Please create your Stripe account to complete the setup and enable payment processing on your account.
+          </p>
+        </div>
+        <div className="flex flex-col items-center mt-4 text-lg">
+          <div className="mt-6 w-full max-w-xs">
+            <label htmlFor="countryCode" className="ml-[10px] block font-medium text-gray-700">
+              Select Country
+            </label>
+            <select
+              id="countryCode"
+              name="countryCode"
+              className="m-[10px] block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 "
+              onChange={(event) => setCountryCode(event.target.value)}
+            >
+              <option value="gb">United Kingdom</option>
+              <option value="us">United States</option>
+              <option value="au">Australia</option>
+              <option value="ca">Canada</option>
+              <option value="nz">New Zealand</option>
+            </select>
+          </div>
+          <div className="w-full max-w-xs my-6">
+            <button
+              onClick={createConnected}
+              id="createConnected"
+              className="stdButton w-full m-0 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center justify-center"
+            >
+              Create
+              {status && (
+                <Spinner
+                  style={{ marginLeft: "4px", marginTop: "2px" }}
+                  color="warning"
+                  size="sm"
+                />
+              )}
+            </button>
+          </div>
+        </div>
+      </>
         );
     }
 
@@ -163,7 +213,7 @@ export default function StripeVerification() {
         
               <ConnectComponentsProvider connectInstance={stripeConnectInstance}>
               <ConnectAccountOnboarding
-                onExit={() =>  router.push('/account')}
+                 onExit={updateAccount}
               />
               </ConnectComponentsProvider>
     </div>

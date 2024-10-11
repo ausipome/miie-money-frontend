@@ -4,7 +4,20 @@ export interface UserData {
     stripe_account_id: string;
     fullName: string;
     message: string;
+    business_type: 'individual' | 'company' | 'non_profit';
+    account: string; 
 }
+
+export interface AccountInfo {
+    first_name?: string;
+    last_name?: string;
+    address?: {
+      line1: string;
+      city: string;
+      postal_code: string;
+    };
+    name?: string;
+  }
 
 export interface Error {
     message: string;

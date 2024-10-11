@@ -93,7 +93,6 @@ export default function MiieSignupForm() {
                 body: JSON.stringify(values),
             });
             if (response.ok) {
-                console.log(response);
                 setStatus(false);
                 setSignupComplete(true);
             } else {

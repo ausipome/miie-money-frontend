@@ -15,7 +15,13 @@ export default function InvoiceBuilder() {
 
   const handleItemChange = (index: number, key: keyof InvoiceItem, value: string | number) => {
     const updatedItems = [...items];
-    (updatedItems[index][key] as any) = value; // Assert the type of the key to any
+    if (key === 'quantity' && value === '') {
+      value = 0;
+    }
+    if (key === 'cost' && value === '') {
+      value = 0;
+    }
+    (updatedItems[index][key] as any) = value;
     setItems(updatedItems);
   };
 
@@ -43,9 +49,33 @@ export default function InvoiceBuilder() {
 
   return (
     <div className="max-w-[70%] mx-auto mt-8 p-6 bg-white rounded shadow-md">
-        <h1 className="text-2xl font-bold mb-4 text-slate-300">Create Invoice</h1>
+      {/* Header Section */}
+      <div className="flex justify-between items-start mb-8 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
+        <div>
+          <img src="/logo.png" alt="Company Logo" className="w-24 h-24 mb-2" />
+          <div className="font-bold text-xl">Your Company Name</div>
+          <div>1234 Street Address</div>
+          <div>City, ST 56789</div>
+          <div>Email: info@yourcompany.com</div>
+          <div>Phone: (123) 456-7890</div>
+        </div>
+        <div className="text-right">
+          <h1 className="text-4xl font-bold">INVOICE</h1>
+          <div className="mt-4">
+            <div><strong>Invoice #: </strong> INV-0001</div>
+            <div><strong>Invoice Date: </strong> October 10, 2024</div>
+          </div>
+          <div className="mt-4">
+            <h2 className="font-bold">Customer Name</h2>
+            <div>5678 Customer St.</div>
+            <div>Customer City, ST 12345</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Items Section */}
       {items.map((item, index) => (
-        <div key={index} className="mb-4">
+        <div key={index} className="mb-4 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
           <label htmlFor={`itemName-${index}`} className="block mb-2 font-bold">
             Item Name
           </label>
@@ -69,7 +99,7 @@ export default function InvoiceBuilder() {
                 min="1"
                 className="w-full border p-2 mr-2"
                 value={item.quantity}
-                onChange={e => handleItemChange(index, 'quantity', parseInt(e.target.value))}
+                onChange={e => handleItemChange(index, 'quantity', e.target.value === '' ? 0 : parseInt(e.target.value))}
               />
             </div>
             <div className="w-1/2">
@@ -84,7 +114,7 @@ export default function InvoiceBuilder() {
                 step="0.01"
                 className="w-full border p-2"
                 value={item.cost}
-                onChange={e => handleItemChange(index, 'cost', parseFloat(e.target.value))}
+                onChange={e => handleItemChange(index, 'cost', e.target.value === '' ? 0 : parseFloat(e.target.value))}
               />
             </div>
             {index !== 0 && (
@@ -98,28 +128,34 @@ export default function InvoiceBuilder() {
           </div>
         </div>
       ))}
-      <button onClick={handleAddItem} className="bg-blue-900 text-white px-4 py-2 rounded hover:text-[#fffd78] mb-4">
-        Add Item
-      </button>
-      <div className="mb-4">
-        <div className="flex mb-2">
-          <span className='w-[100px]'>Subtotal:</span>
+
+      {/* Add Item and Totals Section */}
+      <div className="mt-8 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
+        <div className="flex justify-end mb-4">
+          <button onClick={handleAddItem} className="bg-blue-900 text-white px-4 py-2 rounded hover:text-[#fffd78]">
+            Add Item
+          </button>
+        </div>
+        <div className="flex justify-end mb-2">
+          <span className='w-[100px] text-left'>Subtotal:</span>
           <span>${calculateSubtotal().toFixed(2)}</span>
         </div>
-        <div className="flex mb-2">
-          <span className='w-[100px]'>VAT ({VAT_RATE * 100}%):</span>
+        <div className="flex justify-end mb-2">
+          <span className='w-[100px] text-left'>VAT ({VAT_RATE * 100}%):</span>
           <span>${calculateVAT().toFixed(2)}</span>
         </div>
-        <div className="flex mb-2">
-          <h2 className="font-bold w-[100px]">Total:</h2>
+        <div className="flex justify-end">
+          <h2 className="font-bold w-[100px] text-left">Total:</h2>
           <h2 className="font-bold">${calculateTotal().toFixed(2)}</h2>
+        </div>
+
+        {/* Send Button */}
+        <div className="flex justify-center mt-4">
+          <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+            Send Invoice
+          </button>
         </div>
       </div>
     </div>
   );
-  
-};
-
-
-
-   
+}

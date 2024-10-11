@@ -32,11 +32,9 @@ export default function AccountMain() {
       
               if (response.ok) {
                 const data = await response.json();
-                console.log(data);
                 if(data.requirements.currently_due.length > 0){setRequiredInfo(true)}
             } else {
                 const errorData = await response.json();
-                console.log(errorData);
             }
             };
             getConnected();

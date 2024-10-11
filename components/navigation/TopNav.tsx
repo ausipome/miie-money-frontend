@@ -25,16 +25,16 @@ export default function TopNav() {
       <div className="flex flex-grow justify-left ml-20 text-xl">
         <div className="flex-shrink-0 flex items-center space-x-4">
           <div className="relative group">
-            <Link href="#" className="text-white py-2 hover:text-gray-300 px-4 rounded">Components</Link>
+            <Link href="#" className="text-white py-2 hover:text-pink-200 px-4 rounded">Components</Link>
             <div className="absolute hidden group-hover:block bg-white shadow-lg mt-1 rounded text-lg">
-              <Link href="/component1" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Component 1</Link>
-              <Link href="/component2" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Component 2</Link>
-              <Link href="/component3" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Component 3</Link>
+              <Link href="/component1" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Component 1</Link>
+              <Link href="/component2" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Component 2</Link>
+              <Link href="/component3" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Component 3</Link>
             </div>
           </div>
-          <Link href="docs" className="text-white px-4 hover:text-gray-300">Docs</Link>
-          <Link href="learn" className="text-white px-4 hover:text-gray-300">Learn</Link>
-          <Link href="contact" className="text-white px-4 hover:text-gray-300">Contact</Link>
+          <Link href="docs" className="text-white px-4 hover:text-pink-200">Docs</Link>
+          <Link href="learn" className="text-white px-4 hover:text-pink-200">Learn</Link>
+          <Link href="contact" className="text-white px-4 hover:text-pink-200">Contact</Link>
         </div>
       </div>
       
