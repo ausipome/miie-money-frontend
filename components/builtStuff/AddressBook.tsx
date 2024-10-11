@@ -2,7 +2,7 @@
 
 import useForm from '../../hooks/useForm';
 
-export default function ControlNavbar() {
+export default function AddressBook() {
 
     const { values, handleChange } = useForm({
         company: '',

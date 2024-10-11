@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-export default function InvoiceBuilder() {
+export default function LinkBuilder() {
 
     const [amount, setAmount] = useState<number | string>(''); // State for amount input
 

@@ -3,8 +3,8 @@ import { Spinner } from '@nextui-org/spinner';
 
 const Loading: React.FC = () => {
     return (
-        <div className="flex items-center justify-center h-screen">
-        <Spinner className="ml-1 mt-0.5" color="warning" size="lg"/>
+        <div className="flex justify-center h-full">
+        <Spinner color="warning" size="lg"/>
         </div>
     );
 };
