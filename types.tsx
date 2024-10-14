@@ -6,6 +6,8 @@ export interface UserData {
     message: string;
     business_type: 'individual' | 'company' | 'non_profit';
     account: string; 
+    logo_url: string;
+    vatNumber: string;
 }
 
 export interface AccountInfo {

@@ -207,7 +207,7 @@ export default function StripeVerification() {
       return (<div>
                     <div className="bg-blue-500 text-white p-4 rounded-md shadow-md my-2 text-xl w-3/4 mx-auto">
                         <p className="text-center">
-                        Please follow the prompts below to complete the required account information.
+                        Please follow the prompts below to add or update the required account information.
                         </p>
                     </div>
         

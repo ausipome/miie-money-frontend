@@ -12,10 +12,10 @@ export default function TopNav() {
         <div className="flex-shrink-0">
         <Link href="/">
         <Image 
-        src="/miie-money-side.png" 
+        src="/logo_side.png" 
         alt="Miie Money logo which is a pink and blue smile formed in the shape of an M" 
-        width={200}
-        height={40} 
+        width={286}
+        height={50} 
         />
         </Link>
         </div>
@@ -27,9 +27,9 @@ export default function TopNav() {
           <div className="relative group">
             <Link href="#" className="text-white py-2 hover:text-pink-200 px-4 rounded">Get Paid</Link>
             <div className="absolute hidden group-hover:block bg-white shadow-lg mt-1 rounded text-lg">
-              <Link href="/account/invoice" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Invoice</Link>
-              <Link href="/account/payment-link" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Payment Link</Link>
-              <Link href="/account/subscription" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Subscription</Link>
+              <Link href="/account/invoice" className="block px-4 py-2 text-gray-800 hover:bg-pink-50">Invoice</Link>
+              <Link href="/account/payment-link" className="block px-4 py-2 text-gray-800 hover:bg-pink-50">Payment Link</Link>
+              <Link href="/account/subscription" className="block px-4 py-2 text-gray-800 hover:bg-pink-50">Subscription</Link>
             </div>
           </div>
           <Link href="/account/address-book" className="text-white px-4 hover:text-pink-200">Address Book</Link>

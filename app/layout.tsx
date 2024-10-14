@@ -15,7 +15,7 @@ const roboto = Roboto({
 })
 
 export const metadata: Metadata = {
-  title: "Miie Money",
+  title: "Get Paid On The Web",
   description: "Get Paid Instantly, Invoice Customers Securely, and Manage Your Business Finances Online.",
 };
 

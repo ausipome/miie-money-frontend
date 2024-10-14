@@ -26,9 +26,9 @@ export default function IsLoggedIn() {
                                 </Link>
                                 {dropdownVisible && (
                                     <div className="absolute mt-1 bg-white shadow-lg rounded right-0">
-                                    <Link className="block px-4 py-2 text-gray-800 hover:bg-gray-100" href="/account">Account</Link>
-                                    <Link className="block px-4 py-2 text-gray-800 hover:bg-gray-100" href="/account/settings">Settings</Link>
-                                    <Link className="block px-4 py-2 text-gray-800 hover:bg-gray-100" href="/logout">Logout</Link>
+                                    <Link className="block px-4 py-2 text-gray-800 hover:bg-pink-50" href="/account">Account</Link>
+                                    <Link className="block px-4 py-2 text-gray-800 hover:bg-pink-50" href="/account/settings">Settings</Link>
+                                    <Link className="block px-4 py-2 text-gray-800 hover:bg-pink-50" href="/logout">Logout</Link>
                                     </div>
                                 )}
                                 </div> 
