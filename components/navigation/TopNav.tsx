@@ -12,10 +12,10 @@ export default function TopNav() {
         <div className="flex-shrink-0">
         <Link href="/">
         <Image 
-        src="/miie-money-side.png" 
+        src="/logo_side.png" 
         alt="Miie Money logo which is a pink and blue smile formed in the shape of an M" 
-        width={200}
-        height={40} 
+        width={286}
+        height={50} 
         />
         </Link>
         </div>
@@ -27,9 +27,9 @@ export default function TopNav() {
           <div className="relative group">
             <Link href="#" className="text-white py-2 hover:text-pink-200 px-4 rounded">Components</Link>
             <div className="absolute hidden group-hover:block bg-white shadow-lg mt-1 rounded text-lg">
-              <Link href="/component1" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Component 1</Link>
-              <Link href="/component2" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Component 2</Link>
-              <Link href="/component3" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Component 3</Link>
+              <Link href="/component1" className="block px-4 py-2 text-gray-800 hover:bg-pink-50">Component 1</Link>
+              <Link href="/component2" className="block px-4 py-2 text-gray-800 hover:bg-pink-50">Component 2</Link>
+              <Link href="/component3" className="block px-4 py-2 text-gray-800 hover:bg-pink-50">Component 3</Link>
             </div>
           </div>
           <Link href="docs" className="text-white px-4 hover:text-pink-200">Docs</Link>
