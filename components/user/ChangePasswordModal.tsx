@@ -112,15 +112,15 @@ export default function ChangePasswordModal({ isOpen, onClose }: { isOpen: boole
     }
 
     try {
-      const response = await fetch('/api/change-password', {
+      const response = await fetch('/api/account/update-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-Token': xsrfToken,
-          email: email,
         },
         credentials: 'include',
         body: JSON.stringify({
+          email: email,
           currentPassword: currentPassword,
           newPassword: newPassword,
         }),
@@ -130,6 +130,9 @@ export default function ChangePasswordModal({ isOpen, onClose }: { isOpen: boole
 
       if (response.ok) {
         setSuccessMessage('Password changed successfully!');
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 5000);
         setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
@@ -148,8 +151,6 @@ export default function ChangePasswordModal({ isOpen, onClose }: { isOpen: boole
           <>
             <ModalHeader>Change Password</ModalHeader>
             <ModalBody>
-              {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-              {successMessage && <p className="text-green-500">{successMessage}</p>}
 
               {/* Current Password Input */}
               <div className="my-4">
@@ -216,7 +217,9 @@ export default function ChangePasswordModal({ isOpen, onClose }: { isOpen: boole
                     {confirmPasswordVisible ? <FontAwesomeIcon icon={byPrefixAndName.fal['eye-slash']} /> : <FontAwesomeIcon icon={byPrefixAndName.fal['eye']} />}
                   </span>
                 </div>
-                {passwordMatchError && <p className="text-red-500">{passwordMatchError}</p>}
+                {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+                {successMessage && <p className="text-green-500 mt-4">{successMessage}</p>}
+                {passwordMatchError && <p className="text-red-500 mt-4">{passwordMatchError}</p>}
               </div>
             </ModalBody>
             <ModalFooter>

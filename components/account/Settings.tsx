@@ -189,7 +189,7 @@ export default function Settings() {
           {logoUrl ? (
             <div className="relative">
               {/* Restricting logo to a max of 300x300 without distorting the aspect ratio */}
-              <img src={logoUrl} alt="Company Logo" className="max-w-[300px] max-h-[300px] object-contain border rounded-lg bg-white" />
+              <img src={logoUrl} alt="Company Logo" className="max-w-[300px] max-h-[150px] object-contain border rounded-lg bg-white" />
               <button
                 className="absolute -bottom-8 -right-4 bg-blue-500 text-white rounded-full p-2"
                 onClick={handleLogoChange}
@@ -198,7 +198,7 @@ export default function Settings() {
               </button>
             </div>
           ) : (
-            <div className="relative h-[300px] w-[300px] bg-gray-200 flex justify-center items-center rounded-lg">
+            <div className="relative h-[150px] w-[150px] bg-gray-200 flex justify-center items-center rounded-full">
               <button onClick={handleLogoChange} className="text-gray-500 text-2xl">
                 + Add Logo
               </button>
