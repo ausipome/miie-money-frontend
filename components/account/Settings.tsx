@@ -12,7 +12,7 @@ import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
 import ChangePasswordModal from '../user/ChangePasswordModal'; // Import the modal
 
 export default function Settings() {
-  const { userData, error, loading, setLoading } = useCheckUser();
+  const { userData, error, loading } = useCheckUser();
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
   const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
   const [email, setEmail] = useState(Cookies.get('email') || '');
@@ -27,7 +27,6 @@ export default function Settings() {
 
   useEffect(() => { 
     if (userData) {
-      console.log(userData);
       try {
         const parsedAccount: AccountInfo = JSON.parse(userData.account);
         setAccountInfo(parsedAccount);

@@ -21,9 +21,21 @@ export interface AccountInfo {
     name?: string;
   }
 
+  
+export interface Contact {
+  customerId: string;
+  company: string;
+  fullName: string;
+  address: string;
+  townCity: string;
+  countyState: string;
+  postcodeZip: string;
+  email: string;
+  phone: string;
+}
+
 export interface Error {
     message: string;
-    // Add other fields as necessary
 }
 
 export type SetError = (error: Error | null) => void;
@@ -34,4 +46,10 @@ export interface UseCheckUserResult {
     error: Error | null;
     loading: boolean;
     setLoading: SetLoading;
+}
+
+export interface Invoice {
+  id: number;
+  invoiceNumber: string;
+  status: "Paid" | "Unpaid";
 }
