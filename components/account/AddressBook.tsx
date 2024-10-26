@@ -1,3 +1,5 @@
+// components/AddressBook.tsx
+
 'use client';
 
 import { useState, useEffect, ChangeEvent } from 'react';
@@ -8,19 +10,20 @@ import Cookies from 'js-cookie';
 import { Contact } from '../../types';
 
 interface AddressBookProps {
-  mode?: 'default' | 'invoice'; // 'default' for normal mode, 'invoice' for InvoiceFlow mode
-  onUseContact?: (contact: Contact) => void; // Callback to pass selected contact data to InvoiceFlow
+  mode?: 'default' | 'invoice';
+  onUseContact?: (contact: Contact) => void;
+  backButton?: React.ReactNode;
 }
 
-const AddressBook: React.FC<AddressBookProps> = ({ mode = 'default', onUseContact }) => {
+const AddressBook: React.FC<AddressBookProps> = ({ mode = 'default', onUseContact, backButton }) => {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [filteredContacts, setFilteredContacts] = useState<Contact[]>(contacts);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [contactIndex, setContactIndex] = useState<number | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string>(''); // State for error messages
-  const [successMessage, setSuccessMessage] = useState<string>(''); // State for success messages
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [successMessage, setSuccessMessage] = useState<string>('');
   const [contactForm, setContactForm] = useState<Contact>({
     customerId: '',
     company: '',
@@ -51,7 +54,7 @@ const AddressBook: React.FC<AddressBookProps> = ({ mode = 'default', onUseContac
 
       const data = await response.json();
       setContacts(data.contacts);
-      setFilteredContacts(data.contacts); // Display all contacts initially
+      setFilteredContacts(data.contacts);
     } catch (error) {
       console.error('Error fetching contacts:', error);
     }
@@ -79,12 +82,11 @@ const AddressBook: React.FC<AddressBookProps> = ({ mode = 'default', onUseContac
           setErrorMessage('');
 
           if (onUseContact) {
-            onUseContact(newContact); // Pass the newly added contact to InvoiceFlow
+            onUseContact(newContact);
           }
 
           closeModal();
 
-          // Clear success message after 4 seconds
           setTimeout(() => {
             setSuccessMessage('');
           }, 4000);
@@ -96,6 +98,80 @@ const AddressBook: React.FC<AddressBookProps> = ({ mode = 'default', onUseContac
     } catch (error) {
       console.error('Network or server error when adding contact:', error);
       setErrorMessage('Failed to add contact: Network or server error.');
+    }
+  };
+
+  const updateContact = async () => {
+    if (!contactForm.customerId) {
+      setErrorMessage('CustomerId is required to update a contact.');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/account/update-contact', {
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': xsrfToken,
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(contactForm),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        await fetchContacts();
+        setSuccessMessage(data.message || 'Contact updated successfully!');
+        setErrorMessage('');
+        closeModal();
+
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 4000);
+      } else {
+        const data = await response.json();
+        setErrorMessage(data.error || 'Failed to update contact.');
+      }
+    } catch (error) {
+      console.error('Network or server error when updating contact:', error);
+      setErrorMessage('Failed to update contact: Network or server error.');
+    }
+  };
+
+  const deleteContact = async () => {
+    if (!contactForm.customerId) {
+      setErrorMessage('CustomerId is required to delete a contact.');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/account/delete-contact', {
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': xsrfToken,
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ customerId: contactForm.customerId }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        await fetchContacts();
+        setSuccessMessage(data.message || 'Contact deleted successfully!');
+        setErrorMessage('');
+        closeModal();
+
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 4000);
+      } else {
+        const data = await response.json();
+        setErrorMessage(data.error || 'Failed to delete contact.');
+      }
+    } catch (error) {
+      console.error('Network or server error when deleting contact:', error);
+      setErrorMessage('Failed to delete contact: Network or server error.');
     }
   };
 
@@ -121,7 +197,7 @@ const AddressBook: React.FC<AddressBookProps> = ({ mode = 'default', onUseContac
 
   const openAddModal = () => {
     setIsEdit(false);
-    setErrorMessage(''); // Clear previous errors
+    setErrorMessage('');
     setContactForm({
       customerId: '',
       company: '',
@@ -138,7 +214,7 @@ const AddressBook: React.FC<AddressBookProps> = ({ mode = 'default', onUseContac
 
   const openEditModal = (index: number) => {
     setIsEdit(true);
-    setErrorMessage(''); // Clear previous errors
+    setErrorMessage('');
     setContactIndex(index);
     setContactForm(contacts[index]);
     setIsModalOpen(true);
@@ -147,12 +223,12 @@ const AddressBook: React.FC<AddressBookProps> = ({ mode = 'default', onUseContac
   const closeModal = () => {
     setIsModalOpen(false);
     setContactIndex(null);
-    setErrorMessage(''); // Clear previous errors
+    setErrorMessage('');
   };
 
   const handleUseContact = () => {
     if (onUseContact) {
-      onUseContact(contactForm); // Pass contact data to the parent (InvoiceFlow)
+      onUseContact(contactForm);
     }
     closeModal();
   };
@@ -160,14 +236,11 @@ const AddressBook: React.FC<AddressBookProps> = ({ mode = 'default', onUseContac
   return (
     <div className="flex justify-center text-center">
       <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-8">
-        <h1 className='text-2xl mb-6 border-b-1'>Address book</h1>
+        {backButton && <div className="mb-4">{backButton}</div>}
 
-        {/* Conditionally render the message when in invoice mode */}
-        {mode === 'invoice' && (
-          <p className="text-gray-600 mb-4 text-lg">
-            Select a contact or add a new contact to invoice.
-          </p>
-        )}
+        <h1 className="text-2xl mb-6 border-b-1">
+          {mode === 'invoice' ? 'Select a contact or add a new contact to invoice.' : 'Address Book'}
+        </h1>
 
         {/* Search Bar */}
         <Input
@@ -211,8 +284,7 @@ const AddressBook: React.FC<AddressBookProps> = ({ mode = 'default', onUseContac
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <ModalContent>
           <ModalHeader>
-            {/* Change heading based on mode */}
-            <h3>{isEdit && mode === 'invoice' ? 'Select Contact' : isEdit ? 'Edit Contact' : 'Add Contact'}</h3>
+            <h3>{isEdit ? (mode === 'invoice' ? 'Select Contact' : 'Edit Contact') : 'Add Contact'}</h3>
           </ModalHeader>
           <ModalBody>
 
@@ -272,27 +344,24 @@ const AddressBook: React.FC<AddressBookProps> = ({ mode = 'default', onUseContac
               onChange={handleFormChange}
               fullWidth
             />
-            {/* Error Message */}
             {errorMessage && (
               <p className="text-red-500 text-sm mb-4">{errorMessage}</p>
             )}
           </ModalBody>
           <ModalFooter>
-            {isEdit ? (
-              mode === 'invoice' ? (
-                <Button color="primary" onClick={handleUseContact}>
-                  Use Contact
+            {isEdit && mode === 'default' ? (
+              <>
+                <Button color="danger" onClick={deleteContact}>
+                  Delete
                 </Button>
-              ) : (
-                <>
-                  <Button color="danger" onClick={() => console.log('delete')}>
-                    Delete
-                  </Button>
-                  <Button color="primary" onClick={() => console.log('update')}>
-                    Save
-                  </Button>
-                </>
-              )
+                <Button color="primary" onClick={updateContact}>
+                  Save
+                </Button>
+              </>
+            ) : isEdit && mode === 'invoice' ? (
+              <Button color="primary" onClick={handleUseContact}>
+                Use Contact
+              </Button>
             ) : (
               <Button color="primary" onClick={addContact}>
                 {mode === 'invoice' ? 'Add and Use Contact' : 'Add'}
