@@ -5,6 +5,7 @@
 import useCheckUser from '@/hooks/useCheckUser';
 import { AccountInfo, Contact } from '../../types';
 import { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 
 interface InvoiceItem {
   itemName: string;
@@ -14,16 +15,19 @@ interface InvoiceItem {
 
 interface InvoiceBuilderProps {
   customer: Contact;
-  backButton?: React.ReactNode; // Pass backButton as a prop to render in InvoiceBuilder
+  backButton?: React.ReactNode;
 }
 
 export default function InvoiceBuilder({ customer, backButton }: InvoiceBuilderProps) {
-  const { userData, error, loading } = useCheckUser();
+  const { userData } = useCheckUser();
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [vatNumber, setVatNumber] = useState<string | null>(null);
+  const [invoiceNumber, setInvoiceNumber] = useState<string>(''); // Dynamically set invoice number
   const [items, setItems] = useState<InvoiceItem[]>([{ itemName: '', quantity: 1, cost: 0 }]);
-  const VAT_RATE = 0.20; // VAT rate, set to 20%
+  const VAT_RATE = 0.20;
+  const INVOICE_DATE = new Date().toLocaleDateString(); // Format date as desired
+  const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
 
   useEffect(() => {
     if (userData) {
@@ -37,6 +41,32 @@ export default function InvoiceBuilder({ customer, backButton }: InvoiceBuilderP
       }
     }
   }, [userData]);
+
+  // Fetch dynamic invoice number on component mount
+  useEffect(() => {
+    const fetchInvoiceNumber = async () => {
+      try {
+        const response = await fetch('/api/account/get-invoice-number', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': xsrfToken,
+          },
+          credentials: 'include',
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setInvoiceNumber(data.invoiceNumber); // Assume API returns { invoiceNumber: "INV-XXXX" }
+        } else {
+          console.error('Failed to fetch invoice number');
+        }
+      } catch (error) {
+        console.error('Error fetching invoice number:', error);
+      }
+    };
+
+    fetchInvoiceNumber();
+  }, []);
 
   const handleItemChange = (index: number, key: keyof InvoiceItem, value: string | number) => {
     const updatedItems = [...items];
@@ -59,13 +89,52 @@ export default function InvoiceBuilder({ customer, backButton }: InvoiceBuilderP
 
   const calculateTotal = () => calculateSubtotal() + calculateVAT();
 
+  // Fetch function to send or save the invoice
+  const handleInvoiceAction = async (action: 'save' | 'send') => {
+    const invoiceData = {
+      whereFrom: action,
+      invoiceNumber,
+      invoiceDate: INVOICE_DATE,
+      vatNumber,
+      customer,
+      items,
+      accountInfo, // Include accountInfo in the payload
+      logoUrl, // Include logoUrl in the payload
+      subtotal: calculateSubtotal(),
+      vatAmount: calculateVAT(),
+      total: calculateTotal(),
+    };
+
+    try {
+      const response = await fetch('/api/account/manage-invoice', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': xsrfToken,
+        },
+        credentials: 'include',
+        body: JSON.stringify(invoiceData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(`Invoice ${action === 'save' ? 'saved' : 'sent'} successfully:`, data.message);
+      } else {
+        const errorData = await response.json();
+        console.error(`Failed to ${action} invoice:`, errorData.error);
+      }
+    } catch (error) {
+      console.error('Error in invoice action:', error);
+    }
+  };
+
   return (
     <div className="max-w-[70%] mx-auto mt-8 p-6 bg-white rounded shadow-md">
-      {backButton && <div className="mb-4">{backButton}</div>} {/* Display back button */}
+      {backButton && <div className="mb-4">{backButton}</div>}
 
       <div className="flex justify-between items-start mb-8 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
         <div>
-          <img src={logoUrl || "/logo.png"} alt="Company Logo" className="w-auto h-auto max-w-[200px] max-h-[100px] mb-2" />
+          <img src={logoUrl || "/logo_side.png"} alt="Company Logo" className="w-auto h-auto max-w-[200px] max-h-[100px] mb-2" />
           {userData?.business_type === 'individual' && (
             <div>
               <p className='pb-4'><strong>Full Name</strong><br /> {accountInfo?.first_name} {accountInfo?.last_name}</p>
@@ -91,8 +160,8 @@ export default function InvoiceBuilder({ customer, backButton }: InvoiceBuilderP
         <div className="text-left">
           <h1 className="text-4xl font-bold">INVOICE</h1>
           <div className="mt-4">
-            <div><strong>Invoice #: </strong> INV-0001</div>
-            <div><strong>Invoice Date: </strong> {new Date().toLocaleDateString()}</div>
+            <div><strong>Invoice #: </strong> {invoiceNumber}</div>
+            <div><strong>Invoice Date: </strong> {INVOICE_DATE}</div>
             {vatNumber && (
               <div className="mt-2">
                 <strong>VAT Number: </strong>{vatNumber}
@@ -102,7 +171,7 @@ export default function InvoiceBuilder({ customer, backButton }: InvoiceBuilderP
 
           {/* Customer Details */}
           <div className="mt-4">
-            <h2 className="font-bold">{customer.company || customer.fullName}</h2> {/* Display company or full name */}
+            <h2 className="font-bold">{customer.company || customer.fullName}</h2>
             <div>{customer.address}</div>
             <div>{customer.townCity}, {customer.countyState} {customer.postcodeZip}</div>
             <div>{customer.email}</div>
@@ -182,8 +251,12 @@ export default function InvoiceBuilder({ customer, backButton }: InvoiceBuilderP
           <h2 className="font-bold">£{calculateTotal().toFixed(2)}</h2>
         </div>
 
-        <div className="flex justify-center mt-4">
-          <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+        {/* Save and Send Buttons */}
+        <div className="flex justify-center mt-4 space-x-4">
+          <button onClick={() => handleInvoiceAction('save')} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+            Save Invoice
+          </button>
+          <button onClick={() => handleInvoiceAction('send')} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
             Send Invoice
           </button>
         </div>
