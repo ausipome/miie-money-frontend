@@ -49,7 +49,21 @@ export interface UseCheckUserResult {
 }
 
 export interface Invoice {
-  id: number;
+  customer: any;
+  invoiceId: string;
   invoiceNumber: string;
-  status: "Paid" | "Unpaid";
-}
+  invoiceDate: string;
+  status: "paid" | "unpaid";
+  total: number;
+  vatNumber: string;
+  items: InvoiceItem[];
+  logoUrl: string;
+  }
+
+  export interface InvoiceItem {
+    itemName: string;
+    quantity: number;
+    cost: number;
+  }
+  
+ 
