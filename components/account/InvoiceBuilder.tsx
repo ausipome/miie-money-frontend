@@ -1,34 +1,37 @@
-// components/InvoiceBuilder.tsx
-
 'use client';
 
 import useCheckUser from '@/hooks/useCheckUser';
-import { AccountInfo, Contact } from '../../types';
+import { AccountInfo, Contact, Invoice, InvoiceItem } from '../../types';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
-
-interface InvoiceItem {
-  itemName: string;
-  quantity: number;
-  cost: number;
-}
+import { Spinner } from '@nextui-org/spinner';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
+import { Button } from '@nextui-org/button';
 
 interface InvoiceBuilderProps {
-  customer: Contact;
+  customer?: Contact;
+  invoiceData?: Invoice;
   backButton?: React.ReactNode;
+  onNewInvoice: () => void;
+  onHomeClick: () => void;
 }
 
-export default function InvoiceBuilder({ customer, backButton }: InvoiceBuilderProps) {
+export default function InvoiceBuilder({ customer, invoiceData, backButton, onNewInvoice, onHomeClick }: InvoiceBuilderProps) {
   const { userData } = useCheckUser();
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
-  const [logoUrl, setLogoUrl] = useState<string | null>(null);
-  const [vatNumber, setVatNumber] = useState<string | null>(null);
-  const [invoiceNumber, setInvoiceNumber] = useState<string>(''); // Dynamically set invoice number
-  const [items, setItems] = useState<InvoiceItem[]>([{ itemName: '', quantity: 1, cost: 0 }]);
+  const [logoUrl, setLogoUrl] = useState<string | null>(invoiceData?.logoUrl || null);
+  const [vatNumber, setVatNumber] = useState<string | null>(invoiceData?.vatNumber || null);
+  const [invoiceId, setInvoiceId] = useState<string | null>(invoiceData?.invoiceId || null);
+  const [invoiceNumber, setInvoiceNumber] = useState<string>(invoiceData?.invoiceNumber || '');
+  const [items, setItems] = useState<InvoiceItem[]>(invoiceData?.items || [{ itemName: '', quantity: 1, cost: 0 }]);
+  const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+  const [loadingAction, setLoadingAction] = useState<'save' | 'send' | 'delete' | null>(null);
   const VAT_RATE = 0.20;
-  const INVOICE_DATE = new Date().toLocaleDateString(); // Format date as desired
+  const INVOICE_DATE = invoiceData?.invoiceDate || new Date().toLocaleDateString();
   const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
 
+  // Set up user data
   useEffect(() => {
     if (userData) {
       try {
@@ -42,31 +45,32 @@ export default function InvoiceBuilder({ customer, backButton }: InvoiceBuilderP
     }
   }, [userData]);
 
-  // Fetch dynamic invoice number on component mount
+  // Fetch new invoice number if creating a new invoice
   useEffect(() => {
-    const fetchInvoiceNumber = async () => {
-      try {
-        const response = await fetch('/api/account/get-invoice-number', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-Token': xsrfToken,
-          },
-          credentials: 'include',
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setInvoiceNumber(data.invoiceNumber); // Assume API returns { invoiceNumber: "INV-XXXX" }
-        } else {
-          console.error('Failed to fetch invoice number');
+    if (!invoiceData) {
+      const fetchInvoiceNumber = async () => {
+        try {
+          const response = await fetch('/api/account/get-invoice-number', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': xsrfToken,
+            },
+            credentials: 'include',
+          });
+          if (response.ok) {
+            const data = await response.json();
+            setInvoiceNumber(data.invoiceNumber); 
+          } else {
+            console.error('Failed to fetch invoice number');
+          }
+        } catch (error) {
+          console.error('Error fetching invoice number:', error);
         }
-      } catch (error) {
-        console.error('Error fetching invoice number:', error);
-      }
-    };
-
-    fetchInvoiceNumber();
-  }, []);
+      };
+      fetchInvoiceNumber();
+    }
+  }, [invoiceData]);
 
   const handleItemChange = (index: number, key: keyof InvoiceItem, value: string | number) => {
     const updatedItems = [...items];
@@ -89,17 +93,27 @@ export default function InvoiceBuilder({ customer, backButton }: InvoiceBuilderP
 
   const calculateTotal = () => calculateSubtotal() + calculateVAT();
 
-  // Fetch function to send or save the invoice
-  const handleInvoiceAction = async (action: 'save' | 'send') => {
-    const invoiceData = {
+  const handleInvoiceAction = async (action: 'save' | 'send' | 'delete') => {
+    setLoadingAction(action);
+
+    if (action === 'delete') {
+      const confirmed = confirm("Are you sure you want to delete this invoice?");
+      if (!confirmed) {
+        setLoadingAction(null);
+        return;
+      }
+    }
+
+    const invoicePayload = {
+      invoiceId,
       whereFrom: action,
       invoiceNumber,
       invoiceDate: INVOICE_DATE,
       vatNumber,
-      customer,
+      customer: invoiceData?.customer || customer,
       items,
-      accountInfo, // Include accountInfo in the payload
-      logoUrl, // Include logoUrl in the payload
+      accountInfo,
+      logoUrl,
       subtotal: calculateSubtotal(),
       vatAmount: calculateVAT(),
       total: calculateTotal(),
@@ -107,31 +121,55 @@ export default function InvoiceBuilder({ customer, backButton }: InvoiceBuilderP
 
     try {
       const response = await fetch('/api/account/manage-invoice', {
-        method: 'POST',
+        method: action === 'delete' ? 'DELETE' : 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-Token': xsrfToken,
         },
         credentials: 'include',
-        body: JSON.stringify(invoiceData),
+        body: JSON.stringify(invoicePayload),
       });
 
       if (response.ok) {
         const data = await response.json();
-        console.log(`Invoice ${action === 'save' ? 'saved' : 'sent'} successfully:`, data.message);
+        setMessage({ type: 'success', text: `Invoice ${action === 'save' ? 'saved' : action === 'send' ? 'sent' : 'deleted'} successfully!` });
+        
+        if (action === 'delete') {
+          onHomeClick();
+        } else if (!invoiceId && data.invoiceId) {
+          setInvoiceId(data.invoiceId);
+        }
       } else {
         const errorData = await response.json();
-        console.error(`Failed to ${action} invoice:`, errorData.error);
+        setMessage({ type: 'error', text: `Failed to ${action} invoice: ${errorData.error}` });
       }
-    } catch (error) {
-      console.error('Error in invoice action:', error);
+    } catch (error: any) {
+      setMessage({ type: 'error', text: `Error in invoice action: ${error.message}` });
+    } finally {
+      setLoadingAction(null);
     }
   };
 
+  const displayedCustomer = invoiceData?.customer || customer;
+
   return (
     <div className="max-w-[70%] mx-auto mt-8 p-6 bg-white rounded shadow-md">
-      {backButton && <div className="mb-4">{backButton}</div>}
+      {/* Back, Home, and New Invoice Buttons */}
+      {backButton && (
+        <div className="flex justify-between mb-4 text-base">
+          <div className="flex space-x-2">
+            {backButton}
+            <Button onClick={onHomeClick} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+              <FontAwesomeIcon icon={byPrefixAndName.fas['house']} />
+            </Button>
+          </div>
+          <Button onClick={onNewInvoice} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            New Invoice
+          </Button>
+        </div>
+      )}
 
+      {/* Invoice Details */}
       <div className="flex justify-between items-start mb-8 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
         <div>
           <img src={logoUrl || "/logo_side.png"} alt="Company Logo" className="w-auto h-auto max-w-[200px] max-h-[100px] mb-2" />
@@ -169,14 +207,15 @@ export default function InvoiceBuilder({ customer, backButton }: InvoiceBuilderP
             )}
           </div>
 
-          {/* Customer Details */}
-          <div className="mt-4">
-            <h2 className="font-bold">{customer.company || customer.fullName}</h2>
-            <div>{customer.address}</div>
-            <div>{customer.townCity}, {customer.countyState} {customer.postcodeZip}</div>
-            <div>{customer.email}</div>
-            <div>{customer.phone}</div>
-          </div>
+          {displayedCustomer && (
+            <div className="mt-4">
+              <h2 className="font-bold">{displayedCustomer.company || displayedCustomer.fullName}</h2>
+              <div>{displayedCustomer.address}</div>
+              <div>{displayedCustomer.townCity}, {displayedCustomer.countyState} {displayedCustomer.postcodeZip}</div>
+              <div>{displayedCustomer.email}</div>
+              <div>{displayedCustomer.phone}</div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -227,7 +266,7 @@ export default function InvoiceBuilder({ customer, backButton }: InvoiceBuilderP
         </div>
       ))}
 
-      {/* Add Item and Totals Section */}
+      {/* Totals and Action Buttons */}
       <div className="mt-8 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
         <div className="flex justify-end mb-4">
           <button onClick={handleAddItem} className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-800">
@@ -251,16 +290,43 @@ export default function InvoiceBuilder({ customer, backButton }: InvoiceBuilderP
           <h2 className="font-bold">£{calculateTotal().toFixed(2)}</h2>
         </div>
 
-        {/* Save and Send Buttons */}
+        {/* Save, Send, and Delete Buttons with Spinner */}
         <div className="flex justify-center mt-4 space-x-4">
-          <button onClick={() => handleInvoiceAction('save')} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+          {invoiceId && (
+            <button
+              onClick={() => handleInvoiceAction('delete')}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              disabled={loadingAction === 'delete'}
+            >
+              Delete Invoice
+              {loadingAction === 'delete' && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
+            </button>
+          )}
+          <button
+            onClick={() => handleInvoiceAction('save')}
+            className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600"
+            disabled={loadingAction === 'save'}
+          >
             Save Invoice
+            {loadingAction === 'save' && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
           </button>
-          <button onClick={() => handleInvoiceAction('send')} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+          <button
+            onClick={() => handleInvoiceAction('send')}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            disabled={loadingAction === 'send'}
+          >
             Send Invoice
+            {loadingAction === 'send' && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
           </button>
         </div>
       </div>
+
+      {/* Success/Error Message */}
+      {message && (
+        <div className={`mt-4 p-2 rounded ${message.type === 'success' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>
+          {message.text}
+        </div>
+      )}
     </div>
   );
 }
