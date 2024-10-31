@@ -28,7 +28,7 @@ export default function SubscriptionBuilder() {
     
       const handleSubmit = () => {
         // Your submit logic here
-        console.log('Subscription details:', subscription);
+        
       };
     
       return (

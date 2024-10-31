@@ -8,6 +8,7 @@ export interface UserData {
     account: string; 
     logo_url: string;
     vatNumber: string;
+    application_fee: number;
 }
 
 export interface AccountInfo {
@@ -58,6 +59,8 @@ export interface Invoice {
   vatNumber: string;
   items: InvoiceItem[];
   logoUrl: string;
+  vatAmount: number;
+  countryCode: string;
   }
 
   export interface InvoiceItem {

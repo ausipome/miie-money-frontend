@@ -18,7 +18,6 @@ export default function AddressBook() {
     
       const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(values); // You can use the form data here
       };
     
       return (
