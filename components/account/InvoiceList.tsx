@@ -19,7 +19,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onNewInvoiceClick, onOpenInvo
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const response = await fetch('/api/account/get-invoices', {
+        const response = await fetch('/api/invoice/get-invoices', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onNewInvoiceClick, onOpenInvo
   // Handler to fetch and open a specific invoice by ID
   const handleInvoiceClick = async (invoiceId: string) => {
     try {
-      const response = await fetch(`/api/account/get-invoice-by-id/${invoiceId}`, {
+      const response = await fetch(`/get-invoice-by-id/${invoiceId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +57,6 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onNewInvoiceClick, onOpenInvo
       if (!response.ok) throw new Error('Failed to fetch invoice');
 
       const invoice = await response.json();
-      console.log("Loaded invoice data:", invoice); // Add logging to check data structure
       onOpenInvoice(invoice.invoice); // Pass only the `invoice` object if it's wrapped in { invoice: {...} }
     } catch (error) {
       console.error('Error fetching invoice:', error);

@@ -1,10 +1,12 @@
+// components/InvoiceFlow.tsx
+
 'use client';
 
 import { useState } from 'react';
 import InvoiceList from './InvoiceList';
 import AddressBook from './AddressBook';
 import InvoiceBuilder from './InvoiceBuilder';
-import BackButton from '../BackButton';
+import BackButton from '../navigation/BackButton';
 import { Contact, Invoice } from '../../types';
 
 const InvoiceFlow: React.FC = () => {
@@ -36,18 +38,16 @@ const InvoiceFlow: React.FC = () => {
     setSelectedInvoice(invoice);
   };
 
-  // Reset the flow to show the invoice list (home screen)
   const handleHomeClick = () => {
     setShowAddressBook(false);
     setSelectedContact(null);
     setSelectedInvoice(null);
   };
 
-  // New function to reset flow for a new invoice
   const handleNewInvoice = () => {
     setSelectedContact(null);
     setSelectedInvoice(null);
-    setShowAddressBook(true); // Show the address book for contact selection
+    setShowAddressBook(true);
   };
 
   return (
@@ -57,14 +57,14 @@ const InvoiceFlow: React.FC = () => {
           invoiceData={selectedInvoice}
           backButton={<BackButton onClick={handleBackClick} />}
           onNewInvoice={handleNewInvoice}
-          onHomeClick={handleHomeClick} // Pass the home button handler
+          onHomeClick={handleHomeClick}
         />
       ) : selectedContact ? (
         <InvoiceBuilder
           customer={selectedContact}
           backButton={<BackButton onClick={handleBackClick} />}
           onNewInvoice={handleNewInvoice}
-          onHomeClick={handleHomeClick} // Pass the home button handler
+          onHomeClick={handleHomeClick}
         />
       ) : showAddressBook ? (
         <AddressBook mode="invoice" onUseContact={handleUseContact} backButton={<BackButton onClick={handleBackClick} />} />

@@ -1,13 +1,10 @@
-'use client';
-
 import useCheckUser from '@/hooks/useCheckUser';
 import { AccountInfo, Contact, Invoice, InvoiceItem } from '../../types';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { Spinner } from '@nextui-org/spinner';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
 import { Button } from '@nextui-org/button';
+import HomeButton from '../navigation/HomeButton';
 
 interface InvoiceBuilderProps {
   customer?: Contact;
@@ -31,7 +28,13 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   const INVOICE_DATE = invoiceData?.invoiceDate || new Date().toLocaleDateString();
   const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
 
-  // Set up user data
+  const applicationFeeRate = userData?.application_fee || 0;
+
+  const isPaid = invoiceData?.status === 'paid';
+  const shouldCalculateVAT = !isPaid
+    ? !!vatNumber
+    : isPaid && invoiceData?.vatAmount !== 0;
+
   useEffect(() => {
     if (userData) {
       try {
@@ -45,12 +48,11 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
     }
   }, [userData]);
 
-  // Fetch new invoice number if creating a new invoice
   useEffect(() => {
     if (!invoiceData) {
       const fetchInvoiceNumber = async () => {
         try {
-          const response = await fetch('/api/account/get-invoice-number', {
+          const response = await fetch('/api/invoice/get-invoice-number', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -89,9 +91,11 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
 
   const calculateSubtotal = () => items.reduce((acc, item) => acc + item.quantity * item.cost, 0);
 
-  const calculateVAT = () => (vatNumber ? calculateSubtotal() * VAT_RATE : 0);
+  const calculateVAT = () => (shouldCalculateVAT ? calculateSubtotal() * VAT_RATE : 0);
 
   const calculateTotal = () => calculateSubtotal() + calculateVAT();
+
+  const applicationFee = parseFloat((calculateTotal() * applicationFeeRate).toFixed(2));
 
   const handleInvoiceAction = async (action: 'save' | 'send' | 'delete') => {
     setLoadingAction(action);
@@ -117,11 +121,12 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
       subtotal: calculateSubtotal(),
       vatAmount: calculateVAT(),
       total: calculateTotal(),
+      applicationFee,
     };
 
     try {
-      const response = await fetch('/api/account/manage-invoice', {
-        method: action === 'delete' ? 'DELETE' : 'POST',
+      const response = await fetch('/api/invoice/manage-invoice', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-Token': xsrfToken,
@@ -155,24 +160,20 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   return (
     <div className="max-w-[70%] mx-auto mt-8 p-6 bg-white rounded shadow-md">
       {/* Back, Home, and New Invoice Buttons */}
-      {backButton && (
-        <div className="flex justify-between mb-4 text-base">
-          <div className="flex space-x-2">
-            {backButton}
-            <Button onClick={onHomeClick} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-              <FontAwesomeIcon icon={byPrefixAndName.fas['house']} />
-            </Button>
-          </div>
-          <Button onClick={onNewInvoice} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-            New Invoice
-          </Button>
+      <div className="flex justify-between mb-4 text-base">
+        <div className="flex space-x-2">
+          {backButton}
+          <HomeButton onClick={onHomeClick} />
         </div>
-      )}
+        <Button onClick={onNewInvoice} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+          New Invoice
+        </Button>
+      </div>
 
       {/* Invoice Details */}
       <div className="flex justify-between items-start mb-8 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
         <div>
-          <img src={logoUrl || "/logo_side.png"} alt="Company Logo" className="w-auto h-auto max-w-[200px] max-h-[100px] mb-2" />
+          <img src={logoUrl || "/logo_side_transparent-background_black.png"} alt="Company Logo" className="w-auto h-auto max-w-[200px] max-h-[100px] mb-2" />
           {userData?.business_type === 'individual' && (
             <div>
               <p className='pb-4'><strong>Full Name</strong><br /> {accountInfo?.first_name} {accountInfo?.last_name}</p>
@@ -230,6 +231,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
             className="w-full border p-2 mb-2"
             value={item.itemName}
             onChange={e => handleItemChange(index, 'itemName', e.target.value)}
+            readOnly={isPaid}
           />
           <div className="flex justify-between mb-2">
             <div className="w-1/2">
@@ -242,6 +244,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
                 className="w-full border p-2 mr-2"
                 value={item.quantity}
                 onChange={e => handleItemChange(index, 'quantity', parseInt(e.target.value))}
+                readOnly={isPaid}
               />
             </div>
             <div className="w-1/2">
@@ -255,9 +258,10 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
                 className="w-full border p-2"
                 value={item.cost}
                 onChange={e => handleItemChange(index, 'cost', parseFloat(e.target.value))}
+                readOnly={isPaid}
               />
             </div>
-            {index !== 0 && (
+            {!isPaid && index !== 0 && (
               <button onClick={() => handleRemoveItem(index)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ml-2 h-1/2 mt-auto">
                 Remove
               </button>
@@ -268,17 +272,19 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
 
       {/* Totals and Action Buttons */}
       <div className="mt-8 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
-        <div className="flex justify-end mb-4">
-          <button onClick={handleAddItem} className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-800">
-            Add Item
-          </button>
-        </div>
+        {!isPaid && (
+          <div className="flex justify-end mb-4">
+            <button onClick={handleAddItem} className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-800">
+              Add Item
+            </button>
+          </div>
+        )}
         <div className="flex justify-end mb-2">
           <span className="w-[100px] text-left">Subtotal:</span>
           <span>£{calculateSubtotal().toFixed(2)}</span>
         </div>
 
-        {vatNumber && (
+        {shouldCalculateVAT && (
           <div className="flex justify-end mb-2">
             <span className="w-[100px] text-left">VAT ({VAT_RATE * 100}%):</span>
             <span>£{calculateVAT().toFixed(2)}</span>
@@ -290,38 +296,42 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
           <h2 className="font-bold">£{calculateTotal().toFixed(2)}</h2>
         </div>
 
-        {/* Save, Send, and Delete Buttons with Spinner */}
-        <div className="flex justify-center mt-4 space-x-4">
-          {invoiceId && (
+        {!isPaid ? (
+          <div className="flex justify-center mt-4 space-x-4">
+            {invoiceId && (
+              <button
+                onClick={() => handleInvoiceAction('delete')}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                disabled={loadingAction === 'delete'}
+              >
+                Delete Invoice
+                {loadingAction === 'delete' && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
+              </button>
+            )}
             <button
-              onClick={() => handleInvoiceAction('delete')}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-              disabled={loadingAction === 'delete'}
+              onClick={() => handleInvoiceAction('save')}
+              className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600"
+              disabled={loadingAction === 'save'}
             >
-              Delete Invoice
-              {loadingAction === 'delete' && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
+              Save Invoice
+              {loadingAction === 'save' && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
             </button>
-          )}
-          <button
-            onClick={() => handleInvoiceAction('save')}
-            className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600"
-            disabled={loadingAction === 'save'}
-          >
-            Save Invoice
-            {loadingAction === 'save' && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
-          </button>
-          <button
-            onClick={() => handleInvoiceAction('send')}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-            disabled={loadingAction === 'send'}
-          >
-            Send Invoice
-            {loadingAction === 'send' && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
-          </button>
-        </div>
+            <button
+              onClick={() => handleInvoiceAction('send')}
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              disabled={loadingAction === 'send'}
+            >
+              Send Invoice
+              {loadingAction === 'send' && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
+            </button>
+          </div>
+        ) : (
+          <div className="flex justify-center mt-4 text-green-600 font-bold text-5xl">
+            PAID
+          </div>
+        )}
       </div>
 
-      {/* Success/Error Message */}
       {message && (
         <div className={`mt-4 p-2 rounded ${message.type === 'success' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>
           {message.text}

@@ -93,9 +93,6 @@ export default function Settings() {
     formData.append('email', email);  // Attach email to the form data
     formData.append('logo', file);    // Attach the logo file to the form data
 
-    console.log("Uploading file:", file); // Debugging log
-    console.log("FormData:", formData.get('logo')); // Debugging log for the file inside FormData
-
     try {
       const response = await fetch('/api/account/upload-logo', {
         method: 'POST',
@@ -109,7 +106,6 @@ export default function Settings() {
       const data = await response.json();
 
       if (response.ok) {
-        console.log('Logo uploaded successfully:', data.logo_url);
         setLogoUrl(data.logo_url); // Update logo URL in state after successful upload
       } else {
         console.error('Error uploading logo:', data.error);

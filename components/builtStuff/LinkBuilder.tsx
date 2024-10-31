@@ -8,8 +8,6 @@ export default function LinkBuilder() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Here you can perform any action with the submitted amount, like sending it to an API
-    console.log('Submitted amount:', amount);
     // Reset the form after submission
     setAmount('');
   };

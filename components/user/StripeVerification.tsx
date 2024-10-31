@@ -18,7 +18,7 @@ export default function StripeVerification() {
     const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
     const [email, setEmail] = useState(Cookies.get('email') || '');
     const [stripeAccountId, setStripeAccountId] = useState<string | undefined>(undefined);
-    const [countryCode, setCountryCode] = useState<string>('gb');
+    const [countryCode, setCountryCode] = useState<string>('GB');
     const [status, setStatus] = useState<boolean>(false);
     const { userData, error, loading, setLoading } = useCheckUser();
     const [stripeConnectInstance, setStripeConnectInstance] = useState<StripeConnectInstance | undefined>(undefined);
@@ -115,7 +115,6 @@ export default function StripeVerification() {
 
         if (response.ok) {
           const data = await response.json();
-          console.log('update Success', data);
         } else {
           setLoading(false);
         }
@@ -175,11 +174,11 @@ export default function StripeVerification() {
               className="m-[10px] block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 "
               onChange={(event) => setCountryCode(event.target.value)}
             >
-              <option value="gb">United Kingdom</option>
-              <option value="us">United States</option>
-              <option value="au">Australia</option>
-              <option value="ca">Canada</option>
-              <option value="nz">New Zealand</option>
+              <option value="GB">United Kingdom</option>
+              <option value="US">United States</option>
+              <option value="AU">Australia</option>
+              <option value="CA">Canada</option>
+              <option value="NZ">New Zealand</option>
             </select>
           </div>
           <div className="w-full max-w-xs my-6">
