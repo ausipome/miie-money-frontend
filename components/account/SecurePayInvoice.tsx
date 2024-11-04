@@ -4,6 +4,11 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Spinner } from '@nextui-org/spinner';
 import { AccountInfo, Invoice } from '../../types';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
+
+// Initialize Stripe with your publishable key
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
 
 export default function SecurePayInvoice() {
   const searchParams = useSearchParams();
@@ -12,6 +17,7 @@ export default function SecurePayInvoice() {
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<{ type: 'error'; text: string } | null>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
   const VAT_RATE = 0.20;
 
   useEffect(() => {
@@ -44,6 +50,41 @@ export default function SecurePayInvoice() {
 
     fetchInvoice();
   }, [invoiceId]);
+
+  const initializePayment = async () => {
+    if (!invoice) return;
+
+    const countryCode = invoice.countryCode || 'GB';
+    const currencyMap = { GB: 'gbp', US: 'usd', CA: 'cad', AU: 'aud', NZ: 'nzd' };
+    const currency = (currencyMap as Record<string, string>)[countryCode] || 'usd';
+
+    // Calculate total amount in smallest currency unit (e.g., pence or cents)
+    const amount = Math.round(calculateTotal() * 100);
+    const applicationFee = Math.round(invoice.applicationFee * 100); // Convert application fee to smallest currency unit
+    const accountId = invoice.accountId; // Retrieve connected account ID from invoice data
+
+    try {
+      const response = await fetch('/get-payment-intent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount,
+          currency,
+          application_fee: applicationFee,
+          accountId: accountId,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to create PaymentIntent');
+      const { clientSecret } = await response.json();
+      setClientSecret(clientSecret);
+    } catch (error) {
+      console.error('Error creating PaymentIntent:', error);
+      setMessage({ type: 'error', text: 'Failed to initialize payment.' });
+    }
+  };
 
   if (loading) return <Spinner color="primary" size="lg" />;
 
@@ -131,19 +172,61 @@ export default function SecurePayInvoice() {
         </div>
       </div>
 
-      {/* Payment Status */}
-      {isPaid ? (
-        <div className="text-center text-green-600 font-bold text-2xl mt-8">This Invoice is Paid</div>
-      ) : (
-        <div className="text-center text-red-600 font-bold text-2xl mt-8">Payment Required</div>
+      {/* Stripe Payment Section */}
+      {!isPaid && (
+        <div className="mt-8">
+          {clientSecret ? (
+            <Elements stripe={stripePromise} options={{ clientSecret }}>
+              <CheckoutForm />
+            </Elements>
+          ) : (
+            <button onClick={initializePayment} className="btn btn-primary">
+              Pay Invoice
+            </button>
+          )}
+        </div>
       )}
 
-      {/* Error Message */}
       {message && (
         <div className={`mt-4 p-2 rounded ${message.type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
           {message.text}
         </div>
       )}
     </div>
+  );
+}
+
+function CheckoutForm() {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleSubmit = async (e:any) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
+
+    setIsProcessing(true);
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: window.location.href,
+      },
+    });
+
+    if (error) {
+      setErrorMessage(error.message);
+      setIsProcessing(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <PaymentElement />
+      <button disabled={!stripe || isProcessing} className="btn btn-primary mt-4">
+        {isProcessing ? 'Processing...' : 'Pay Now'}
+      </button>
+      {errorMessage && <div className="text-red-600 mt-2">{errorMessage}</div>}
+    </form>
   );
 }
