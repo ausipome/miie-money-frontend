@@ -65,8 +65,8 @@ export interface Invoice {
 
   export interface InvoiceItem {
     itemName: string;
-    quantity: number;
-    cost: number;
-  }
+    quantity: string | number;
+    cost: string | number;
+}
   
  
