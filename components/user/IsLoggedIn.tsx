@@ -21,7 +21,7 @@ export default function IsLoggedIn() {
                                 onMouseEnter={() => setDropdownVisible(true)} 
                                 onMouseLeave={() => setDropdownVisible(false)}
                                 >
-                                <Link className="text-white py-2 hover:text-pink-200 px-4 text-2xl mr-4" href="account">
+                                <Link className="text-white py-2 hover:text-pink-200 px-4 text-2xl mr-4" href="/account">
                                     <FontAwesomeIcon icon={byPrefixAndName.fal['user']} />
                                 </Link>
                                 {dropdownVisible && (

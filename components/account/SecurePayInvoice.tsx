@@ -20,7 +20,7 @@ export default function SecurePayInvoice() {
     async function fetchInvoice() {
       setLoading(true);
       try {
-        const response = await fetch(`/api/invoice/get-invoice-by-id/${invoiceId}`, {
+        const response = await fetch(`/get-invoice-by-id/${invoiceId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ export default function SecurePayInvoice() {
         const { invoice: fetchedInvoice } = await response.json();
         setInvoice(fetchedInvoice);
         setAccountInfo(fetchedInvoice.accountInfo);
-        setMessage(null); // Clear any previous error messages
+        setMessage(null);
       } catch (error) {
         console.error('Error fetching invoice:', error);
         setMessage({ type: 'error', text: 'Failed to load invoice.' });
@@ -53,7 +53,10 @@ export default function SecurePayInvoice() {
 
   const isPaid = invoice.status === 'paid';
   const shouldCalculateVAT = isPaid ? invoice.vatAmount !== 0 : !!invoice.vatNumber;
-  const calculateSubtotal = () => invoice.items.reduce((acc, item) => acc + item.quantity * item.cost, 0);
+
+  const calculateSubtotal = () => invoice.items.reduce((acc, item) => 
+    acc + (Number(item.quantity) || 0) * (Number(item.cost) || 0), 0);
+
   const calculateVAT = () => (shouldCalculateVAT ? calculateSubtotal() * VAT_RATE : 0);
   const calculateTotal = () => calculateSubtotal() + calculateVAT();
 
@@ -103,7 +106,7 @@ export default function SecurePayInvoice() {
               <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
                 <td className="py-2 font-medium">{item.itemName}</td>
                 <td className="py-2">{item.quantity}</td>
-                <td className="py-2">£{item.cost.toFixed(2)}</td>
+                <td className="py-2">£{Number(item.cost).toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
@@ -112,18 +115,18 @@ export default function SecurePayInvoice() {
 
       {/* Totals Section */}
       <div className="border-t border-gray-300 mt-6 py-6">
-        <div className="flex justify-between py-2">
-          <span className="text-lg font-semibold text-gray-700">Subtotal</span>
+        <div className="flex justify-end py-2">
+          <span className="text-lg font-semibold text-gray-700 mr-4">Subtotal:</span>
           <span className="text-lg font-medium text-gray-800">£{calculateSubtotal().toFixed(2)}</span>
         </div>
         {shouldCalculateVAT && (
-          <div className="flex justify-between py-2">
-            <span className="text-lg font-semibold text-gray-700">VAT ({VAT_RATE * 100}%)</span>
+          <div className="flex justify-end py-2">
+            <span className="text-lg font-semibold text-gray-700 mr-4">VAT ({VAT_RATE * 100}%):</span>
             <span className="text-lg font-medium text-gray-800">£{calculateVAT().toFixed(2)}</span>
           </div>
         )}
-        <div className="flex justify-between py-2 mt-4 border-t border-gray-300 pt-4">
-          <span className="text-xl font-bold text-gray-900">Total</span>
+        <div className="flex justify-end py-2 mt-4 border-t border-gray-300 pt-4">
+          <span className="text-xl font-bold text-gray-900 mr-4">Total:</span>
           <span className="text-xl font-bold text-gray-900">£{calculateTotal().toFixed(2)}</span>
         </div>
       </div>

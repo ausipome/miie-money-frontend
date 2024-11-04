@@ -1,5 +1,3 @@
-// components/InvoiceBuilder.tsx
-
 'use client';
 
 import useCheckUser from '@/hooks/useCheckUser';
@@ -27,7 +25,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   const [vatNumber, setVatNumber] = useState<string | null>(invoiceData?.vatNumber || null);
   const [invoiceId, setInvoiceId] = useState<string | null>(invoiceData?.invoiceId || null);
   const [invoiceNumber, setInvoiceNumber] = useState<string>(invoiceData?.invoiceNumber || '');
-  const [items, setItems] = useState<InvoiceItem[]>(invoiceData?.items || [{ itemName: '', quantity: 1, cost: 0 }]);
+  const [items, setItems] = useState<InvoiceItem[]>(invoiceData?.items || [{ itemName: '', quantity: '', cost: '' }]);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [customerDetails, setCustomerDetails] = useState<Contact>(invoiceData?.customer || customer || {} as Contact);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -52,6 +50,32 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
       }
     }
   }, [userData]);
+
+  useEffect(() => {
+    if (!invoiceData) {
+      const fetchInvoiceNumber = async () => {
+        try {
+          const response = await fetch('/api/invoice/get-invoice-number', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': xsrfToken,
+            },
+            credentials: 'include',
+          });
+          if (response.ok) {
+            const data = await response.json();
+            setInvoiceNumber(data.invoiceNumber); 
+          } else {
+            console.error('Failed to fetch invoice number');
+          }
+        } catch (error) {
+          console.error('Error fetching invoice number:', error);
+        }
+      };
+      fetchInvoiceNumber();
+    }
+  }, [invoiceData]);
 
   const handleOpenEditModal = () => {
     setShowEditModal(true);
@@ -85,14 +109,14 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
     }
   };
 
-  const handleItemChange = (index: number, key: keyof InvoiceItem, value: string | number) => {
+  const handleItemChange = (index: number, key: keyof InvoiceItem, value: string) => {
     const updatedItems = [...items];
     updatedItems[index] = { ...updatedItems[index], [key]: value };
     setItems(updatedItems);
   };
 
   const handleAddItem = () => {
-    setItems([...items, { itemName: '', quantity: 1, cost: 0 }]);
+    setItems([...items, { itemName: '', quantity: '', cost: '' }]);
   };
 
   const handleRemoveItem = (index: number) => {
@@ -100,7 +124,12 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
     setItems([...items.slice(0, index), ...items.slice(index + 1)]);
   };
 
-  const calculateSubtotal = () => items.reduce((acc, item) => acc + item.quantity * item.cost, 0);
+  const calculateSubtotal = () => items.reduce((acc, item) => {
+    const quantity = item.quantity ? parseInt(item.quantity as string, 10) : 0;
+    const cost = item.cost ? parseFloat(item.cost as string) : 0;
+    return acc + quantity * cost;
+  }, 0);
+
   const calculateVAT = () => (shouldCalculateVAT ? calculateSubtotal() * VAT_RATE : 0);
   const calculateTotal = () => calculateSubtotal() + calculateVAT();
   const applicationFee = parseFloat((calculateTotal() * applicationFeeRate).toFixed(2));
@@ -113,6 +142,12 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
       return;
     }
 
+    const formattedItems = items.map((item) => ({
+      ...item,
+      quantity: item.quantity ? parseInt(item.quantity as string, 10) : 0,
+      cost: item.cost ? parseFloat(item.cost as string) : 0,
+    }));
+
     const invoicePayload = {
       invoiceId,
       whereFrom: action,
@@ -120,7 +155,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
       invoiceDate: INVOICE_DATE,
       vatNumber,
       customer: customerDetails,
-      items,
+      items: formattedItems,
       accountInfo,
       logoUrl,
       subtotal: calculateSubtotal(),
@@ -142,7 +177,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
 
       if (response.ok) {
         const data = await response.json();
-        setMessage({ type: 'success', text: `Invoice ${action} successfully!` });
+        setMessage({ type: 'success', text: `Invoice ${action} successful!` });
         if (action === 'delete') {
           onHomeClick();
         } else if (!invoiceId && data.invoiceId) {
@@ -161,12 +196,12 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
 
   return (
     <div className="max-w-[70%] mx-auto mt-8 p-6 bg-white rounded shadow-md">
-      {/* Back, Home, Edit, and New Invoice Buttons */}
+      {/* Back, Home, and Edit Buttons */}
       <div className="flex justify-between mb-4 text-base">
         <div className="flex space-x-2">
-          {backButton}
+          {!invoiceId && backButton}
           <HomeButton onClick={onHomeClick} />
-          {invoiceId && (
+          {!isPaid && invoiceId && (
             <Button onClick={handleOpenEditModal} className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
               Edit Contact
             </Button>
@@ -181,8 +216,17 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
       <div className="flex justify-between items-start mb-8 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
         <div>
           <img src={logoUrl || "/logo_side_transparent-background_black.png"} alt="Company Logo" className="w-auto h-auto max-w-[200px] max-h-[100px] mb-2" />
-          <p><strong>Full Name:</strong> {accountInfo?.first_name} {accountInfo?.last_name}</p>
-          <p><strong>Address:</strong> {accountInfo?.address?.line1}, {accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
+          {userData?.business_type === 'individual' ? (
+            <>
+              <p>{accountInfo?.first_name} {accountInfo?.last_name}</p>
+              <p>{accountInfo?.address?.line1}, {accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
+            </>
+          ) : userData?.business_type === 'company' ? (
+            <>
+              <p>{accountInfo?.name}</p>
+              <p>{accountInfo?.address?.line1}, {accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
+            </>
+          ) : null}
         </div>
 
         <div>
@@ -200,24 +244,38 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
       {/* Items Section */}
       {items.map((item, index) => (
         <div key={index} className="mb-4 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
-          <label htmlFor={`itemName-${index}`} className="block mb-2 font-bold">Item Name</label>
-          <input type="text" id={`itemName-${index}`} className="w-full border p-2 mb-2" value={item.itemName} readOnly={isPaid}
-            onChange={e => handleItemChange(index, 'itemName', e.target.value)} />
+          <input
+            type="text"
+            value={item.itemName}
+            placeholder="Item Name"
+            readOnly={isPaid}
+            className="w-full border p-2 mb-2"
+            onChange={(e) => handleItemChange(index, 'itemName', e.target.value)}
+          />
           <div className="flex justify-between mb-2">
-            <div className="w-1/2">
-              <label htmlFor={`quantity-${index}`} className="block mb-2 font-bold">Quantity</label>
-              <input type="number" id={`quantity-${index}`} className="w-full border p-2 mr-2" value={item.quantity} min="1" readOnly={isPaid}
-                onChange={e => handleItemChange(index, 'quantity', parseInt(e.target.value))} />
-            </div>
-            <div className="w-1/2">
-              <label htmlFor={`cost-${index}`} className="block mb-2 font-bold">Cost (£)</label>
-              <input type="number" id={`cost-${index}`} className="w-full border p-2" value={item.cost} step="0.01" min="0" readOnly={isPaid}
-                onChange={e => handleItemChange(index, 'cost', parseFloat(e.target.value))} />
-            </div>
+            <input
+              type="number"
+              min="1"
+              value={item.quantity}
+              placeholder="Quantity"
+              readOnly={isPaid}
+              className="w-1/2 border p-2 mr-2"
+              onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+            />
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              value={item.cost}
+              placeholder="Cost (£)"
+              readOnly={isPaid}
+              className="w-1/2 border p-2"
+              onChange={(e) => handleItemChange(index, 'cost', e.target.value)}
+            />
             {!isPaid && index !== 0 && (
-              <button onClick={() => handleRemoveItem(index)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ml-2">
+              <Button onClick={() => handleRemoveItem(index)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
                 Remove
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -227,42 +285,43 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
       <div className="mt-8 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
         {!isPaid && (
           <div className="flex justify-end mb-4">
-            <button onClick={handleAddItem} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            <Button onClick={handleAddItem} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
               Add Item
-            </button>
+            </Button>
           </div>
         )}
         <div className="flex justify-end mb-2">
-          <span className="w-[100px] text-left">Subtotal:</span>
+          <span>Subtotal:</span>
           <span>£{calculateSubtotal().toFixed(2)}</span>
         </div>
         {shouldCalculateVAT && (
           <div className="flex justify-end mb-2">
-            <span className="w-[100px] text-left">VAT ({VAT_RATE * 100}%):</span>
+            <span>VAT ({VAT_RATE * 100}%):</span>
             <span>£{calculateVAT().toFixed(2)}</span>
           </div>
         )}
         <div className="flex justify-end">
-          <h2 className="font-bold w-[100px] text-left">Total:</h2>
-          <h2 className="font-bold">£{calculateTotal().toFixed(2)}</h2>
+          <h2>Total:</h2>
+          <h2>£{calculateTotal().toFixed(2)}</h2>
         </div>
-
-        {/* Action Buttons */}
-        <div className="flex justify-center mt-4 space-x-4">
-          {invoiceId && (
-            <button onClick={() => handleInvoiceAction('delete')} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-              Delete Invoice
-            </button>
-          )}
-          <button onClick={() => handleInvoiceAction('save')} className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600">
-            Save Invoice
-          </button>
-          <button onClick={() => handleInvoiceAction('send')} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-            Send Invoice
-          </button>
-        </div>
+        {!isPaid && (
+          <div className="flex justify-center mt-4 space-x-4">
+            {invoiceId && (
+              <Button onClick={() => handleInvoiceAction('delete')} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" disabled={loadingAction === 'delete'}>
+                Delete Invoice {loadingAction === 'delete' && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
+              </Button>
+            )}
+            <Button onClick={() => handleInvoiceAction('save')} className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600" disabled={loadingAction === 'save'}>
+              Save Invoice {loadingAction === 'save' && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
+            </Button>
+            <Button onClick={() => handleInvoiceAction('send')} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" disabled={loadingAction === 'send'}>
+              Send Invoice {loadingAction === 'send' && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
+            </Button>
+          </div>
+        )}
       </div>
 
+      {/* Success/Error Message */}
       {message && (
         <div className={`mt-4 p-2 rounded ${message.type === 'success' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>
           {message.text}
