@@ -61,6 +61,8 @@ export interface Invoice {
   logoUrl: string;
   vatAmount: number;
   countryCode: string;
+  applicationFee: number;
+  accountId: string;
   }
 
   export interface InvoiceItem {
