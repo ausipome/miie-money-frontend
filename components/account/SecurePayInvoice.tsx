@@ -1,23 +1,35 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Spinner } from '@nextui-org/spinner';
 import { AccountInfo, Invoice } from '../../types';
 import { loadStripe } from '@stripe/stripe-js';
-import { Elements, useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
-
-// Initialize Stripe with your publishable key
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
+import { Elements } from '@stripe/react-stripe-js';
+import CheckoutForm from './CheckoutForm';
 
 export default function SecurePayInvoice() {
   const searchParams = useSearchParams();
   const invoiceId = searchParams.get('invoice');
+  const stripeAccount = searchParams.get('account');
+
+  // Memoized stripePromise to only load when stripeAccount changes
+  const stripePromise = useMemo(() => {
+    const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+    if (!stripeKey) {
+      throw new Error('Stripe publishable key is not defined');
+    }
+    return loadStripe(stripeKey, {
+      stripeAccount: stripeAccount || undefined,
+    });
+  }, [stripeAccount]);
+
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<{ type: 'error'; text: string } | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [initializingPayment, setInitializingPayment] = useState(false); // New state to track initialization
   const VAT_RATE = 0.20;
 
   useEffect(() => {
@@ -28,10 +40,7 @@ export default function SecurePayInvoice() {
       try {
         const response = await fetch(`/get-invoice-by-id/${invoiceId}`, {
           method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
         });
 
         if (!response.ok) throw new Error('Failed to fetch invoice');
@@ -51,46 +60,45 @@ export default function SecurePayInvoice() {
     fetchInvoice();
   }, [invoiceId]);
 
+  useEffect(() => {
+    if (invoice && !clientSecret && !initializingPayment) {
+      initializePayment();
+    }
+  }, [invoice]);
+
   const initializePayment = async () => {
-    if (!invoice) return;
+    if (!invoice || clientSecret || initializingPayment) return;
+
+    setInitializingPayment(true); // Set initializing to true to prevent multiple calls
 
     const countryCode = invoice.countryCode || 'GB';
     const currencyMap = { GB: 'gbp', US: 'usd', CA: 'cad', AU: 'aud', NZ: 'nzd' };
-    const currency = (currencyMap as Record<string, string>)[countryCode] || 'usd';
+    const currency = currencyMap[countryCode as keyof typeof currencyMap] || 'usd';
 
-    // Calculate total amount in smallest currency unit (e.g., pence or cents)
     const amount = Math.round(calculateTotal() * 100);
-    const applicationFee = Math.round(invoice.applicationFee * 100); // Convert application fee to smallest currency unit
-    const accountId = invoice.accountId; // Retrieve connected account ID from invoice data
+    const applicationFee = Math.round(invoice.applicationFee * 100);
 
     try {
       const response = await fetch('/get-payment-intent', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount,
-          currency,
-          application_fee: applicationFee,
-          accountId: accountId,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount, currency, application_fee: applicationFee, stripeAccount }),
       });
 
       if (!response.ok) throw new Error('Failed to create PaymentIntent');
-      const { clientSecret } = await response.json();
-      setClientSecret(clientSecret);
+      const { client_secret: newClientSecret } = await response.json();
+      console.log('New PaymentIntent client_secret:', newClientSecret);
+        setClientSecret(newClientSecret);
     } catch (error) {
       console.error('Error creating PaymentIntent:', error);
       setMessage({ type: 'error', text: 'Failed to initialize payment.' });
+    } finally {
+      setInitializingPayment(false); // Reset initializing after attempt
     }
   };
 
   if (loading) return <Spinner color="primary" size="lg" />;
-
-  if (!invoice) {
-    return <div>Invoice not found.</div>;
-  }
+  if (!invoice) return <div>Invoice not found.</div>;
 
   const isPaid = invoice.status === 'paid';
   const shouldCalculateVAT = isPaid ? invoice.vatAmount !== 0 : !!invoice.vatNumber;
@@ -100,6 +108,9 @@ export default function SecurePayInvoice() {
 
   const calculateVAT = () => (shouldCalculateVAT ? calculateSubtotal() * VAT_RATE : 0);
   const calculateTotal = () => calculateSubtotal() + calculateVAT();
+
+  const appearance = { theme: 'stripe' };
+  const options = { clientSecret, appearance };
 
   return (
     <div className="container mx-auto mt-8 p-10 max-w-3xl bg-white rounded-lg shadow-md border border-gray-200">
@@ -112,7 +123,7 @@ export default function SecurePayInvoice() {
         <p className="text-lg text-gray-500">Date: {invoice.invoiceDate}</p>
       </header>
 
-      {/* Invoice Sender and Receiver Information */}
+      {/* Sender and Receiver Information */}
       <div className="border-t border-gray-300 py-6 flex justify-between">
         <div>
           <h2 className="text-xl font-semibold text-gray-700">From:</h2>
@@ -131,7 +142,7 @@ export default function SecurePayInvoice() {
         </div>
       </div>
 
-      {/* Items Table */}
+      {/* Itemized Invoice Table */}
       <div className="border-t border-gray-300 mt-6 py-6">
         <h2 className="text-xl font-semibold text-gray-700 mb-4">Invoice Details</h2>
         <table className="w-full text-left text-gray-600">
@@ -173,19 +184,13 @@ export default function SecurePayInvoice() {
       </div>
 
       {/* Stripe Payment Section */}
-      {!isPaid && (
-        <div className="mt-8">
-          {clientSecret ? (
-            <Elements stripe={stripePromise} options={{ clientSecret }}>
-              <CheckoutForm />
-            </Elements>
-          ) : (
-            <button onClick={initializePayment} className="btn btn-primary">
-              Pay Invoice
-            </button>
-          )}
-        </div>
-      )}
+      {!isPaid && clientSecret ? (
+          <Elements stripe={stripePromise} options={options}>
+           <CheckoutForm invoiceId={invoiceId} />
+          </Elements>
+        ) : (
+          <p>Payment initialization in progress... {isPaid.toString()} {clientSecret}</p>
+        )}
 
       {message && (
         <div className={`mt-4 p-2 rounded ${message.type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
@@ -193,40 +198,5 @@ export default function SecurePayInvoice() {
         </div>
       )}
     </div>
-  );
-}
-
-function CheckoutForm() {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  const handleSubmit = async (e:any) => {
-    e.preventDefault();
-    if (!stripe || !elements) return;
-
-    setIsProcessing(true);
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: window.location.href,
-      },
-    });
-
-    if (error) {
-      setErrorMessage(error.message);
-      setIsProcessing(false);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <PaymentElement />
-      <button disabled={!stripe || isProcessing} className="btn btn-primary mt-4">
-        {isProcessing ? 'Processing...' : 'Pay Now'}
-      </button>
-      {errorMessage && <div className="text-red-600 mt-2">{errorMessage}</div>}
-    </form>
   );
 }
