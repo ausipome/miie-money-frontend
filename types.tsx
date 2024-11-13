@@ -54,6 +54,7 @@ export interface Invoice {
   invoiceId: string;
   invoiceNumber: string;
   invoiceDate: string;
+  receiptDate: string;
   status: "paid" | "unpaid";
   total: number;
   vatNumber: string;
