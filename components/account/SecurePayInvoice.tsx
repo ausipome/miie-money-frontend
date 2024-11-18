@@ -7,6 +7,7 @@ import { AccountInfo, Invoice } from '../../types';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from './CheckoutForm';
+import { Skeleton } from '@nextui-org/skeleton';
 
 export default function SecurePayInvoice() {
   const searchParams = useSearchParams();
@@ -97,8 +98,82 @@ export default function SecurePayInvoice() {
     }
   };
 
-  if (loading) return <Spinner color="primary" size="lg" />;
-  if (!invoice) return <div>Invoice not found.</div>;
+  if (loading) {
+    return (
+      <div className="container mx-auto mt-8 p-10 max-w-3xl bg-gray-100 rounded-lg shadow-md border border-gray-200">
+        {/* Header Skeleton */}
+        <header className="text-center mb-8">
+          <div className="mb-4">
+            <Skeleton isLoaded={!loading} className="rounded-lg">
+              <div className="h-20 w-40 bg-gray-300 mx-auto rounded"></div> {/* Logo placeholder */}
+            </Skeleton>
+          </div>
+          <Skeleton isLoaded={!loading} className="rounded-lg">
+            <div className="h-8 w-1/2 bg-gray-300 mx-auto mb-2 rounded"></div> {/* Title placeholder */}
+          </Skeleton>
+          <Skeleton isLoaded={!loading} className="rounded-lg">
+            <div className="h-6 w-1/3 bg-gray-300 mx-auto mb-1 rounded"></div> {/* Invoice Number */}
+          </Skeleton>
+          <Skeleton isLoaded={!loading} className="rounded-lg">
+            <div className="h-6 w-1/4 bg-gray-300 mx-auto rounded"></div> {/* Date */}
+          </Skeleton>
+        </header>
+  
+        {/* Sender and Receiver Information Skeleton */}
+        <div className="border-t border-gray-300 py-6 flex justify-between">
+          <div className="space-y-2">
+            <Skeleton isLoaded={!loading} className="rounded-lg">
+              <div className="h-6 w-1/4 bg-gray-300 mb-2 rounded"></div> {/* "From:" */}
+            </Skeleton>
+            {[...Array(4)].map((_, index) => (
+              <Skeleton key={index} isLoaded={!loading} className="rounded-lg">
+                <div className="h-4 w-3/4 bg-gray-300 rounded"></div> {/* From Info */}
+              </Skeleton>
+            ))}
+          </div>
+          <div className="space-y-2">
+            <Skeleton isLoaded={!loading} className="rounded-lg">
+              <div className="h-6 w-1/4 bg-gray-300 mb-2 rounded"></div> {/* "To:" */}
+            </Skeleton>
+            {[...Array(4)].map((_, index) => (
+              <Skeleton key={index} isLoaded={!loading} className="rounded-lg">
+                <div className="h-4 w-3/4 bg-gray-300 rounded"></div> {/* To Info */}
+              </Skeleton>
+            ))}
+          </div>
+        </div>
+  
+        {/* Invoice Details Skeleton */}
+        <div className="border-t border-gray-300 mt-6 py-6">
+          <Skeleton isLoaded={!loading} className="rounded-lg mb-4">
+            <div className="h-6 w-1/3 bg-gray-300 mb-2 rounded"></div> {/* "Invoice Details" */}
+          </Skeleton>
+          <Skeleton isLoaded={!loading} className="rounded-lg">
+            <div className="h-8 w-full bg-gray-300 rounded mb-2"></div> {/* Table Header */}
+          </Skeleton>
+          {[...Array(3)].map((_, index) => (
+            <Skeleton key={index} isLoaded={!loading} className="rounded-lg">
+              <div className="h-6 w-full bg-gray-300 mb-2 rounded"></div> {/* Table Rows */}
+            </Skeleton>
+          ))}
+        </div>
+  
+        {/* Totals Section Skeleton */}
+        <div className="border-t border-gray-300 mt-6 py-6 space-y-2">
+          {[...Array(3)].map((_, index) => (
+            <Skeleton key={index} isLoaded={!loading} className="rounded-lg">
+              <div className="h-6 w-1/2 bg-gray-300 ml-auto rounded"></div> {/* Totals */}
+            </Skeleton>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  
+  if (!invoice) return <div className="bg-blue-500 text-white p-4 rounded-md shadow-md my-2 text-xl w-3/4 mx-auto">
+  <p className="text-center">The requested invoice could not be found. If you believe this to be an error, please contact the sender for assistance.</p>
+</div>
+;
 
   const isPaid = invoice.status === 'paid';
   const shouldCalculateVAT = isPaid ? invoice.vatAmount !== 0 : !!invoice.vatNumber;
@@ -116,7 +191,7 @@ export default function SecurePayInvoice() {
     <div className="container mx-auto mt-8 p-10 max-w-3xl bg-white rounded-lg shadow-md border border-gray-200">
       <header className="text-center mb-8">
         <div className="mb-4">
-          <img src={invoice.logoUrl || "/logo_side_transparent-background_black.png"} alt="Company Logo" className="w-64 h-auto mx-auto" />
+          <img src={invoice.logoUrl || "/logo_side_transparent-background_black.png"} alt="Company Logo" className="w-auto h-auto max-w-[200px] max-h-[100px] mx-auto" />
         </div>
         <h1 className="text-4xl font-bold text-gray-800">INVOICE</h1>
         <p className="text-lg text-gray-500 mt-2">Invoice Number: {invoice.invoiceNumber}</p>
@@ -184,13 +259,18 @@ export default function SecurePayInvoice() {
       </div>
 
       {/* Stripe Payment Section */}
-      {!isPaid && clientSecret ? (
-          <Elements stripe={stripePromise} options={options}>
-           <CheckoutForm invoiceId={invoiceId} />
-          </Elements>
-        ) : (
-          <p>Payment initialization in progress... {isPaid.toString()} {clientSecret}</p>
-        )}
+      {isPaid ? (
+        <div style={{ textAlign: 'center', color: 'green', fontSize: '2rem', fontWeight: 'bold' }}>
+          PAID
+        </div>
+      ) : clientSecret ? (
+        <Elements stripe={stripePromise} options={options}>
+          <CheckoutForm invoiceId={invoiceId} />
+        </Elements>
+      ) : (
+        <p>Payment initialization in progress...</p>
+      )}
+
 
       {message && (
         <div className={`mt-4 p-2 rounded ${message.type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
