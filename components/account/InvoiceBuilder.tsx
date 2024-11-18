@@ -1,3 +1,5 @@
+// Code for the InvoiceBuilder component
+
 'use client';
 
 import useCheckUser from '@/hooks/useCheckUser';
@@ -9,6 +11,8 @@ import { Button } from '@nextui-org/button';
 import HomeButton from '../navigation/HomeButton';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/modal';
 import { Input } from '@nextui-org/input';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 interface InvoiceBuilderProps {
   customer?: Contact;
@@ -34,7 +38,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   const INVOICE_DATE = invoiceData?.invoiceDate || new Date().toLocaleDateString();
   const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
 
-  const applicationFeeRate = userData?.application_fee || 0;
+  const applicationFeeRate = userData?.application_fee || 0;  
   const isPaid = invoiceData?.status === 'paid';
   const shouldCalculateVAT = !isPaid ? !!vatNumber : isPaid && invoiceData?.vatAmount !== 0;
 
@@ -304,21 +308,47 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
           <h2>Total:</h2>
           <h2>£{calculateTotal().toFixed(2)}</h2>
         </div>
-        {!isPaid && (
-          <div className="flex justify-center mt-4 space-x-4">
-            {invoiceId && (
-              <Button onClick={() => handleInvoiceAction('delete')} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" disabled={loadingAction === 'delete'}>
-                Delete Invoice {loadingAction === 'delete' && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
-              </Button>
-            )}
-            <Button onClick={() => handleInvoiceAction('save')} className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600" disabled={loadingAction === 'save'}>
-              Save Invoice {loadingAction === 'save' && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
-            </Button>
-            <Button onClick={() => handleInvoiceAction('send')} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" disabled={loadingAction === 'send'}>
-              Send Invoice {loadingAction === 'send' && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
+        {!isPaid ? (
+        <div className="flex justify-center mt-4 space-x-4">
+        {invoiceId && (
+          <Button
+            onClick={() => handleInvoiceAction('delete')}
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            disabled={loadingAction === 'delete'}
+          >
+            Delete Invoice
+            {loadingAction === 'delete' && <Spinner className="ml-1 mt-1" color="warning" size="sm" />}
+          </Button>
+        )}
+        <Button
+          onClick={() => handleInvoiceAction('save')}
+          className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600"
+          disabled={loadingAction === 'save'}
+        >
+          Save Invoice
+          {loadingAction === 'save' && <Spinner className="ml-1 mt-1" color="warning" size="sm" />}
+        </Button>
+        <Tippy
+          content={calculateTotal() <= 1 ? "Total must be more than £1 to send the invoice." : ""}
+          disabled={calculateTotal() > 1} // Disable tooltip when the condition is not met
+        >
+          <div>
+            <Button
+              onClick={() => handleInvoiceAction('send')}
+              className={`bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ${calculateTotal() <= 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={loadingAction === 'send' || calculateTotal() <= 1}
+            >
+              Send Invoice
+              {loadingAction === 'send' && <Spinner className="ml-1 mt-1" color="warning" size="sm" />}
             </Button>
           </div>
-        )}
+        </Tippy>
+      </div>
+      ) : (
+        <div className="text-center text-slate-400 text-2xl font-bold">
+          PAID {invoiceData?.receiptDate}
+        </div>
+      )}
       </div>
 
       {/* Success/Error Message */}

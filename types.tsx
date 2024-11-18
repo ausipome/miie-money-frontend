@@ -64,6 +64,7 @@ export interface Invoice {
   countryCode: string;
   applicationFee: number;
   accountId: string;
+  paymentIntent: string;
   }
 
   export interface InvoiceItem {
@@ -71,5 +72,17 @@ export interface Invoice {
     quantity: string | number;
     cost: string | number;
 }
+export interface PaymentLink {
+  linkId: string; 
+  linkUrl: string; 
+  description: string; 
+  amount: number; 
+  customerName: string; 
+  customerId?: string; 
+  status: 'active' | 'expired'; 
+  createdDate: string; 
+  expirationDate?: string; 
+}
+
   
  

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Spinner } from '@nextui-org/spinner';
+import { Skeleton } from '@nextui-org/skeleton';
 import { AccountInfo, Invoice } from '../../types';
 
 export default function PaymentReceipt() {
@@ -36,9 +36,8 @@ export default function PaymentReceipt() {
       } catch (error) {
         console.error('Error fetching invoice:', error);
         setMessage('Failed to load invoice.');
-      } finally {
         setLoading(false);
-      }
+      } 
     }
     const RECEIPT_DATE = new Date().toLocaleDateString(); // Receipt date set to the current date when receipt is generated.
 
@@ -52,9 +51,11 @@ export default function PaymentReceipt() {
         if (!response.ok) throw new Error('Failed to update invoice status');
         
         setMessage('Your payment has been successfully completed. A copy of this receipt has been emailed to you.');
+        setLoading(false);
       } catch (error) {
         console.error('Error updating invoice status:', error);
         setMessage('Failed to update invoice status.');
+        setLoading(false);
       }
     }
 
@@ -62,9 +63,98 @@ export default function PaymentReceipt() {
     updateInvoiceStatus();
   }, [invoiceId]);
 
-  if (loading) return <Spinner color="primary" size="lg" />;
-  if (!invoice) return <div>Invoice not found.</div>;
+  if (loading) { 
+    return (
+      <div className="flex flex-col items-center h-screen w-full gap-6 bg-gray-100">
+        {/* Full-screen skeleton container */}
+        <div className="w-[90%] max-w-3xl space-y-6 p-6 bg-white rounded-lg shadow-md border border-gray-200">
+          
+          {/* Logo and Title Skeleton */}
+          <div className="flex flex-col items-center space-y-4">
+            <Skeleton isLoaded={!loading} className="rounded-lg">
+              <div className="h-16 w-40 bg-gray-200 rounded-lg"></div> {/* Logo placeholder */}
+            </Skeleton>
+            <Skeleton isLoaded={!loading} className="rounded-lg">
+              <div className="h-8 w-3/4 bg-gray-200 rounded-lg"></div> {/* Title placeholder */}
+            </Skeleton>
+            <Skeleton isLoaded={!loading} className="rounded-lg">
+              <div className="h-6 w-1/2 bg-gray-200 rounded-lg"></div> {/* Receipt number */}
+            </Skeleton>
+            <Skeleton isLoaded={!loading} className="rounded-lg">
+              <div className="h-6 w-1/3 bg-gray-200 rounded-lg"></div> {/* Date */}
+            </Skeleton>
+          </div>
+  
+          {/* Sender and Receiver Information */}
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <Skeleton isLoaded={!loading} className="rounded-lg">
+                <div className="h-6 w-1/3 bg-gray-200 rounded-lg"></div> {/* "From:" label */}
+              </Skeleton>
+              <Skeleton isLoaded={!loading} className="rounded-lg">
+                <div className="h-6 w-1/2 bg-gray-200 rounded-lg"></div> {/* Sender name */}
+              </Skeleton>
+              <Skeleton isLoaded={!loading} className="rounded-lg">
+                <div className="h-6 w-2/3 bg-gray-200 rounded-lg"></div> {/* Sender address */}
+              </Skeleton>
+            </div>
+            <div className="space-y-4">
+              <Skeleton isLoaded={!loading} className="rounded-lg">
+                <div className="h-6 w-1/3 bg-gray-200 rounded-lg"></div> {/* "To:" label */}
+              </Skeleton>
+              <Skeleton isLoaded={!loading} className="rounded-lg">
+                <div className="h-6 w-1/2 bg-gray-200 rounded-lg"></div> {/* Recipient name */}
+              </Skeleton>
+              <Skeleton isLoaded={!loading} className="rounded-lg">
+                <div className="h-6 w-2/3 bg-gray-200 rounded-lg"></div> {/* Recipient address */}
+              </Skeleton>
+            </div>
+          </div>
+  
+          {/* Invoice Details Skeleton */}
+          <div className="space-y-4">
+            <Skeleton isLoaded={!loading} className="rounded-lg">
+              <div className="h-6 w-1/4 bg-gray-200 rounded-lg"></div> {/* "Invoice Details" heading */}
+            </Skeleton>
+            <Skeleton isLoaded={!loading} className="rounded-lg">
+              <div className="h-8 w-full bg-gray-200 rounded-lg"></div> {/* Table header */}
+            </Skeleton>
+            {[...Array(3)].map((_, index) => (
+              <Skeleton key={index} isLoaded={!loading} className="rounded-lg">
+                <div className="h-6 w-full bg-gray-200 rounded-lg"></div> {/* Table rows */}
+              </Skeleton>
+            ))}
+          </div>
+  
+          {/* Totals Section Skeleton */}
+          <div className="space-y-4">
+            <Skeleton isLoaded={!loading} className="rounded-lg">
+              <div className="h-6 w-1/3 bg-gray-200 rounded-lg"></div> {/* Subtotal */}
+            </Skeleton>
+            <Skeleton isLoaded={!loading} className="rounded-lg">
+              <div className="h-6 w-1/3 bg-gray-200 rounded-lg"></div> {/* VAT */}
+            </Skeleton>
+            <Skeleton isLoaded={!loading} className="rounded-lg">
+              <div className="h-8 w-1/2 bg-gray-200 rounded-lg"></div> {/* Total */}
+            </Skeleton>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
 
+  if (!invoice) {
+    return (
+      <div className="bg-red-500 text-white p-4 rounded-md shadow-md my-2 text-xl w-3/4 mx-auto">
+        <p className="text-center">
+          Unfortunately, the invoice you're looking for could not be found.<br />
+          If you believe this is an error, please contact the sender for assistance.
+        </p>
+      </div>
+    );
+  }
+  
   const shouldCalculateVAT = invoice.status === 'paid' ? invoice.vatAmount !== 0 : !!invoice.vatNumber;
 
   const calculateSubtotal = () => invoice.items.reduce((acc, item) => 
@@ -77,7 +167,7 @@ export default function PaymentReceipt() {
     <div className="container mx-auto mt-8 p-10 max-w-3xl bg-white rounded-lg shadow-md border border-gray-200">
       <header className="text-center mb-8">
         <div className="mb-4">
-          <img src={invoice.logoUrl || "/logo_side_transparent-background_black.png"} alt="Company Logo" className="w-64 h-auto mx-auto" />
+          <img src={invoice.logoUrl || "/logo_side_transparent-background_black.png"} alt="Company Logo" className="w-auto h-auto max-w-[200px] max-h-[100px] mx-auto" />
         </div>
         <h1 className="text-4xl font-bold text-gray-800">PAYMENT RECEIPT</h1>
         <p className="text-lg text-gray-500 mt-2">Receipt Number: {invoice.invoiceNumber}</p>
