@@ -3,7 +3,7 @@
 'use client';
 
 import useCheckUser from '@/hooks/useCheckUser';
-import { AccountInfo, Contact, Invoice, InvoiceItem } from '../../types';
+import { AccountInfo, Contact, InvoiceBuilderProps, InvoiceItem } from '../../types';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { Spinner } from '@nextui-org/spinner';
@@ -13,14 +13,6 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextu
 import { Input } from '@nextui-org/input';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-
-interface InvoiceBuilderProps {
-  customer?: Contact;
-  invoiceData?: Invoice;
-  backButton?: React.ReactNode;
-  onNewInvoice: () => void;
-  onHomeClick: () => void;
-}
 
 export default function InvoiceBuilder({ customer, invoiceData, backButton, onNewInvoice, onHomeClick }: InvoiceBuilderProps) {
   const { userData } = useCheckUser();
@@ -38,7 +30,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   const INVOICE_DATE = invoiceData?.invoiceDate || new Date().toLocaleDateString();
   const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
 
-  const applicationFeeRate = userData?.application_fee || 0;  
+  const applicationFeeRate = userData?.application_fee || 0.01;  
   const isPaid = invoiceData?.status === 'paid';
   const shouldCalculateVAT = !isPaid ? !!vatNumber : isPaid && invoiceData?.vatAmount !== 0;
 

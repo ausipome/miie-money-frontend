@@ -49,6 +49,14 @@ export interface UseCheckUserResult {
     setLoading: SetLoading;
 }
 
+export interface InvoiceBuilderProps {
+  customer?: Contact;
+  invoiceData?: Invoice;
+  backButton?: React.ReactNode;
+  onNewInvoice: () => void;
+  onHomeClick: () => void;
+}
+
 export interface Invoice {
   customer: any;
   invoiceId: string;
@@ -82,6 +90,12 @@ export interface PaymentLink {
   status: 'active' | 'expired'; 
   createdDate: string; 
   expirationDate?: string; 
+  vatNumber: string;
+  logoUrl: string;
+  subtotal: number;
+  total: number;
+  customer: any;
+  url: string;
 }
 
   
