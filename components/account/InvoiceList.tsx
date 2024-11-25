@@ -1,5 +1,3 @@
-//invoice list component
-
 'use client';
 
 import { Invoice } from '@/types';
@@ -59,9 +57,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onNewInvoiceClick, onOpenInvo
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRF-Token': xsrfToken,
         },
-        credentials: 'include',
       });
 
       if (!response.ok) throw new Error('Failed to fetch invoice');
@@ -182,7 +178,15 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onNewInvoiceClick, onOpenInvo
 
       {error && <p className="text-red-500">Error: {error}</p>}
 
-      {!loading && !error && recentInvoices.length > 0 && (
+      {!loading && !error && filteredInvoices.length === 0 && recentInvoices.length > 0 && (
+        <p className="text-gray-500 text-center">No matching invoices found for your search.</p>
+      )}
+
+      {!loading && !error && recentInvoices.length === 0 && (
+        <p className="text-gray-500 text-center">You have no invoices. Click "New Invoice" to create one.</p>
+      )}
+
+      {!loading && !error && filteredInvoices.length > 0 && (
         <div className="overflow-x-auto">
           <table className="min-w-full table-auto">
             <thead>

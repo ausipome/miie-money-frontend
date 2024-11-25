@@ -21,8 +21,8 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
   useEffect(() => {
     const fetchLinks = async () => {
       try {
-        const response = await fetch('/api/payment-links', {
-          method: 'GET',
+        const response = await fetch('/api/links/get-payment-links', {
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRF-Token': xsrfToken,
@@ -33,7 +33,7 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
         if (!response.ok) throw new Error('Failed to fetch links');
 
         const data = await response.json();
-        setLinks(data.links);
+        setLinks(data.paymentLinks);
       } catch (error) {
         setError((error as Error).message);
       } finally {
@@ -42,13 +42,35 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
     };
 
     fetchLinks();
-  }, []);
+  }, [xsrfToken]);
+
+  const fetchLinkDetails = async (linkId: string) => {
+    try {
+      const response = await fetch(`/get-link-by-id/${linkId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': xsrfToken,
+        },
+        credentials: 'include',
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch link details');
+
+      const data = await response.json();
+      onOpenLink(data.paymentLink);
+    } catch (error) {
+      console.error('Error fetching link details:', error);
+      setError('Error fetching link details.');
+    }
+  };
 
   const filteredLinks = links.filter((link) => {
     const searchLower = searchQuery.toLowerCase();
     return (
-      link.customerName.toLowerCase().includes(searchLower) ||
-      link.description.toLowerCase().includes(searchLower)
+      link.customer?.fullName?.toLowerCase().includes(searchLower) ||
+      link.description?.toLowerCase().includes(searchLower) ||
+      link.customer?.company?.toLowerCase().includes(searchLower)
     );
   });
 
@@ -76,6 +98,14 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
       {loading && <Skeleton className="w-full h-12" />}
       {error && <p className="text-red-500">Error: {error}</p>}
 
+      {!loading && !error && filteredLinks.length === 0 && links.length > 0 && (
+        <p className="text-gray-500 text-center">No matching links found for your search.</p>
+      )}
+
+      {!loading && !error && links.length === 0 && (
+        <p className="text-gray-500 text-center">You have no payment links. Click "New Link" to create one.</p>
+      )}
+
       {!loading && !error && filteredLinks.length > 0 && (
         <div className="overflow-x-auto">
           <table className="min-w-full table-auto">
@@ -84,6 +114,8 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
                 <th className="px-4 py-2 text-left">Description</th>
                 <th className="px-4 py-2 text-left">Amount (£)</th>
                 <th className="px-4 py-2 text-left">Customer</th>
+                <th className="px-4 py-2 text-left">Company</th>
+                <th className="px-4 py-2 text-left">Status</th>
                 <th className="px-4 py-2 text-left">Actions</th>
               </tr>
             </thead>
@@ -92,17 +124,23 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
                 <tr
                   key={link.linkId}
                   className="border-t cursor-pointer hover:bg-gray-100"
-                  onClick={() => onOpenLink(link)}
+                  onClick={() => fetchLinkDetails(link.linkId)}
                 >
-                  <td className="px-4 py-2">{link.description}</td>
-                  <td className="px-4 py-2">£{link.amount.toFixed(2)}</td>
-                  <td className="px-4 py-2">{link.customerName}</td>
+                  <td className="px-4 py-2">{link.description || 'N/A'}</td>
+                  <td className="px-4 py-2">£{(link.total).toFixed(2)}</td>
+                  <td className="px-4 py-2">{link.customer?.fullName || 'N/A'}</td>
+                  <td className="px-4 py-2">{link.customer?.company || 'N/A'}</td>
+                  <td className="px-4 py-2">{link.status}</td>
                   <td className="px-4 py-2">
                     <button
                       className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                       onClick={(e) => {
                         e.stopPropagation();
-                        navigator.clipboard.writeText(link.linkUrl);
+                        if (link.url) {
+                          navigator.clipboard.writeText(link.url);
+                        } else {
+                          alert('No URL available for this link.');
+                        }
                       }}
                     >
                       Copy Link
