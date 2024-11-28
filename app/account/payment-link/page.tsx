@@ -1,4 +1,4 @@
-import LinkFlow from "@/components/account/LinkFlow";
+import LinkFlow from "@/components/links/LinkFlow"
 
 export default function Page() {
     return (

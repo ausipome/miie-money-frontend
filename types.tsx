@@ -87,7 +87,7 @@ export interface PaymentLink {
   amount: number; 
   customerName: string; 
   customerId?: string; 
-  status: 'active' | 'expired'; 
+  status: 'paid' | 'unpaid'; 
   createdDate: string; 
   expirationDate?: string; 
   vatNumber: string;
@@ -96,6 +96,11 @@ export interface PaymentLink {
   total: number;
   customer: any;
   url: string;
+  countryCode: string;
+  applicationFee: number;
+  creationDate: string;
+  vatAmount: number;
+  receiptDate: string;
 }
 
   

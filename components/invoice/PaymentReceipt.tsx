@@ -43,7 +43,7 @@ export default function PaymentReceipt() {
 
     async function updateInvoiceStatus() {
       try {
-        const response = await fetch('/payment-complete', {
+        const response = await fetch('/payment-complete-invoice', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ invoiceId, paymentIntent, receiptDate: RECEIPT_DATE }),

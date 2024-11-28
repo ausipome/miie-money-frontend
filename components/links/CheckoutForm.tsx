@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
-export default function CheckoutForm({ invoiceId }: { invoiceId: string | null }) {
+export default function CheckoutForm({ linkId }: { linkId: string | null }) {
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = useState<string | null>(null);
@@ -27,7 +27,7 @@ export default function CheckoutForm({ invoiceId }: { invoiceId: string | null }
       elements,
       confirmParams: {
         // Change this to your payment completion page
-        return_url: `http://localhost:3000/payment-receipt?invoice=${invoiceId}`,
+        return_url: `http://localhost:3000/payment-receipt-link?link=${linkId}`,
       },
     });
 

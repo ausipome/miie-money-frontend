@@ -4,7 +4,6 @@ import { PaymentLink } from '@/types';
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { Skeleton } from '@nextui-org/skeleton';
-import { Button } from '@nextui-org/button';
 
 interface LinkListProps {
   onNewLinkClick: () => void;
