@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Spinner } from '@nextui-org/spinner';
 import { AccountInfo, Invoice } from '../../types';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';

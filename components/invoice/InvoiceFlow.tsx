@@ -1,20 +1,22 @@
+// components/InvoiceFlow.tsx
+
 'use client';
 
 import { useState } from 'react';
-import LinkList from './LinkList';
-import AddressBook from './AddressBook';
-import LinkBuilder from './LinkBuilder';
+import InvoiceList from './InvoiceList';
+import AddressBook from '../account/AddressBook';
+import InvoiceBuilder from './InvoiceBuilder';
 import BackButton from '../navigation/BackButton';
-import { Contact, PaymentLink } from '../../types';
+import { Contact, Invoice } from '../../types';
 
-const LinkFlow: React.FC = () => {
+const InvoiceFlow: React.FC = () => {
   const [showAddressBook, setShowAddressBook] = useState(false);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
-  const [selectedLink, setSelectedLink] = useState<PaymentLink | null>(null);
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
 
   const handleBackClick = () => {
-    if (selectedLink) {
-      setSelectedLink(null);
+    if (selectedInvoice) {
+      setSelectedInvoice(null);
     } else if (selectedContact) {
       setSelectedContact(null);
       setShowAddressBook(true);
@@ -23,7 +25,7 @@ const LinkFlow: React.FC = () => {
     }
   };
 
-  const handleNewLinkClick = () => {
+  const handleNewInvoiceClick = () => {
     setShowAddressBook(true);
   };
 
@@ -32,47 +34,47 @@ const LinkFlow: React.FC = () => {
     setShowAddressBook(false);
   };
 
-  const handleOpenLink = (link: PaymentLink) => {
-    setSelectedLink(link);
+  const handleOpenInvoice = (invoice: Invoice) => {
+    setSelectedInvoice(invoice);
   };
 
   const handleHomeClick = () => {
     setShowAddressBook(false);
     setSelectedContact(null);
-    setSelectedLink(null);
+    setSelectedInvoice(null);
   };
 
-  const handleNewLink = () => {
+  const handleNewInvoice = () => {
     setSelectedContact(null);
-    setSelectedLink(null);
+    setSelectedInvoice(null);
     setShowAddressBook(true);
   };
 
   return (
     <div className="container mx-auto py-12">
-      {selectedLink ? (
-        <LinkBuilder
-          linkData={selectedLink}
+      {selectedInvoice ? (
+        <InvoiceBuilder
+          invoiceData={selectedInvoice}
           backButton={<BackButton onClick={handleBackClick} />}
-          onNewLink={handleNewLink}
+          onNewInvoice={handleNewInvoice}
           onHomeClick={handleHomeClick}
         />
       ) : selectedContact ? (
-        <LinkBuilder
+        <InvoiceBuilder
           customer={selectedContact}
           backButton={<BackButton onClick={handleBackClick} />}
-          onNewLink={handleNewLink}
+          onNewInvoice={handleNewInvoice}
           onHomeClick={handleHomeClick}
         />
       ) : showAddressBook ? (
         <AddressBook mode="invoice" onUseContact={handleUseContact} backButton={<BackButton onClick={handleBackClick} />} />
       ) : (
         <div className="flex justify-center w-[95%] lg:w-[80%] mx-auto">
-          <LinkList onNewLinkClick={handleNewLinkClick} onOpenLink={handleOpenLink} />
+          <InvoiceList onNewInvoiceClick={handleNewInvoiceClick} onOpenInvoice={handleOpenInvoice} />
         </div>
       )}
     </div>
   );
 };
 
-export default LinkFlow;
+export default InvoiceFlow;

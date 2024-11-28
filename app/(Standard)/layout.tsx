@@ -8,7 +8,6 @@ export default function AccountLayout({
 }) {
   return (
     <section>
-       <TopNav />
       {children}
     </section>
   )

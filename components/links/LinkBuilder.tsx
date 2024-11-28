@@ -22,7 +22,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(linkData?.logoUrl || null);
   const [description, setDescription] = useState(linkData?.description || '');
-  const [amount, setAmount] = useState<string>(linkData?.subtotal?.toString() || ''); // Preload amount for existing links
+  const [amount, setAmount] = useState<string>(linkData?.subtotal?.toString() || '');
   const [vatNumber, setVatNumber] = useState<string | null>(linkData?.vatNumber || null);
   const [linkId, setLinkId] = useState<string | null>(linkData?.linkId || null);
   const [linkUrl, setLinkUrl] = useState<string | null>(linkData?.url || null);
@@ -34,6 +34,8 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
 
   const VAT_RATE = 0.20;
   const applicationFeeRate = userData?.application_fee || 0.01;
+  const isPaid = linkData?.status === 'paid';
+  const isNewLink = !linkId;
 
   useEffect(() => {
     if (userData) {
@@ -48,13 +50,8 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
     }
   }, [userData]);
 
-  // Parse amount safely, defaulting to 0 if empty
-  const parseAmount = () => (amount ? parseFloat(amount) : 0);
-
-  // Calculate VAT, Subtotal, and Total
-  const calculateVAT = () => (vatNumber ? parseAmount() * VAT_RATE : 0);
-  const calculateTotal = () => parseAmount() + calculateVAT();
-  const applicationFee = parseFloat((calculateTotal() * applicationFeeRate).toFixed(2));
+  const calculateVAT = () => (vatNumber ? parseFloat(amount || '0') * VAT_RATE : 0);
+  const calculateTotal = () => parseFloat(amount || '0') + calculateVAT();
 
   const handleLinkAction = async (action: 'save' | 'send' | 'delete') => {
     setLoadingAction(action);
@@ -65,7 +62,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
     }
 
     const payload = {
-      whereFrom: action, // Include the action for the backend
+      whereFrom: action,
       linkId,
       url: linkUrl,
       creationDate: new Date().toISOString(),
@@ -73,11 +70,10 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
       status: 'unpaid',
       customer: customerDetails,
       accountInfo: accountInfo || {},
-      subtotal: parseAmount(),
+      subtotal: parseFloat(amount || '0'),
       vatAmount: calculateVAT(),
       total: calculateTotal(),
       logoUrl: logoUrl || '',
-      applicationFee,
     };
 
     try {
@@ -96,11 +92,11 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
         setMessage({
           type: 'success',
           text: action === 'send'
-            ? 'Link sent successfully! The customer will receive the link in their email. You can also copy the link above'
+            ? 'Link sent successfully! The customer will receive the link in their email. You can also copy the link above.'
             : `Link ${action} successful!`,
         });
-        setLinkUrl(data.url); // Update linkUrl with the backend-provided URL
-        setLinkId(data.linkId); // Update linkId for future requests
+        setLinkUrl(data.url); // Update the link URL after success
+        setLinkId(data.linkId); // Update link ID for new links
         if (action === 'delete') {
           onHomeClick();
         }
@@ -115,28 +111,55 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
     }
   };
 
-  const handleSaveCustomerDetails = () => {
-    setShowEditModal(false);
+  const handleSaveCustomerDetails = async () => {
+    try {
+      const updatedLink = {
+        ...linkData,
+        customer: customerDetails,
+      };
+      const response = await fetch(`/api/links/manage-payment-links`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': xsrfToken,
+        },
+        credentials: 'include',
+        body: JSON.stringify(updatedLink),
+      });
+      if (response.ok) {
+        setShowEditModal(false);
+        setMessage({ type: 'success', text: 'Customer details updated successfully!' });
+      } else {
+        const data = await response.json();
+        setMessage({ type: 'error', text: data.error || 'Failed to save customer details.' });
+      }
+    } catch (error) {
+      console.error('Error updating customer details:', error);
+      setMessage({ type: 'error', text: 'Failed to update customer details.' });
+    }
   };
 
   return (
     <div className="max-w-[70%] mx-auto mt-8 p-6 bg-white rounded shadow-md">
-      {/* Back, Home, and New Link Buttons */}
+      {/* Back and Home Buttons */}
       <div className="flex justify-between mb-4 text-base">
         <div className="flex space-x-2">
           {backButton}
-          <Button onClick={onHomeClick} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-            Home
-          </Button>
+          {isNewLink && (
+            <Button onClick={onHomeClick} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+              Home
+            </Button>
+          )}
         </div>
-        <Button onClick={onNewLink} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-          New Link
-        </Button>
+        {isNewLink && (
+          <Button onClick={onNewLink} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+            New Link
+          </Button>
+        )}
       </div>
 
       {/* Sender and Customer Details */}
       <div className="flex justify-between items-start mb-8 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
-        {/* Sender Details */}
         <div>
           <img src={logoUrl || '/logo_side_transparent-background_black.png'} alt="Company Logo" className="w-auto h-auto max-w-[200px] max-h-[100px] mb-2" />
           {userData?.business_type === 'individual' ? (
@@ -152,14 +175,13 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
           ) : null}
         </div>
 
-        {/* Customer Details */}
         <div>
           <h1 className="text-4xl font-bold">PAYMENT LINK</h1>
           <p><strong>Customer:</strong> {customerDetails.company || customerDetails.fullName}</p>
           <p>{customerDetails.address}, {customerDetails.townCity}, {customerDetails.countyState}, {customerDetails.postcodeZip}</p>
           <p><strong>Email:</strong> {customerDetails.email}</p>
           <p><strong>Phone:</strong> {customerDetails.phone}</p>
-          {linkId && (
+          {!isPaid && linkId && (
             <Button
               onClick={() => setShowEditModal(true)}
               className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 mt-2"
@@ -170,89 +192,80 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex justify-between">
-        {/* Form Section */}
-        <div className="flex-1">
-          <input
-            type="text"
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full mb-4 p-2 border rounded-md"
-          />
-          <input
-            type="text"
-            placeholder="Amount (£)"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="w-full mb-4 p-2 border rounded-md"
-          />
-
-          {/* Link URL Display */}
-          {linkUrl && message?.type === 'success' && (
-            <div className="mt-4">
-              <div className="p-2 bg-gray-100 border rounded-md mt-2">
-                <p className="text-sm">Payment Link:</p>
-                <p className="text-blue-500">{linkUrl}</p>
-                <Button
-                  onClick={() => navigator.clipboard.writeText(linkUrl)}
-                  className="mt-2 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                >
-                  Copy Link
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
+      {/* Form Section */}
+      <div>
+        <Input
+          type="text"
+          placeholder="Description"
+          value={description}
+          readOnly={isPaid}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full mb-4"
+        />
+        <Input
+          type="text"
+          placeholder="Amount (£)"
+          value={amount}
+          readOnly={isPaid}
+          onChange={(e) => setAmount(e.target.value)}
+          className="w-full mb-4"
+        />
 
         {/* Totals Section */}
-        <div className="flex flex-col items-end text-right ml-8">
-          {vatNumber && (
-            <>
-              <p className="mb-2 text-lg">
-                <strong>Subtotal:</strong> £{parseAmount().toFixed(2)}
-              </p>
-              <p className="mb-2 text-lg">
-                <strong>VAT ({(VAT_RATE * 100).toFixed(0)}%):</strong> £{calculateVAT().toFixed(2)}
-              </p>
-            </>
-          )}
-          <p className="mb-2 text-lg font-bold">
-            <strong>Total:</strong> £{calculateTotal().toFixed(2)}
-          </p>
+        <div className="mt-4 bg-gray-100 p-4 rounded-md shadow-sm">
+          <p><strong>Subtotal:</strong> £{parseFloat(amount || '0').toFixed(2)}</p>
+          {vatNumber && <p><strong>VAT ({(VAT_RATE * 100).toFixed(0)}%):</strong> £{calculateVAT().toFixed(2)}</p>}
+          <p><strong>Total:</strong> £{calculateTotal().toFixed(2)}</p>
         </div>
+
+        {/* Link Display */}
+        {linkUrl && (
+          <div className="mt-4">
+            <div className="p-2 bg-gray-100 border rounded-md">
+              <p className="text-sm">Payment Link:</p>
+              <p className="text-blue-500">{linkUrl}</p>
+              <Button
+                onClick={() => navigator.clipboard.writeText(linkUrl)}
+                className="mt-2 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+              >
+                Copy Link
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Action Buttons */}
-      <div className="flex justify-center mt-4 space-x-4">
-        {linkId && (
+      {!isPaid && (
+        <div className="flex justify-center mt-4 space-x-4">
+          {linkId && (
+            <Button
+              onClick={() => handleLinkAction('delete')}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              disabled={loadingAction === 'delete'}
+            >
+              Delete Link
+              {loadingAction === 'delete' && <Spinner className="ml-2" size="sm" />}
+            </Button>
+          )}
           <Button
-            onClick={() => handleLinkAction('delete')}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-            disabled={loadingAction === 'delete'}
+            onClick={() => handleLinkAction('save')}
+            className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600"
+            disabled={loadingAction === 'save'}
           >
-            Delete Link
-            {loadingAction === 'delete' && <Spinner className="ml-2" size="sm" />}
+            Save Link
+            {loadingAction === 'save' && <Spinner className="ml-2" size="sm" />}
           </Button>
-        )}
-        <Button
-          onClick={() => handleLinkAction('save')}
-          className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600"
-          disabled={loadingAction === 'save'}
-        >
-          Save Link
-          {loadingAction === 'save' && <Spinner className="ml-2" size="sm" />}
-        </Button>
-        <Button
-          onClick={() => handleLinkAction('send')}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          disabled={loadingAction === 'send' || parseAmount() <= 0}
-        >
-          Send Link
-          {loadingAction === 'send' && <Spinner className="ml-2" size="sm" />}
-        </Button>
-      </div>
+          <Button
+            onClick={() => handleLinkAction('send')}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            disabled={loadingAction === 'send' || parseFloat(amount || '0') <= 0}
+          >
+            Send Link
+            {loadingAction === 'send' && <Spinner className="ml-2" size="sm" />}
+          </Button>
+        </div>
+      )}
 
       {/* Success/Error Message */}
       {message && (
