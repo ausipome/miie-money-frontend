@@ -72,7 +72,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onNewInvoiceClick, onOpenInvo
   const handleResendReceipt = async (invoiceId: string) => {
     setLoadingAction('resend');
     try {
-      const response = await fetch('/payment-complete', {
+      const response = await fetch('/payment-complete-invoice', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

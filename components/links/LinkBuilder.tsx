@@ -22,14 +22,15 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(linkData?.logoUrl || null);
   const [description, setDescription] = useState(linkData?.description || '');
-  const [amount, setAmount] = useState<string>(linkData?.subtotal?.toString() || '');
+  const [amount, setAmount] = useState<string>(linkData?.subtotal?.toFixed(2)?.toString() || '');
   const [vatNumber, setVatNumber] = useState<string | null>(linkData?.vatNumber || null);
   const [linkId, setLinkId] = useState<string | null>(linkData?.linkId || null);
   const [linkUrl, setLinkUrl] = useState<string | null>(linkData?.url || null);
   const [customerDetails, setCustomerDetails] = useState<Contact>(linkData?.customer || customer || {} as Contact);
-  const [loadingAction, setLoadingAction] = useState<'save' | 'send' | 'delete' | null>(null);
+  const [loadingAction, setLoadingAction] = useState<'save' | 'send' | 'delete' | 'generateEmail' | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [generatedEmail, setGeneratedEmail] = useState<string>('');
   const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
 
   const VAT_RATE = 0.20;
@@ -111,6 +112,41 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
     }
   };
 
+  const generateEmailFromDescription = async () => {
+    setLoadingAction('generateEmail');
+    try {
+      const response = await fetch('/api/account/generate-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': xsrfToken,
+        },
+        credentials: 'include',
+        body: JSON.stringify({ description }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setGeneratedEmail(data.email);
+        setMessage({ type: 'success', text: 'Email generated successfully!' });
+      } else {
+        const errorData = await response.json();
+        setMessage({ type: 'error', text: `Failed to generate email: ${errorData.error}` });
+      }
+    } catch (error) {
+      console.error('Error generating email:', error);
+      setMessage({ type: 'error', text: 'Error generating email' });
+    } finally {
+      setLoadingAction(null);
+    }
+  };
+
+  const handleAmountBlur = () => {
+    if (amount) {
+      setAmount(parseFloat(amount).toFixed(2));
+    }
+  };
+
   const handleSaveCustomerDetails = async () => {
     try {
       const updatedLink = {
@@ -126,6 +162,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
         credentials: 'include',
         body: JSON.stringify(updatedLink),
       });
+  
       if (response.ok) {
         setShowEditModal(false);
         setMessage({ type: 'success', text: 'Customer details updated successfully!' });
@@ -138,18 +175,17 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
       setMessage({ type: 'error', text: 'Failed to update customer details.' });
     }
   };
+  
 
   return (
     <div className="max-w-[70%] mx-auto mt-8 p-6 bg-white rounded shadow-md">
       {/* Back and Home Buttons */}
       <div className="flex justify-between mb-4 text-base">
         <div className="flex space-x-2">
-          {backButton}
-          {isNewLink && (
-            <Button onClick={onHomeClick} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-              Home
-            </Button>
-          )}
+          {!isPaid && isNewLink && backButton}
+          <Button onClick={onHomeClick} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            Home
+          </Button>
         </div>
         {isNewLink && (
           <Button onClick={onNewLink} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
@@ -208,6 +244,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
           value={amount}
           readOnly={isPaid}
           onChange={(e) => setAmount(e.target.value)}
+          onBlur={handleAmountBlur}
           className="w-full mb-4"
         />
 
@@ -218,8 +255,8 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
           <p><strong>Total:</strong> £{calculateTotal().toFixed(2)}</p>
         </div>
 
-        {/* Link Display */}
-        {linkUrl && (
+        {/* Payment Link or Status Display */}
+        {linkUrl && !isPaid ? (
           <div className="mt-4">
             <div className="p-2 bg-gray-100 border rounded-md">
               <p className="text-sm">Payment Link:</p>
@@ -231,6 +268,38 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
                 Copy Link
               </Button>
             </div>
+          </div>
+        ) : isPaid ? (
+          <div className="text-center text-slate-400 text-2xl font-bold mt-4">
+            PAID
+          </div>
+        ) : null}
+      </div>
+
+      {/* Email Generation Section */}
+      <div className="mt-6">
+        <h2 className="text-lg font-semibold">Generate Email</h2>
+        <Button
+          onClick={generateEmailFromDescription}
+          className="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600"
+          disabled={!description || loadingAction === 'generateEmail'}
+        >
+          {loadingAction === 'generateEmail' ? <Spinner size="sm" /> : 'Generate Email'}
+        </Button>
+        {generatedEmail && (
+          <div className="mt-4 p-4 bg-gray-100 border rounded-md">
+            <h3 className="text-md font-bold">Generated Email:</h3>
+            <textarea
+              className="w-full mt-2 p-2 border rounded-md"
+              value={generatedEmail}
+              onChange={(e) => setGeneratedEmail(e.target.value)}
+            />
+            <Button
+              className="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              onClick={() => alert('Email Sent (Mock Action)!')}
+            >
+              Send Email
+            </Button>
           </div>
         )}
       </div>
@@ -289,7 +358,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
             <Input label="Phone" value={customerDetails.phone || ''} onChange={(e) => setCustomerDetails({ ...customerDetails, phone: e.target.value })} fullWidth />
           </ModalBody>
           <ModalFooter>
-            <Button onClick={handleSaveCustomerDetails} color="primary">Save</Button>
+            <Button onClick={() => handleSaveCustomerDetails()} color="primary">Save</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

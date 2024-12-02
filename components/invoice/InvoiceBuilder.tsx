@@ -267,6 +267,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
               readOnly={isPaid}
               className="w-1/2 border p-2"
               onChange={(e) => handleItemChange(index, 'cost', e.target.value)}
+              onBlur={(e) => handleItemChange(index, 'cost', parseFloat(e.target.value).toFixed(2))}
             />
             {!isPaid && index !== 0 && (
               <Button onClick={() => handleRemoveItem(index)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
