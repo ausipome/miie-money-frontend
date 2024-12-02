@@ -28,7 +28,7 @@ export default function AccountNav() {
 
   return (
     <div className="fixed top-0 bg-white w-full h-[80px] z-50">
-      <nav className="fixed top-3 w-[97%] left-[1.5%] bg-[rgba(90,135,170)] rounded-full p-4">
+      <nav className="fixed top-3 w-[97%] left-[1.5%] bg-[rgba(108,159,193)] rounded-full p-4">
         <div className="w-full mx-auto flex justify-between items-center">
           {/* Left side */}
           <div className="flex items-center">
