@@ -76,7 +76,16 @@ export default function Login() {
                             </span>
                         </div>
                     </div>
-                    <button type="submit" className="stdButton">Login {status && <Spinner style={{marginLeft:"4px",marginTop:"2px"}} color="warning" size="sm"/>}</button>
+                    <button
+                    type="submit"
+                    className={`mt-4 w-full p-2 text-white rounded ${
+                        status ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+                    }`}
+                    disabled={status}
+                    >
+                    {status ? "Please Wait..." : "Login"}
+                    {status && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
+                    </button>
                     {submitError && <div style={{ color: 'red' }}>{submitError}</div>}
                     <Link href="/forgotpassword"><h3 className="text-center my-6">Forgot your Password?</h3></Link>
                     <h3 className="text-center my-6 text-[#5752FC]"><span className="text-slate-400">Don't have an account? </span><Link href="/signup">Sign up here!</Link></h3>

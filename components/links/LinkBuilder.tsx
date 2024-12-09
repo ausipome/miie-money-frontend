@@ -303,6 +303,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
           </div>
         )}
       </div>
+      
 
       {/* Action Buttons */}
       {!isPaid && (

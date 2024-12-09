@@ -43,7 +43,15 @@ export default function CheckoutForm({ linkId }: { linkId: string | null }) {
   return (
     <form onSubmit={handleSubmit} className="text-center">
       <PaymentElement />
-      <button className="stdButton" disabled={!stripe || isLoading}>
+      <button
+        type="submit"
+        className={`mt-4 w-full p-2 text-white rounded ${
+           isLoading
+            ? "bg-gray-500 cursor-not-allowed"
+            : "bg-blue-500 hover:bg-blue-600"
+        }`}
+        disabled={!stripe || isLoading}
+      >
         {isLoading ? "Processing..." : "Pay Now"}
       </button>
       {message && <div className="text-red-600 mt-2">{message}</div>}

@@ -135,7 +135,16 @@ export default function ResetPassword() {
                         </div>
                         {passwordError && <div style={{ color: 'red' }}>{passwordError}</div>}
                     </div>
-                    <button type="submit" className="stdButton">Reset Password {status && <Spinner style={{marginLeft:"4px",marginTop:"2px"}} color="warning" size="sm"/>}</button>
+                    <button
+                    type="submit"
+                    className={`mt-4 w-full p-2 text-white rounded ${
+                        status ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+                    }`}
+                    disabled={status}
+                    >
+                    {status ? "Please Wait..." : "Reset Password"} 
+                    {status && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
+                    </button>
                     <p className="text-red-500">{error}</p>
                     {statusText && (<p className='text-center text-[#000000]'>You can now <Link className='text-[#2923dc]' href="/login">Login in</Link> with your new password</p>)}
                 </div>

@@ -27,8 +27,8 @@ export default function TopNav() {
   }, []);
 
   return (
-    <div className="fixed top-0 bg-white w-full h-[80px] z-50">
-      <nav className="fixed top-3 w-[97%] left-[1.5%] bg-[rgba(108,159,193)] rounded-full p-4">
+    <div className="bg-white w-full h-[80px] z-50">
+      <nav className="m-auto w-[97%] left-[1.5%] bg-[rgba(108,159,193)] rounded-full p-4">
         <div className="w-full mx-auto flex justify-between items-center">
           {/* Left side */}
           <div className="flex items-center">
@@ -89,6 +89,14 @@ export default function TopNav() {
                 }`}
               >
                 Help
+              </Link>
+              <Link
+                href="pricing"
+                className={`py-3 px-4 ${
+                  isMenuOpen ? "text-black hover:bg-pink-50" : "text-white hover:text-pink-200"
+                }`}
+              >
+                Pricing
               </Link>
 
               {/* Logged In Component (Visible only in Collapsed Menu) */}

@@ -182,20 +182,17 @@ export default function StripeVerification() {
             </select>
           </div>
           <div className="w-full max-w-xs my-6">
-            <button
+              <button
               onClick={createConnected}
               id="createConnected"
-              className="stdButton w-full m-0 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center justify-center"
-            >
-              Create
-              {status && (
-                <Spinner
-                  style={{ marginLeft: "4px", marginTop: "2px" }}
-                  color="warning"
-                  size="sm"
-                />
-              )}
-            </button>
+              className={`w-full m-0 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center justify-center ${
+                  status ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+              }`}
+              disabled={status}
+              >
+              {status ? "Please Wait..." : "Create"}
+              {status && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
+              </button>
           </div>
         </div>
       </>

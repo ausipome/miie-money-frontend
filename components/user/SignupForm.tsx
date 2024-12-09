@@ -178,7 +178,16 @@ export default function MiieSignupForm() {
                     </div>
 
                     <h3 className='text-center my-6 text-[#5752FC] mt-4'><span className='text-slate-400'>Already have an account? </span><Link href="/login">Login in here!</Link></h3>
-                    <button type="submit" className="stdButton">Sign Up {status && <Spinner style={{marginLeft:"4px",marginTop:"2px"}} color="warning" size="sm"/>}</button>
+                    <button
+                    type="submit"
+                    className={`mt-4 w-full p-2 text-white rounded ${
+                        status ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+                    }`}
+                    disabled={status}
+                    >
+                    {status ? "Please Wait..." : "Sign Up"}
+                    {status && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
+                    </button>
                     {submitError && <div style={{ color: 'red' }}>{submitError}</div>}
                     </div>
                 </form>
