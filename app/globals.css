@@ -5,29 +5,9 @@
 body {
   font-family: 'Nunito', sans-serif;
   background-color: white;
-  margin-top: 110px;
+  margin-top: 20px;
   margin-bottom: 50px;
-}
-
-/* Standard button */
-.stdButton{
-  background: linear-gradient(to right, #5752FC, #C91AFE);
-  border: none;
-  color: white;
-  padding: 12px 24px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 20px;
-  margin: 10px;
-  cursor: pointer;
-  border-radius: 40px;
-  vertical-align: middle;
-}
-
-/* Standard button change colour on hover*/
-.stdButton:hover {
-  background: linear-gradient(to right, #6c67f6, #cb3df7);
+  min-width: 360px;
 }
 
 .stdInput {
@@ -81,4 +61,96 @@ body {
 
 #nprogress .peg {
   box-shadow: 0 0 10px #020344, 0 0 5px #020344 !important;
+}
+
+
+/* WordCloud Container */
+.word-cloud-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px; /* Optional padding for spacing */
+  box-sizing: border-box; /* Ensure padding is included in width/height */
+}
+
+/* WordCloud Responsiveness */
+.react-wordcloud {
+  max-width: 100%; /* Ensure the word cloud doesn't overflow horizontally */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px; /* Space between horizontal words */
+  margin: 10px 0;
+}
+
+.word {
+  font-family: Arial, sans-serif;
+  margin: 5px;
+  animation: float 4s ease-in-out infinite;
+}
+
+.large {
+  font-size: 3em;
+  font-weight: bold;
+}
+
+.medium {
+  font-size: 2em;
+}
+
+.medium-light {
+  font-size: 1.8em;
+}
+
+.small {
+  font-size: 1.5em;
+}
+
+.centerpiece {
+  margin: 15px 0;
+}
+
+.dark-blue {
+  color: #00274D;
+}
+
+.blue {
+  color: #00509E;
+}
+
+.light-blue {
+  color: #89CFF0;
+}
+
+/* Vertical Words */
+.vertical-word {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+}
+
+.left {
+  left: 10%; /* Position to the left of the word cloud */
+  top: 20%;
+}
+
+.right {
+  right: 10%; /* Position to the right of the word cloud */
+  top: 20%;
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
 }

@@ -55,7 +55,16 @@ export default function ForgotPassword() {
                         />
                         
                     </div>
-                    <button type="submit" className="stdButton">Request Reset Token {status && <Spinner style={{marginLeft:"4px",marginTop:"2px"}} color="warning" size="sm"/>}</button>
+                    <button
+                    type="submit"
+                    className={`mt-4 w-full p-2 text-white rounded ${
+                        status ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+                    }`}
+                    disabled={status}
+                    >
+                    {status ? "Please Wait..." : "Request Reset Token"}
+                    {status && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
+                    </button>
                     <p className="text-red-500">{error}</p>
                 </div>
             </form>
