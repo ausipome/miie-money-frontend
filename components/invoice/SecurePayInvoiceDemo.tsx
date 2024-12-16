@@ -217,7 +217,6 @@ export default function SecurePayInvoiceDemo() {
       <div>
         <DemoCheckoutForm
           onPaymentSuccess={() => {
-            console.log("Payment succeeded! Restarting the animation...");
             setCurrentStep(0); // Example: Reset animation logic
           }}
         />

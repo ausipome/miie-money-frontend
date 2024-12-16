@@ -1,0 +1,80 @@
+import Link from 'next/link';
+
+const Footer = () => {
+  return (
+    <footer className="bg-gradient-to-b from-gray-800 to-gray-900 text-white py-5">
+      <div className="container mx-auto flex flex-wrap justify-between px-4">
+        {/* Contact Section */}
+        <div className="w-full sm:w-1/4 mb-4 sm:mb-0">
+          <h4 className="text-lg font-bold mb-2">Contact</h4>
+          <ul className="space-y-1">
+            <li>
+              <Link href="/help" className="hover:underline">Help</Link>
+            </li>
+            <li>
+              <a href="mailto:martyn@getpaidontheweb.com" className="hover:underline">martyn@getpaidontheweb.com</a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Info Section */}
+        <div className="w-full sm:w-1/4 mb-4 sm:mb-0">
+          <h4 className="text-lg font-bold mb-2">Info</h4>
+          <ul className="space-y-1">
+            <li>
+              <Link href="/docs" className="hover:underline">Docs</Link>
+            </li>
+            <li>
+              <Link href="/learn" className="hover:underline">Learn</Link>
+            </li>
+            <li>
+              <Link href="/terms" className="hover:underline">Terms</Link>
+            </li>
+            <li>
+              <Link href="/pricing" className="hover:underline">Pricing</Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Account Section */}
+        <div className="w-full sm:w-1/4 mb-4 sm:mb-0">
+          <h4 className="text-lg font-bold mb-2">Account</h4>
+          <ul className="space-y-1">
+            <li>
+              <Link href="/account" className="hover:underline">Account</Link>
+            </li>
+            <li>
+              <Link href="/login" className="hover:underline">Login</Link>
+            </li>
+            <li>
+              <Link href="/signup" className="hover:underline">Signup</Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Social Media Section */}
+        <div className="w-full sm:w-1/4">
+          <h4 className="text-lg font-bold mb-2">Follow Us</h4>
+          <ul className="space-y-1">
+            <li>
+              <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:underline">TikTok</a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="hover:underline">Instagram</a>
+            </li>
+            <li>
+              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="hover:underline">Facebook</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Copyright */}
+      <div className="text-center mt-4 text-sm">
+        <p>© getpaidontheweb.com</p>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;

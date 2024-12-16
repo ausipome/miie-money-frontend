@@ -101,6 +101,7 @@ export interface PaymentLink {
   creationDate: string;
   vatAmount: number;
   receiptDate: string;
+  email: string;
 }
 
   
