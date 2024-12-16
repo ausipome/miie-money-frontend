@@ -6,7 +6,6 @@ body {
   font-family: 'Nunito', sans-serif;
   background-color: white;
   margin-top: 20px;
-  margin-bottom: 50px;
   min-width: 360px;
 }
 
@@ -52,7 +51,7 @@ body {
 
 #nprogress .bar {
   position: absolute !important;
-  background: #020344 !important;
+  background: rgb(59 130 246) !important;
   height: 5px !important;
   top:85px !important;    
   left: 1.5% !important;
@@ -60,7 +59,7 @@ body {
 }
 
 #nprogress .peg {
-  box-shadow: 0 0 10px #020344, 0 0 5px #020344 !important;
+  box-shadow: 0 0 10px rgb(252 231 243), 0 0 5px rgb(252 231 243) !important;
 }
 
 
