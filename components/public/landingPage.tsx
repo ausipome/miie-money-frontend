@@ -8,6 +8,8 @@ import TopNav from '../navigation/TopNav';
 import { motion } from 'framer-motion';
 import LinkBuilderDemo from '../links/LinkDemo';
 import CustomSubscriptionForm from './subscribe';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
 import Footer from './footer';
 
 const textItem = {
@@ -340,7 +342,7 @@ export default function LandingPage() {
 
         {/* Social Media Badges */}
         <motion.div
-          className="mt-12 flex justify-center space-x-6"
+          className="mt-12 flex justify-center space-x-6 text-2xl"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
@@ -349,26 +351,14 @@ export default function LandingPage() {
             visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
           }}
         >
-          <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer">
-            <img
-              src="/icons/tiktok-badge.png"
-              alt="Follow us on TikTok"
-              className="w-16 h-16 hover:scale-105 transition-transform"
-            />
+          <a href="https://www.tiktok.com/@get.paid.on.the.web" target="_blank" rel="noopener noreferrer">
+          <FontAwesomeIcon icon={byPrefixAndName.fab['tiktok']} />
           </a>
           <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
-            <img
-              src="/icons/facebook-badge.png"
-              alt="Follow us on Facebook"
-              className="w-16 h-16 hover:scale-105 transition-transform"
-            />
+          <FontAwesomeIcon icon={byPrefixAndName.fab['facebook']} />
           </a>
-          <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-            <img
-              src="/icons/instagram-badge.png"
-              alt="Follow us on Instagram"
-              className="w-16 h-16 hover:scale-105 transition-transform"
-            />
+          <a href="https://www.instagram.com/get.paid.on.the.web" target="_blank" rel="noopener noreferrer">
+          <FontAwesomeIcon icon={byPrefixAndName.fab['instagram']} />
           </a>
         </motion.div>
       </div>
