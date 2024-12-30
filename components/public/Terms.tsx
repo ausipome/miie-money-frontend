@@ -1,11 +1,12 @@
 import React from "react";
+import Footer from "./footer";
 
 const TermsAndConditions = () => {
   return (
     <>
       {/* Header Section */}
       <section className="text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white py-20 mt-12">
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-4">
+        <h1 className="text-3xl md:text-5xl font-extrabold mb-4">
           Terms and Conditions
         </h1>
       </section>
@@ -142,6 +143,7 @@ const TermsAndConditions = () => {
           </Section>
         </div>
       </section>
+      <Footer />
     </>
   );
 };

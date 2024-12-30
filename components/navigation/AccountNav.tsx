@@ -1,3 +1,5 @@
+// Account Nav
+
 'use client';
 
 import { useState, useEffect } from "react";
@@ -117,7 +119,7 @@ export default function AccountNav() {
                 Docs
               </Link>
               <Link
-                href="learn"
+                href="/learn"
                 className={`py-3 px-4 ${
                   isMenuOpen ? "text-black hover:bg-pink-50" : "text-white hover:text-pink-200"
                 }`}
@@ -125,7 +127,7 @@ export default function AccountNav() {
                 Learn
               </Link>
               <Link
-                href="help"
+                href="/help"
                 className={`py-3 px-4 ${
                   isMenuOpen ? "text-black hover:bg-pink-50" : "text-white hover:text-pink-200"
                 }`}

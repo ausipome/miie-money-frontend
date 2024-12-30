@@ -1,4 +1,3 @@
-import AccountNav from '@/components/navigation/AccountNav';
 import PrivateRoute from '../../components/user/PrivateRoute';
 
 export default function AccountLayout({
@@ -9,7 +8,6 @@ export default function AccountLayout({
   return (
     <PrivateRoute>
     <section>
-      <AccountNav />
       {children}
     </section>
     </PrivateRoute>

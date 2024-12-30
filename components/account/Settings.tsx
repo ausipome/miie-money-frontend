@@ -9,72 +9,105 @@ import { AccountInfo } from '../../types';
 import Link from "next/link";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
-import ChangePasswordModal from '../user/ChangePasswordModal'; // Import the modal
+import ChangePasswordModal from '../user/ChangePasswordModal';
+import { Button } from '@nextui-org/button';
 
 export default function Settings() {
   const { userData, error, loading } = useCheckUser();
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
   const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
   const [email, setEmail] = useState(Cookies.get('email') || '');
-  const [logoUrl, setLogoUrl] = useState<string | null>(null); // Holds the uploaded logo URL
-  const [vatNumber, setVatNumber] = useState<string | null>(null); // VAT number state
-  const fileInputRef = useRef<HTMLInputElement | null>(null); // Ref to trigger the file input
-  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false); // Modal open state
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [taxNumber, setTaxNumber] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
-  // Open and close functions for the modal
+  const country = Cookies.get('country') || 'US';
+  const [taxLabel, setTaxLabel] = useState<string>('Sales Tax Number');
+  const [taxRate, setTaxRate] = useState<number>(0);
+  const [taxMessage, setTaxMessage] = useState<string>('Enter your sales tax number.');
+
+  // Modal functions
   const openPasswordModal = () => setIsPasswordModalOpen(true);
   const closePasswordModal = () => setIsPasswordModalOpen(false);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (userData) {
       try {
         const parsedAccount: AccountInfo = JSON.parse(userData.account);
         setAccountInfo(parsedAccount);
-        setLogoUrl(userData.logo_url || null); // Assuming the logo URL is available in userData
-        setVatNumber(userData.vatNumber || ''); // Assuming vat_number is in userData
+        setLogoUrl(userData.logo_url || null);
+        setTaxNumber(userData.taxNumber || '');
+        setTaxRate(userData.taxRate || 0);
       } catch (e) {
         console.error('Error parsing account:', e);
       }
     }
   }, [userData]);
 
-  // Function to update VAT number in the database
-  const updateVatNumber = async () => {
+  // Update tax-related labels and messages based on the country
+  useEffect(() => {
+    switch (country) {
+      case 'GB':
+        setTaxLabel('VAT Number');
+        setTaxMessage('To send VAT invoices you must add your VAT number. The current VAT rate is 20%.');
+        break;
+      case 'US':
+        setTaxLabel('Sales Tax Number');
+        setTaxMessage('Enter your sales tax number. Sales tax varies by state.');
+        break;
+      case 'AU':
+        setTaxLabel('GST Number');
+        setTaxMessage('To send GST invoices in Australia, add your GST number. The current GST rate is 10%.');
+        break;
+      case 'NZ':
+        setTaxLabel('GST Number');
+        setTaxMessage('To send GST invoices in New Zealand, add your GST number. The current GST rate is 15%.');
+        break;
+      case 'CA':
+        setTaxLabel('GST Number');
+        setTaxMessage('Enter your GST number to include it on invoices. GST rates vary by province.');
+        break;
+      default:
+        setTaxLabel('Tax Number');
+        setTaxMessage('Enter your tax number to include it on invoices.');
+        break;
+    }
+  }, [country]);
+
+  const updateTaxNumber = async () => {
     try {
-      const response = await fetch('/api/account/update-vat', {
+      const response = await fetch('/api/account/update-tax', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-Token': xsrfToken,
         },
         credentials: 'include',
-        body: JSON.stringify({ email, vatNumber: vatNumber }),
+        body: JSON.stringify({ email, taxNumber, taxRate: taxRate }),
       });
 
       const data = await response.json();
       if (response.ok) {
-        alert('VAT number updated successfully!'); // Success popup
+        alert(`Updated successfully!`);
       } else {
-        alert('Failed to update VAT number. Please try again.'); // Error popup
+        alert(`Failed to update! Please try again.`);
       }
     } catch (error) {
-      console.error('Error updating VAT number:', error);
-      alert('An error occurred while updating the VAT number.');
+      console.error('Error updating tax number and tax rate:', error);
+      alert('An error occurred while updating the tax number and tax rate.');
     }
   };
 
-  // Handle when the "+" button is clicked to change or add a logo
   const handleLogoChange = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.click(); // Trigger the file input click
+      fileInputRef.current.click();
     }
   };
 
-  // Handle the file selection and trigger the logo upload
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]; // Get the first selected file
+    const file = event.target.files?.[0];
     if (file && email) {
-      // Check dimensions of the image before upload (Optional)
       const img = new Image();
       img.src = URL.createObjectURL(file);
       img.onload = async function () {
@@ -87,26 +120,24 @@ export default function Settings() {
     }
   };
 
-  // Function to handle logo upload to the backend
   const uploadLogo = async (email: string | Blob, file: string | Blob) => {
     const formData = new FormData();
-    formData.append('email', email);  // Attach email to the form data
-    formData.append('logo', file);    // Attach the logo file to the form data
+    formData.append('email', email);
+    formData.append('logo', file);
 
     try {
       const response = await fetch('/api/account/upload-logo', {
         method: 'POST',
         headers: {
           'X-CSRF-Token': xsrfToken,
-      },
-      credentials: 'include',
-        body: formData,  // Sending form data containing the logo and email
+        },
+        credentials: 'include',
+        body: formData,
       });
 
       const data = await response.json();
-
       if (response.ok) {
-        setLogoUrl(data.logo_url); // Update logo URL in state after successful upload
+        setLogoUrl(data.logo_url);
       } else {
         console.error('Error uploading logo:', data.error);
       }
@@ -115,10 +146,9 @@ export default function Settings() {
     }
   };
 
-  // Helper functions to render individual account info
   const renderIndividualInfo = () => (
     <div>
-      <p className='pb-4'><strong>Full Name</strong><br /> {accountInfo?.first_name} {accountInfo?.last_name}</p>
+      <p className="pb-4"><strong>Full Name</strong><br /> {accountInfo?.first_name} {accountInfo?.last_name}</p>
       <p><strong>Address</strong><br />
         {accountInfo?.address?.line1}<br />
         {accountInfo?.address?.city}<br />
@@ -127,10 +157,9 @@ export default function Settings() {
     </div>
   );
 
-  // Helper function to render company or non-profit info
   const renderCompanyInfo = () => (
     <div>
-      <p className='pb-4'><strong>Company Name</strong><br /> {accountInfo?.name}</p>
+      <p className="pb-4"><strong>Company Name</strong><br /> {accountInfo?.name}</p>
       <p><strong>Address</strong><br />
         {accountInfo?.address?.line1}<br />
         {accountInfo?.address?.city}<br />
@@ -139,26 +168,83 @@ export default function Settings() {
     </div>
   );
 
-  if (loading) { 
+  {/* Empty function to handle button click/blur update */}
+  const emptyFunction = () => {};
+
+  if (loading) {
     return (
-      <div className="flex flex-col items-center h-screen w-full gap-6 bg-gray-100">
-        <Card className="w-[90%] max-w-3xl space-y-6 p-6" radius="lg">
-          <Skeleton isLoaded={!loading} className="rounded-lg">
-            <div className="h-64 w-full rounded-lg bg-secondary"></div>
-          </Skeleton>
-          <div className="space-y-4">
-            <Skeleton isLoaded={!loading} className="w-full rounded-lg">
-              <div className="h-6 w-full rounded-lg bg-secondary"></div>
+      <>
+      {/* Change Password Modal Skeleton */}
+      {isPasswordModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md">
+            <Skeleton isLoaded={!loading} className="rounded-lg">
+              <div className="h-8 w-1/2 bg-gray-300 mx-auto mb-4 rounded"></div> {/* Modal Title */}
             </Skeleton>
-            <Skeleton isLoaded={!loading} className="w-4/5 rounded-lg">
-              <div className="h-6 w-full rounded-lg bg-secondary-300"></div>
-            </Skeleton>
-            <Skeleton isLoaded={!loading} className="w-3/5 rounded-lg">
-              <div className="h-6 w-full rounded-lg bg-secondary-200"></div>
+            {[...Array(3)].map((_, index) => (
+              <Skeleton key={index} isLoaded={!loading} className="rounded-lg mb-2">
+                <div className="h-6 w-3/4 mx-auto bg-gray-300 rounded"></div> {/* Modal Content */}
+              </Skeleton>
+            ))}
+            <Skeleton isLoaded={!loading} className="rounded-lg">
+              <div className="h-10 w-1/3 mx-auto bg-gray-300 rounded"></div> {/* Modal Button */}
             </Skeleton>
           </div>
-        </Card>
+        </div>
+      )}
+    
+      {/* Account Information Skeleton */}
+      <div className="flex flex-col items-center py-10 bg-white">
+        <div className="w-[90%] max-w-xl space-y-6 p-6 rounded-lg shadow-lg bg-gray-50">
+          {/* Title Skeleton */}
+          <Skeleton isLoaded={!loading} className="rounded-lg">
+            <div className="h-8 w-1/2 mx-auto bg-gray-300 rounded"></div> {/* Title */}
+          </Skeleton>
+    
+          {/* Logo Section Skeleton */}
+          <div className="relative flex flex-col items-center">
+            <Skeleton isLoaded={!loading} className="rounded-lg">
+              <div className="h-[150px] w-[150px] bg-gray-200 rounded-full"></div> {/* Logo Placeholder */}
+            </Skeleton>
+            <Skeleton isLoaded={!loading} className="rounded-full absolute -bottom-4 -right-4">
+              <div className="h-8 w-8 bg-gray-300 rounded-full"></div> {/* Add Logo Button */}
+            </Skeleton>
+          </div>
+    
+          {/* Form Fields Skeleton */}
+          <div className="flex flex-col items-center space-y-4 pt-6">
+            {[...Array(2)].map((_, index) => (
+              <Skeleton key={index} isLoaded={!loading} className="rounded-lg">
+                <div className="h-6 w-3/4 bg-gray-300 rounded"></div> {/* Form Field Placeholder */}
+              </Skeleton>
+            ))}
+          </div>
+    
+          {/* Edit Link Skeleton */}
+          <Skeleton isLoaded={!loading} className="rounded-lg">
+            <div className="h-6 w-1/4 mx-auto bg-gray-300 rounded"></div> {/* Edit Link */}
+          </Skeleton>
+    
+          {/* Tax Fields Skeleton */}
+          <Skeleton isLoaded={!loading} className="rounded-lg">
+            <div className="h-6 w-1/3 bg-gray-300 mx-auto rounded"></div> {/* Tax Label */}
+          </Skeleton>
+          <Skeleton isLoaded={!loading} className="rounded-lg">
+            <div className="h-10 w-full bg-gray-300 rounded"></div> {/* Tax Input */}
+          </Skeleton>
+    
+          {/* Tax Message Skeleton */}
+          <Skeleton isLoaded={!loading} className="rounded-lg">
+            <div className="h-4 w-3/4 mx-auto bg-gray-300 rounded"></div> {/* Tax Message */}
+          </Skeleton>
+    
+          {/* Change Password Skeleton */}
+          <Skeleton isLoaded={!loading} className="rounded-lg mt-4">
+            <div className="h-6 w-1/4 mx-auto bg-gray-300 rounded"></div> {/* Change Password Link */}
+          </Skeleton>
+        </div>
       </div>
+    </>    
     );
   }
 
@@ -172,90 +258,97 @@ export default function Settings() {
 
   return (
     <>
-    {/* Change Password Modal */}
-    <ChangePasswordModal isOpen={isPasswordModalOpen} onClose={closePasswordModal} />
+      <ChangePasswordModal isOpen={isPasswordModalOpen} onClose={closePasswordModal} />
 
-    <div className="flex flex-col items-center py-10 bg-white">
-      <Card className="w-[90%] max-w-md space-y-6 p-6 rounded-lg shadow-lg bg-gray-50">
-        <h1 className="text-2xl font-bold text-center">Account Information</h1>
-        
-        {/* Logo Display Section */}
-        <div className="relative flex flex-col items-center">
-          {logoUrl ? (
-            <div className="relative">
-              {/* Restricting logo to a max of 300x300 without distorting the aspect ratio */}
-              <img src={logoUrl} alt="Company Logo" className="max-w-[300px] max-h-[150px] object-contain border rounded-lg bg-white" />
-              <button
-                className="absolute -bottom-8 -right-4 bg-blue-500 text-white rounded-full p-2"
-                onClick={handleLogoChange}
-              >
-                +
-              </button>
-            </div>
-          ) : (
-            <div className="relative h-[150px] w-[150px] bg-gray-200 flex justify-center items-center rounded-full">
-              <button onClick={handleLogoChange} className="text-gray-500 text-2xl">
-                + Add Logo
-              </button>
-            </div>
-          )}
-        </div>
+      <div className="flex flex-col items-center py-10 bg-white">
+        <Card className="w-[90%] max-w-xl space-y-6 p-6 rounded-lg shadow-lg bg-gray-50">
+          <h1 className="text-2xl font-bold text-center">Account Information</h1>
 
-        <input
-          type="file"
-          ref={fileInputRef}
-          style={{ display: 'none' }}
-          onChange={handleFileSelect}
-          accept="image/*"
-        />
+          <div className="relative flex flex-col items-center my-6">
+            {logoUrl ? (
+              <div className="relative">
+                <img src={logoUrl} alt="Company Logo" className="max-w-[300px] max-h-[150px] object-contain border rounded-lg bg-white" />
+                <button
+                  className="absolute -bottom-8 -right-4 bg-blue-500 text-white rounded-full p-2"
+                  onClick={handleLogoChange}
+                >
+                  +
+                </button>
+              </div>
+            ) : (
+              <div className="relative h-[150px] w-[150px] bg-gray-200 flex justify-center items-center rounded-full">
+                <button onClick={handleLogoChange} className="text-gray-500 text-2xl">
+                  + Add Logo
+                </button>
+              </div>
+            )}
+          </div>
 
-        <div className="flex flex-col items-center space-y-4 text-left pt-6 text-xl">
-          {/* Conditionally render based on business_type */}
-          {userData.business_type === 'individual' && renderIndividualInfo()}
-          {(userData.business_type === 'company' || userData.business_type === 'non_profit') && renderCompanyInfo()}
-        </div>
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            onChange={handleFileSelect}
+            accept="image/*"
+          />
 
-        <div className="w-full text-center">
-          {/* Edit Button */}
-          <Link href="/account/verification" className="text-xl text-blue-500">
-            Edit
-          </Link>
-        </div>
+          <div className='border-t-solid border-t-2 border-t-grey-500 border-b-solid border-b-2 border-b-grey-500 my-8'>
+          <div className="flex flex-col space-y-4 text-left pt-6 text-xl">
+            {userData.business_type === 'individual' && renderIndividualInfo()}
+            {(userData.business_type === 'company' || userData.business_type === 'non_profit') && renderCompanyInfo()}
+          </div>
 
-        {/* VAT Number Input */}
-        <div className="pt-6 relative">
-          <label htmlFor="vat" className="block text-xl font-medium text-gray-700">VAT Number</label>
+          <div className="w-full text-center pb-4">
+            <Link href="/account/verification" className="text-xl text-blue-500">
+              Edit
+            </Link>
+          </div>
+          </div>
+
+          
           <div className="relative">
+          <label htmlFor="vat" className="block text-xl font-medium text-gray-700">{taxLabel}</label>
             <input
               id="vat"
               type="text"
-              value={vatNumber || ''}
-              onChange={(e) => setVatNumber(e.target.value)}
-              onBlur={updateVatNumber}
-              className="mt-1 block w-full p-2 pr-12 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Enter VAT number"
+              value={taxNumber || ''}
+              onChange={(e) => setTaxNumber(e.target.value)}
+              placeholder={`Enter ${taxLabel}`}
+              className="block w-full p-2 border border-gray-300 rounded-md"
             />
-            <button
-              className="absolute inset-y-0 right-0 px-4 py-2 bg-green-500 text-white rounded-r-md focus:outline-none"
-              onClick={updateVatNumber}
-            >
-              <FontAwesomeIcon icon={byPrefixAndName.fal['check']} />
+            <p className="mt-0 text-sm text-gray-500">{taxMessage}</p>
+          </div>
+
+          
+
+          {(country === 'CA' || country === 'US') && (
+            <>
+              <div className="relative">
+              <label htmlFor="taxRate" className="block text-xl font-medium text-gray-700">Tax Rate %</label>
+                <input
+                  id="taxRate"
+                  type="text"
+                  value={taxRate}
+                  onChange={(e) => setTaxRate(Number(e.target.value))}
+                  placeholder="Enter Tax Rate (%)"
+                  className="block w-full p-2 border border-gray-300 rounded-md"
+                />
+                <p className="mt-0 text-sm text-gray-500">Please enter total tax rate. This varies dependent on state or province</p>
+              </div>
+            </>
+          )}
+
+            <Button color="primary" onClick={updateTaxNumber} className="mb-4">
+              Update
+            </Button>
+
+          <div className="pt-4">
+            <button className="text-blue-500 hover:underline" onClick={openPasswordModal}>
+              Change Password
             </button>
           </div>
-          <p className="mt-2 text-sm text-gray-500">
-            To send VAT invoices you must add your VAT number.<br/> Click the <FontAwesomeIcon className='text-green-800' icon={byPrefixAndName.fal['check']} /> once you have added/updated.
-          </p>
-        </div>
-
-        {/* Change Password Link */}
-        <div className="pt-4">
-          {/* Change Password Link that opens the modal */}
-          <button className="text-blue-500 hover:underline" onClick={openPasswordModal}>
-            Change Password
-          </button>
-        </div>
         </Card>
-    </div>
+      </div>
     </>
   );
 }

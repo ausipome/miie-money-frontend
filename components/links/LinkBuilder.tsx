@@ -24,7 +24,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
   const [logoUrl, setLogoUrl] = useState<string | null>(linkData?.logoUrl || null);
   const [description, setDescription] = useState(linkData?.description || '');
   const [amount, setAmount] = useState<string>(linkData?.subtotal?.toFixed(2)?.toString() || '');
-  const [vatNumber, setVatNumber] = useState<string | null>(linkData?.vatNumber || null);
+  const [taxNumber, setTaxNumber] = useState<string | null>(linkData?.taxNumber || null);
   const [linkId, setLinkId] = useState<string | null>(linkData?.linkId || null);
   const [linkUrl, setLinkUrl] = useState<string | null>(linkData?.url || null);
   const [customerDetails, setCustomerDetails] = useState<Contact>(linkData?.customer || customer || {} as Contact);
@@ -33,11 +33,43 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [generatedEmail, setGeneratedEmail] = useState<string>(linkData?.email || '');
   const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
-
-  const VAT_RATE = 0.20;
+  const country = Cookies.get('country') || 'US';
+  const [vatRate, setVatRate] = useState<number>(linkData?.taxRate || 0);
   const applicationFeeRate = userData?.application_fee || 0.01;
   const isPaid = linkData?.status === 'paid';
   const isNewLink = !linkId;
+  const [whichTax, setWhichTax] = useState('Sales Tax ');
+  const [symbol, setSymbol] = useState('$');
+
+  // Update tax-related labels and messages based on the country
+  useEffect(() => {
+    switch (country) {
+      case 'GB':
+        setVatRate(0.2);
+        setWhichTax('VAT ');
+        setSymbol('£');
+        break;
+      case 'US':
+        setVatRate(linkData?.taxRate || 0);
+        setWhichTax('Sales Tax ');
+        break;
+      case 'AU':
+        setVatRate(0.1);
+        setWhichTax('GST ');
+        break;
+      case 'NZ':
+        setVatRate(0.15);
+        setWhichTax('GST ');
+        break;
+      case 'CA':
+        setVatRate(linkData?.taxRate || 0);
+        setWhichTax('Tax ');
+        break;
+      default:
+        setVatRate(0);
+        break;
+    }
+  }, [country]);
 
   useEffect(() => {
     if (userData) {
@@ -45,14 +77,14 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
         const parsedAccount: AccountInfo = JSON.parse(userData.account);
         setAccountInfo(parsedAccount);
         setLogoUrl(userData.logo_url || null);
-        setVatNumber(userData.vatNumber || null);
+        setTaxNumber(userData.taxNumber || null);
       } catch (e) {
         console.error('Error parsing account:', e);
       }
     }
   }, [userData]);
 
-  const calculateVAT = () => (vatNumber ? parseFloat(amount || '0') * VAT_RATE : 0);
+  const calculateVAT = () => (taxNumber ? parseFloat(amount || '0') * vatRate : 0);
   const calculateTotal = () => parseFloat(amount || '0') + calculateVAT();
 
   const handleLinkAction = async (action: 'save' | 'send' | 'delete') => {
@@ -249,7 +281,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
         />
         <Input
           type="number"
-          label="Amount (£)"
+          label={`Amount (${symbol})`}
           placeholder="Enter amount"
           value={amount}
           readOnly={isPaid}
@@ -261,9 +293,9 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
 
       {/* Totals Section */}
       <div className="mt-4 bg-gray-100 p-4 rounded-md shadow-sm">
-        <p><strong>Subtotal:</strong> £{parseFloat(amount || '0').toFixed(2)}</p>
-        {vatNumber && <p><strong>VAT ({(VAT_RATE * 100).toFixed(0)}%):</strong> £{calculateVAT().toFixed(2)}</p>}
-        <p><strong>Total:</strong> £{calculateTotal().toFixed(2)}</p>
+        <p><strong>Subtotal:</strong> {symbol}{parseFloat(amount || '0').toFixed(2)}</p>
+        {taxNumber && <p><strong>{whichTax} ({(vatRate * 100).toFixed(0)}%):</strong> {symbol}{calculateVAT().toFixed(2)}</p>}
+        <p><strong>Total:</strong> {symbol}{calculateTotal().toFixed(2)}</p>
       </div>
 
       {/* Email Generation Section */}
@@ -292,7 +324,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
       </div>
 
       {/* Generated Link or Status Display */}
-      {!isNewLink && (
+      {!isNewLink && !isPaid && (
         <div className="mt-4">
           <div className="p-2 bg-gray-100 border rounded-md">
             <p className="text-sm">Payment Link:</p>
@@ -308,7 +340,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
       )}
 
       {/* Action Buttons */}
-      {!isNewLink && !isPaid && (
+      {!isNewLink && !isPaid ? (
         <div className="flex justify-center mt-4 space-x-4">
           {linkId && (
             <Button
@@ -336,6 +368,10 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
             Send Link
             {loadingAction === 'send' && <Spinner color="warning" className="ml-2" size="sm" />}
           </Button>
+        </div>
+      ) : (
+        <div className="text-center text-slate-400 text-2xl font-bold">
+          PAID {linkData?.receiptDate}
         </div>
       )}
 

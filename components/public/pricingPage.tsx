@@ -39,44 +39,77 @@ export default function DisplayPrices() {
 
   if (!location) {
     return (
-      <div className="p-6 max-w-5xl mx-auto">
-        {/* Header Skeleton */}
-        <div className="text-center mb-8">
+      <>
+      {/* Pricing Page Header Skeleton */}
+      <section className="text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white py-20 mt-6">
+        <Skeleton isLoaded={!location} className="rounded-lg">
+          <div className="h-10 w-1/2 mx-auto mb-4 bg-gray-300 rounded"></div> {/* Header Title */}
+        </Skeleton>
+        <Skeleton isLoaded={!location} className="rounded-lg">
+          <div className="h-6 w-3/4 mx-auto mb-2 bg-gray-300 rounded"></div> {/* Paragraph Line 1 */}
+        </Skeleton>
+        <Skeleton isLoaded={!location} className="rounded-lg">
+          <div className="h-6 w-3/4 mx-auto mb-2 bg-gray-300 rounded"></div> {/* Paragraph Line 2 */}
+        </Skeleton>
+        <Skeleton isLoaded={!location} className="rounded-lg">
+          <div className="h-6 w-1/2 mx-auto bg-gray-300 rounded"></div> {/* Paragraph Line 3 */}
+        </Skeleton>
+      </section>
+    
+      {/* Subheader Skeleton */}
+      <section className="bg-gray-100 py-8 px-6 text-center">
+        <Skeleton isLoaded={!location} className="rounded-lg">
+          <div className="h-6 w-3/4 mx-auto bg-gray-300 rounded"></div> {/* Subheader Text */}
+        </Skeleton>
+      </section>
+    
+      {/* Pricing Content Skeleton */}
+      <section className="bg-gradient-to-r from-blue-950 to-blue-600 py-6">
+        <div className="p-6 max-w-5xl mx-auto bg-gray-100 shadow-md rounded-lg">
           <Skeleton isLoaded={!location} className="rounded-lg">
-            <div className="h-6 w-3/4 bg-gray-300 mx-auto mb-2 rounded"></div> {/* Title */}
+            <div className="h-8 w-1/3 mx-auto bg-gray-300 mb-6 rounded"></div> {/* Section Title */}
           </Skeleton>
+    
+          {/* Category Skeletons */}
+          {[...Array(3)].map((_, categoryIndex) => (
+            <div
+              key={categoryIndex}
+              className="mb-6 bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow"
+            >
+              {/* Category Title Skeleton */}
+              <Skeleton isLoaded={!location} className="rounded-lg">
+                <div className="h-8 w-1/4 mb-4 bg-gray-300 rounded"></div> {/* Category Title */}
+              </Skeleton>
+    
+              {/* Items Skeleton */}
+              <ul className="space-y-3">
+                {[...Array(3)].map((_, itemIndex) => (
+                  <li
+                    key={itemIndex}
+                    className="flex justify-between items-center p-3 bg-gray-50 rounded-md border border-gray-200"
+                  >
+                    <Skeleton isLoaded={!location} className="rounded-lg">
+                      <div className="h-6 w-1/2 bg-gray-300 rounded"></div> {/* Item Description */}
+                    </Skeleton>
+                    <Skeleton isLoaded={!location} className="rounded-lg">
+                      <div className="h-6 w-1/4 bg-gray-300 rounded"></div> {/* Item Rate */}
+                    </Skeleton>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
-
-        {/* Categories and Items Skeleton */}
-        {[...Array(3)].map((_, categoryIndex) => (
-          <div
-            key={categoryIndex}
-            className="mb-6 bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow"
-          >
-            {/* Category Title Skeleton */}
-            <Skeleton isLoaded={!location} className="rounded-lg">
-              <div className="h-8 w-1/3 bg-gray-300 mb-4 rounded"></div> {/* Category Title */}
-            </Skeleton>
-
-            {/* Items Skeleton */}
-            <ul className="space-y-3">
-              {[...Array(3)].map((_, itemIndex) => (
-                <li
-                  key={itemIndex}
-                  className="flex justify-between items-center p-3 bg-gray-50 rounded-md border border-gray-200"
-                >
-                  <Skeleton isLoaded={!location} className="rounded-lg">
-                    <div className="h-6 w-1/2 bg-gray-300 rounded"></div> {/* Item Description */}
-                  </Skeleton>
-                  <Skeleton isLoaded={!location} className="rounded-lg">
-                    <div className="h-6 w-1/4 bg-gray-300 rounded"></div> {/* Item Rate */}
-                  </Skeleton>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+      </section>
+    
+      {/* Footer Skeleton */}
+      <footer className="bg-gray-900 text-white py-6 text-center">
+        <Skeleton isLoaded={!location} className="rounded-lg">
+          <div className="h-6 w-1/3 mx-auto bg-gray-300 rounded"></div> {/* Footer Content */}
+        </Skeleton>
+      </footer>
+    </>
+    
     );
   }
 
@@ -96,7 +129,11 @@ export default function DisplayPrices() {
           Flexible Pricing Plans
         </h1>
         <p className="text-lg md:text-xl font-light mb-6">
-        Detailed pricing for our out-of-the-box standard components. Custom pricing available for volume and unique requirements. <br /> <span className="text-lg italic">** {location} customers</span> 
+        Get Paid On The Web is free to sign up with no monthly subscription fees—you only pay when you receive payments for your business. 
+        <br />
+        ** Below, you'll find detailed pricing for our out-of-the-box standard components. Custom pricing is also available for high-volume or unique requirements.
+        <br />
+        <span className="text-lg italic">** For {location} customers</span>
         </p>
       </section>
 
