@@ -18,7 +18,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   const { userData } = useCheckUser();
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(invoiceData?.logoUrl || null);
-  const [vatNumber, setVatNumber] = useState<string | null>(invoiceData?.vatNumber || null);
+  const [taxNumber, setTaxNumber] = useState<string | null>(invoiceData?.taxNumber || null);
   const [invoiceId, setInvoiceId] = useState<string | null>(invoiceData?.invoiceId || null);
   const [invoiceNumber, setInvoiceNumber] = useState<string>(invoiceData?.invoiceNumber || '');
   const [items, setItems] = useState<InvoiceItem[]>(invoiceData?.items || [{ itemName: '', quantity: '', cost: '' }]);
@@ -26,13 +26,46 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   const [customerDetails, setCustomerDetails] = useState<Contact>(invoiceData?.customer || customer || {} as Contact);
   const [showEditModal, setShowEditModal] = useState(false);
   const [loadingAction, setLoadingAction] = useState<'save' | 'send' | 'delete' | null>(null);
-  const VAT_RATE = 0.20;
+  const country = Cookies.get('country') || 'US';
+  const [vatRate, setVatRate] = useState<number>(invoiceData?.taxRate || 0);
   const INVOICE_DATE = invoiceData?.invoiceDate || new Date().toLocaleDateString();
   const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
-
+  const [whichTax, setWhichTax] = useState('Sales Tax ');
+  const [symbol, setSymbol] = useState('$');
+  
   const applicationFeeRate = userData?.application_fee || 0.01;  
   const isPaid = invoiceData?.status === 'paid';
-  const shouldCalculateVAT = !isPaid ? !!vatNumber : isPaid && invoiceData?.vatAmount !== 0;
+  const shouldCalculateVAT = !isPaid ? !!taxNumber : isPaid && invoiceData?.vatAmount !== 0;
+
+  // Update tax-related labels and messages based on the country
+  useEffect(() => {
+    switch (country) {
+      case 'GB':
+        setVatRate(0.2);
+        setWhichTax('VAT ');
+        setSymbol('£');
+        break;
+      case 'US':
+        setVatRate(invoiceData?.taxRate || 0);
+        setWhichTax('Sales Tax ');
+        break;
+      case 'AU':
+        setVatRate(0.1);
+        setWhichTax('GST ');
+        break;
+      case 'NZ':
+        setVatRate(0.15);
+        setWhichTax('GST ');
+        break;
+      case 'CA':
+        setVatRate(invoiceData?.taxRate || 0);
+        setWhichTax('Tax ');
+        break;
+      default:
+        setVatRate(0);
+        break;
+    }
+  }, [country]);
 
   useEffect(() => {
     if (userData) {
@@ -40,7 +73,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
         const parsedAccount: AccountInfo = JSON.parse(userData.account);
         setAccountInfo(parsedAccount);
         setLogoUrl(userData.logo_url || null);
-        setVatNumber(userData.vatNumber || null);
+        setTaxNumber(userData.taxNumber || null);
       } catch (e) {
         console.error('Error parsing account:', e);
       }
@@ -126,7 +159,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
     return acc + quantity * cost;
   }, 0);
 
-  const calculateVAT = () => (shouldCalculateVAT ? calculateSubtotal() * VAT_RATE : 0);
+  const calculateVAT = () => (shouldCalculateVAT ? calculateSubtotal() * vatRate : 0);
   const calculateTotal = () => calculateSubtotal() + calculateVAT();
   const applicationFee = parseFloat((calculateTotal() * applicationFeeRate).toFixed(2));
 
@@ -149,7 +182,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
       whereFrom: action,
       invoiceNumber,
       invoiceDate: INVOICE_DATE,
-      vatNumber,
+      taxNumber,
       customer: customerDetails,
       items: formattedItems,
       accountInfo,
@@ -229,7 +262,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
           <h1 className="text-4xl font-bold">INVOICE</h1>
           <p><strong>Invoice #: </strong> {invoiceNumber}</p>
           <p><strong>Invoice Date: </strong> {INVOICE_DATE}</p>
-          {vatNumber && <p><strong>VAT Number:</strong> {vatNumber}</p>}
+          {taxNumber && <p><strong>VAT Number:</strong> {taxNumber}</p>}
           <p><strong>Customer:</strong> {customerDetails.company || customerDetails.fullName}</p>
           <p>{customerDetails.address}, {customerDetails.townCity}, {customerDetails.countyState}, {customerDetails.postcodeZip}</p>
           <p><strong>Email:</strong> {customerDetails.email}</p>
@@ -263,7 +296,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
               min="0"
               step="0.01"
               value={item.cost}
-              placeholder="Cost (£)"
+              placeholder={`Cost (${symbol})`}
               readOnly={isPaid}
               className="w-1/2 border p-2"
               onChange={(e) => handleItemChange(index, 'cost', e.target.value)}
@@ -288,18 +321,18 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
           </div>
         )}
         <div className="flex justify-end mb-2">
-          <span>Subtotal:</span>
-          <span>£{calculateSubtotal().toFixed(2)}</span>
+          <span>Subtotal : </span>
+          <span> {symbol}{calculateSubtotal().toFixed(2)}</span>
         </div>
         {shouldCalculateVAT && (
           <div className="flex justify-end mb-2">
-            <span>VAT ({VAT_RATE * 100}%):</span>
-            <span>£{calculateVAT().toFixed(2)}</span>
+            <span>{whichTax} ({vatRate * 100}%) : </span>
+            <span> {symbol}{calculateVAT().toFixed(2)}</span>
           </div>
         )}
         <div className="flex justify-end">
-          <h2>Total:</h2>
-          <h2>£{calculateTotal().toFixed(2)}</h2>
+          <h2>Total : </h2>
+          <h2> {symbol}{calculateTotal().toFixed(2)}</h2>
         </div>
         {!isPaid ? (
         <div className="flex justify-center mt-4 space-x-4">
@@ -322,7 +355,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
           {loadingAction === 'save' && <Spinner className="ml-1 mt-1" color="warning" size="sm" />}
         </Button>
         <Tippy
-          content={calculateTotal() <= 1 ? "Total must be more than £1 to send the invoice." : ""}
+          content={calculateTotal() <= 1 ? `Total must be more than ${symbol}1 to send the invoice.` : ""}
           disabled={calculateTotal() > 1} // Disable tooltip when the condition is not met
         >
           <div>

@@ -15,26 +15,46 @@ export default function ContactForm() {
     message: '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Add form submission logic here (API call or email handling)
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/send-contact-message', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error || 'Failed to send message.');
+      }
+
+      setSubmitted(true);
+    } catch (err: any) {
+      console.error('Error submitting form:', err);
+      setError(err.message || 'An unexpected error occurred.');
+    }
   };
 
   return (
     <div className="bg-white p-8 rounded-lg shadow-lg w-[70%] mx-auto text-black">
       <h2 className="text-2xl font-bold mb-4">Get in Touch</h2>
       {submitted ? (
-        <p className="text-green-300">Thank you for reaching out! We'll get back to you shortly.</p>
+        <p className="text-green-500">Thank you for reaching out! We'll get back to you shortly.</p>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
+          {error && <p className="text-red-500">{error}</p>}
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-black">
               Name

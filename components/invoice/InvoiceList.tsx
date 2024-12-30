@@ -24,6 +24,19 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onNewInvoiceClick, onOpenInvo
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const country = Cookies.get('country') || 'US';
+  const [symbol, setSymbol] = useState('$');
+
+  useEffect(() => {
+    switch (country) {
+      case 'GB':
+        setSymbol('£');
+        break;
+      default:
+        setSymbol('$');
+        break;
+    }
+  }, [country]);
 
   useEffect(() => {
     const fetchInvoices = async () => {
@@ -150,7 +163,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onNewInvoiceClick, onOpenInvo
           <table className="min-w-full table-auto">
             <thead>
               <tr>
-                {["Invoice Number", "Date", "Customer", "Total (£)", "Status", "Actions"].map((header, index) => (
+              {["Invoice Number", "Date", "Customer", `Total (${symbol})`, "Status", "Actions"].map((header, index) => (
                   <th key={index} className="px-4 py-2 text-left">
                     <Skeleton isLoaded={!loading} className="rounded-lg">
                       <div className="h-6 w-32 bg-gray-300 rounded"></div>
@@ -194,7 +207,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onNewInvoiceClick, onOpenInvo
                 <th className="px-4 py-2 text-left">Invoice Number</th>
                 <th className="px-4 py-2 text-left">Date</th>
                 <th className="px-4 py-2 text-left">Customer</th>
-                <th className="px-4 py-2 text-left">Total (£)</th>
+                <th className="px-4 py-2 text-left">Total ({symbol})</th>
                 <th className="px-4 py-2 text-left">Status</th>
                 <th className="px-4 py-2 text-left">Actions</th>
               </tr>
@@ -211,7 +224,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onNewInvoiceClick, onOpenInvo
                   <td className="px-4 py-2">
                     {invoice.customer.company || invoice.customer.fullName}
                   </td>
-                  <td className="px-4 py-2">£{invoice.total.toFixed(2)}</td>
+                  <td className="px-4 py-2">{symbol}{invoice.total.toFixed(2)}</td>
                   <td className="px-4 py-2">
                     {invoice.status === 'paid' ? (
                       <span className="text-green-500 font-semibold">Paid</span>
@@ -259,15 +272,15 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onNewInvoiceClick, onOpenInvo
                   <tbody>
                     <tr>
                       <td className="px-4 py-2 border-b">Amount</td>
-                      <td className="px-4 py-2 border-b">£{(paymentInfo.amount / 100).toFixed(2)}</td>
+                      <td className="px-4 py-2 border-b">{symbol}{(paymentInfo.amount / 100).toFixed(2)}</td>
                     </tr>
                     <tr>
                       <td className="px-4 py-2 border-b">Fees</td>
-                      <td className="px-4 py-2 border-b">£{(paymentInfo.stripe_fees / 100).toFixed(2)}</td>
+                      <td className="px-4 py-2 border-b">{symbol}{(paymentInfo.stripe_fees / 100).toFixed(2)}</td>
                     </tr>
                     <tr>
                       <td className="px-4 py-2 border-b">Net Amount</td>
-                      <td className="px-4 py-2 border-b">£{(paymentInfo.net_amount / 100).toFixed(2)}</td>
+                      <td className="px-4 py-2 border-b">{symbol}{(paymentInfo.net_amount / 100).toFixed(2)}</td>
                     </tr>
                     <tr>
                       <td className="px-4 py-2 border-b">Charge Date</td>

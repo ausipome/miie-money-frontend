@@ -75,7 +75,7 @@ const Footer = () => {
       </div>
 
       {/* Copyright */}
-      <div className="text-center mt-4 text-sm text-pink-200">
+      <div className="text-center mt-4 text-sm text-gray-400">
         <p>© getpaidontheweb.com</p>
       </div>
     </footer>

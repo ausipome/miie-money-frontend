@@ -1,9 +1,12 @@
-'use client';
+"use client";
 
 import { PaymentLink } from '@/types';
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { Skeleton } from '@nextui-org/skeleton';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/modal';
+import { Button } from '@nextui-org/button';
+import { Spinner } from '@nextui-org/spinner';
 
 interface LinkListProps {
   onNewLinkClick: () => void;
@@ -16,6 +19,24 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
+  const [showPaymentModal, setShowPaymentModal] = useState<boolean>(false);
+  const [paymentInfo, setPaymentInfo] = useState<any>(null);
+  const [selectedLink, setSelectedLink] = useState<PaymentLink | null>(null);
+  const [loadingAction, setLoadingAction] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const country = Cookies.get('country') || 'US';
+  const [symbol, setSymbol] = useState('$');
+
+   useEffect(() => {
+      switch (country) {
+        case 'GB':
+          setSymbol('£');
+          break;
+        default:
+          setSymbol('$');
+          break;
+      }
+    }, [country]);
 
   useEffect(() => {
     const fetchLinks = async () => {
@@ -43,7 +64,7 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
     fetchLinks();
   }, [xsrfToken]);
 
-  const fetchLinkDetails = async (linkId: string) => {
+  const handleLinkClick = async (linkId: string) => {
     try {
       const response = await fetch(`/get-link-by-id/${linkId}`, {
         method: 'GET',
@@ -61,6 +82,53 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
     } catch (error) {
       console.error('Error fetching link details:', error);
       setError('Error fetching link details.');
+    }
+  };
+
+  const handleResendReceipt = async (linkId: string) => {
+    setLoadingAction('resend');
+    try {
+      const response = await fetch('/payment-complete-link', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': xsrfToken,
+        },
+        credentials: 'include',
+        body: JSON.stringify({ linkId }),
+      });
+
+      if (!response.ok) throw new Error('Failed to resend receipt');
+
+      setSuccessMessage('Receipt resent successfully!');
+    } catch (error) {
+      console.error('Error resending receipt:', error);
+      setSuccessMessage('Failed to resend receipt.');
+    } finally {
+      setLoadingAction(null);
+    }
+  };
+
+  const handleViewPayment = async (link: PaymentLink) => {
+    try {
+      const response = await fetch('/api/invoice/get-payment-info', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': xsrfToken,
+        },
+        credentials: 'include',
+        body: JSON.stringify({ paymentIntent: link.paymentIntent }),
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch payment info');
+
+      const data = await response.json();
+      setPaymentInfo(data);
+      setSelectedLink(link);
+      setShowPaymentModal(true);
+    } catch (error) {
+      console.error('Error fetching payment info:', error);
     }
   };
 
@@ -111,7 +179,7 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
             <thead>
               <tr>
                 <th className="px-4 py-2 text-left">Description</th>
-                <th className="px-4 py-2 text-left">Amount (£)</th>
+                <th className="px-4 py-2 text-left">Amount ({symbol})</th>
                 <th className="px-4 py-2 text-left">Customer</th>
                 <th className="px-4 py-2 text-left">Company</th>
                 <th className="px-4 py-2 text-left">Status</th>
@@ -123,33 +191,89 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
                 <tr
                   key={link.linkId}
                   className="border-t cursor-pointer hover:bg-gray-100"
-                  onClick={() => fetchLinkDetails(link.linkId)}
+                  onClick={() => handleLinkClick(link.linkId)}
                 >
                   <td className="px-4 py-2">{link.description || 'N/A'}</td>
-                  <td className="px-4 py-2">£{(link.total).toFixed(2)}</td>
+                  <td className="px-4 py-2">{symbol}{(link.total).toFixed(2)}</td>
                   <td className="px-4 py-2">{link.customer?.fullName || 'N/A'}</td>
                   <td className="px-4 py-2">{link.customer?.company || 'N/A'}</td>
-                  <td className="px-4 py-2">{link.status}</td>
                   <td className="px-4 py-2">
-                    <button
-                      className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (link.url) {
-                          navigator.clipboard.writeText(link.url);
-                        } else {
-                          alert('No URL available for this link.');
-                        }
-                      }}
-                    >
-                      Copy Link
-                    </button>
+                    {link.status === 'paid' ? (
+                      <span className="text-green-500 font-semibold">Paid</span>
+                    ) : (
+                      <span className="text-red-500 font-semibold">Unpaid</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-2">
+                    {link.status === 'paid' && (
+                      <button
+                        className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleViewPayment(link);
+                        }}
+                      >
+                        View Payment
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+      )}
+
+      {showPaymentModal && selectedLink && (
+        <Modal isOpen={showPaymentModal} onClose={() => setShowPaymentModal(false)}>
+          <ModalContent>
+            <ModalHeader>Payment Information</ModalHeader>
+            <ModalBody>
+              {paymentInfo ? (
+                <table className="table-auto w-full text-left border-collapse">
+                  <thead>
+                    <tr>
+                      <th className="px-4 py-2 border-b">Details</th>
+                      <th className="px-4 py-2 border-b">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 border-b">Amount</td>
+                      <td className="px-4 py-2 border-b">{symbol}{(paymentInfo.amount / 100).toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 border-b">Fees</td>
+                      <td className="px-4 py-2 border-b">{symbol}{(paymentInfo.stripe_fees / 100).toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 border-b">Net Amount</td>
+                      <td className="px-4 py-2 border-b">{symbol}{(paymentInfo.net_amount / 100).toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 border-b">Charge Date</td>
+                      <td className="px-4 py-2 border-b">
+                        {new Date(paymentInfo.charge_date * 1000).toLocaleDateString('en-GB')}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              ) : (
+                <p>Loading payment details...</p>
+              )}
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                              onClick={() => handleResendReceipt(selectedLink.linkId)}
+                              color="primary"
+                              disabled={loadingAction === 'resend'}
+                            >
+                              Resend Receipt
+                              {loadingAction === 'resend' && <Spinner className="ml-2" color="warning" size="sm" />}
+                            </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       )}
     </div>
   );

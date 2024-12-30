@@ -4,7 +4,6 @@
 import Link from 'next/link';
 import WordCloud from './wordCloud';
 import SecurePayInvoiceDemo from '../invoice/SecurePayInvoiceDemo';
-import TopNav from '../navigation/TopNav';
 import { motion } from 'framer-motion';
 import LinkBuilderDemo from '../links/LinkDemo';
 import CustomSubscriptionForm from './subscribe';
@@ -32,7 +31,6 @@ export default function LandingPage() {
   
   return (
     <>
-      <TopNav />
       <div className="pt-[30px]">
         {/* Hero Section */}
         <section className="text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white py-20">

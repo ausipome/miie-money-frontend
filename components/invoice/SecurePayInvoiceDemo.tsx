@@ -16,7 +16,7 @@ export default function SecurePayInvoiceDemo() {
       invoiceNumber: 'DEMO-001',
       invoiceDate: new Date().toLocaleDateString(),
       status: 'unpaid',
-      vatNumber: 'DEMO-VAT-123',
+      taxNumber: 'DEMO-VAT-123',
       customer: {
         company: 'Demo Customer Co.',
         fullName: 'John Doe',

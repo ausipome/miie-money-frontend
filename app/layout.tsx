@@ -8,6 +8,7 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import NavProgressBar from '@/components/navigation/ProgressBar';
 import CookieConsent from '@/components/public/cookieConsent';
+import TopNav from '@/components/navigation/TopNav';
 config.autoAddCss = false
 
 const roboto = Roboto({
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body className={roboto.className}>
       <NextUIProvider>
+        <TopNav />
         <NavProgressBar />
         {children}
         <CookieConsent />

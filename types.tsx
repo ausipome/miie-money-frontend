@@ -7,8 +7,9 @@ export interface UserData {
     business_type: 'individual' | 'company' | 'non_profit';
     account: string; 
     logo_url: string;
-    vatNumber: string;
+    taxNumber: string;
     application_fee: number;
+    taxRate: number;
 }
 
 export interface AccountInfo {
@@ -65,7 +66,8 @@ export interface Invoice {
   receiptDate: string;
   status: "paid" | "unpaid";
   total: number;
-  vatNumber: string;
+  taxNumber: string;
+  taxRate: number;
   items: InvoiceItem[];
   logoUrl: string;
   vatAmount: number;
@@ -90,7 +92,8 @@ export interface PaymentLink {
   status: 'paid' | 'unpaid'; 
   createdDate: string; 
   expirationDate?: string; 
-  vatNumber: string;
+  taxNumber: string;
+  taxRate: number;
   logoUrl: string;
   subtotal: number;
   total: number;
@@ -102,6 +105,7 @@ export interface PaymentLink {
   vatAmount: number;
   receiptDate: string;
   email: string;
+  paymentIntent: string;
 }
 
   

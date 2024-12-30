@@ -10,15 +10,29 @@ export default function Page() {
     return (
         <>
         {/* Header Section */}
-        <section className="text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white py-8 mt-6">
-        <h1 className="text-3xl md:text-5xl font-extrabold mb-4">Coming Soon!</h1>
-        <p className="text-lg md:text-xl font-light">
-        We’re excited to announce that our learning platform is growing, and we can’t wait to share our upcoming courses with you! Whether you’re just starting your online journey or looking to refine your skills, our courses are designed to empower you with the knowledge and tools you need to succeed. From setting up your first store on Shopify, to creating a stunning shop with Wix Studio, to launching your first online business, we’ve got you covered. These hands-on courses will guide you step-by-step, making the process approachable and easy to follow.
-            </p>
-            <p className="text-lg md:text-xl font-light">
-            Stay in the loop and be the first to know when these courses go live! Subscribe to our community or follow us using the links below. By joining, you’ll get access to updates, exclusive content, and special offers for our courses. Your entrepreneurial journey starts here—let’s build something amazing together!
-            </p>
+        <section className="text-center bg-gradient-to-r from-blue-950 to-blue-600 text-white py-8 mt-6">
+        <h1 className="text-3xl md:text-5xl font-extrabold mb-4 text-pink-200">Coming Soon!</h1>
+        <div className="md:w-2/3 sm:w-full m-auto">
+          <p className="text-lg md:text-xl font-light mb-6">
+            We’re excited to announce that our learning platform is growing, and we can’t wait to share our upcoming courses with you! Whether you’re just starting your online journey or looking to refine your skills, our courses are designed to empower you with the knowledge and tools you need to succeed.
+          </p>
+          <p className="text-lg md:text-xl font-light mb-6">
+            Here’s a sneak peek at some of the courses we’ll be offering:
+          </p>
+          <ol className="text-lg md:text-xl font-light mb-6 list-decimal list-inside text-left mx-auto max-w-md">
+            <li>Setting up your first store on Shopify</li>
+            <li>Creating a stunning shop with Wix Studio</li>
+            <li>Launching your first online business</li>
+          </ol>
+          <p className="text-lg md:text-xl font-light mb-6">
+            These hands-on courses will guide you step-by-step, making the process approachable and easy to follow.
+          </p>
+          <p className="text-lg md:text-xl font-light">
+            Stay in the loop and be the first to know when these courses go live! Subscribe to our community or follow us using the links below. By joining, you’ll gain access to updates, exclusive content, and special offers for our courses. Your entrepreneurial journey starts here—let’s build something amazing together!
+          </p>
+          </div>
         </section>
+
 
         {/* Community Subscription Section */}
 <section className="py-16 bg-gradient-to-r from-teal-600 to-green-500 text-white relative overflow-hidden">

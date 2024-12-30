@@ -175,7 +175,7 @@ export default function SecurePayInvoice() {
 ;
 
   const isPaid = invoice.status === 'paid';
-  const shouldCalculateVAT = isPaid ? invoice.vatAmount !== 0 : !!invoice.vatNumber;
+  const shouldCalculateVAT = isPaid ? invoice.vatAmount !== 0 : !!invoice.taxNumber;
 
   const calculateSubtotal = () => invoice.items.reduce((acc, item) => 
     acc + (Number(item.quantity) || 0) * (Number(item.cost) || 0), 0);
