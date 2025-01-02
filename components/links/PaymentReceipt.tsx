@@ -15,7 +15,40 @@ export default function PaymentLinkReceipt() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
   const RECEIPT_DATE = new Date().toLocaleDateString(); // Receipt date set to the current date when receipt is generated.
-  const VAT_RATE = 0.20;
+  const [whichTax, setWhichTax] = useState('Sales Tax ');
+  const [symbol, setSymbol] = useState('$');
+  const country = paymentLink?.countryCode || 'US';
+  const [vatRate, setVatRate] = useState<number>(paymentLink?.taxRate || 0);
+
+    // Update tax-related labels and messages based on the country
+    useEffect(() => {
+      switch (country) {
+        case 'GB':
+          setVatRate(0.2);
+          setWhichTax('VAT ');
+          setSymbol('£');
+          break;
+        case 'US':
+          setVatRate(paymentLink?.taxRate || 0);
+          setWhichTax('Sales Tax ');
+          break;
+        case 'AU':
+          setVatRate(0.1);
+          setWhichTax('GST ');
+          break;
+        case 'NZ':
+          setVatRate(0.15);
+          setWhichTax('GST ');
+          break;
+        case 'CA':
+          setVatRate(paymentLink?.taxRate || 0);
+          setWhichTax('Tax ');
+          break;
+        default:
+          setVatRate(0);
+          break;
+      }
+    }, [country]);
 
   useEffect(() => {
     if (!linkId) return;
@@ -127,17 +160,17 @@ export default function PaymentLinkReceipt() {
       <div className="border-t border-gray-300 mt-6 py-6">
         <div className="flex justify-end py-2">
           <span className="text-lg font-semibold text-gray-700 mr-4">Subtotal:</span>
-          <span className="text-lg font-medium text-gray-800">£{paymentLink.subtotal.toFixed(2)}</span>
+          <span className="text-lg font-medium text-gray-800">{symbol}{paymentLink.subtotal.toFixed(2)}</span>
         </div>
         {paymentLink.vatAmount > 0 && (
           <div className="flex justify-end py-2">
-            <span className="text-lg font-semibold text-gray-700 mr-4">VAT ({VAT_RATE * 100}%):</span>
-            <span className="text-lg font-medium text-gray-800">£{paymentLink.vatAmount.toFixed(2)}</span>
+            <span className="text-lg font-semibold text-gray-700 mr-4">{whichTax} :</span>
+            <span className="text-lg font-medium text-gray-800">{symbol}{paymentLink.vatAmount.toFixed(2)}</span>
           </div>
         )}
         <div className="flex justify-end py-2 mt-4 border-t border-gray-300 pt-4">
           <span className="text-xl font-bold text-gray-900 mr-4">Total:</span>
-          <span className="text-xl font-bold text-gray-900">£{paymentLink.total.toFixed(2)}</span>
+          <span className="text-xl font-bold text-gray-900">{symbol}{paymentLink.total.toFixed(2)}</span>
         </div>
       </div>
 

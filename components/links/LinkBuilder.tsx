@@ -34,10 +34,10 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
   const [generatedEmail, setGeneratedEmail] = useState<string>(linkData?.email || '');
   const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
   const country = Cookies.get('country') || 'US';
-  const [vatRate, setVatRate] = useState<number>(linkData?.taxRate || 0);
+  const [vatRate, setVatRate] = useState<number>(linkData?.taxRate || userData?.taxRate || 0);
   const applicationFeeRate = userData?.application_fee || 0.01;
-  const isPaid = linkData?.status === 'paid';
   const isNewLink = !linkId;
+  const isPaid = linkData?.status === 'paid' || false;
   const [whichTax, setWhichTax] = useState('Sales Tax ');
   const [symbol, setSymbol] = useState('$');
 
@@ -50,7 +50,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
         setSymbol('£');
         break;
       case 'US':
-        setVatRate(linkData?.taxRate || 0);
+        setVatRate(linkData?.taxRate || userData?.taxRate || 0);
         setWhichTax('Sales Tax ');
         break;
       case 'AU':
@@ -62,7 +62,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
         setWhichTax('GST ');
         break;
       case 'CA':
-        setVatRate(linkData?.taxRate || 0);
+        setVatRate(linkData?.taxRate || userData?.taxRate || 0);
         setWhichTax('Tax ');
         break;
       default:
@@ -86,6 +86,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
 
   const calculateVAT = () => (taxNumber ? parseFloat(amount || '0') * vatRate : 0);
   const calculateTotal = () => parseFloat(amount || '0') + calculateVAT();
+  const applicationFee = parseFloat((calculateTotal() * applicationFeeRate).toFixed(2));
 
   const handleLinkAction = async (action: 'save' | 'send' | 'delete') => {
     setLoadingAction(action);
@@ -109,6 +110,8 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
       total: calculateTotal(),
       logoUrl: logoUrl || '',
       email: generatedEmail,
+      taxRate: vatRate,
+      applicationFee,
     };
 
     try {
@@ -179,6 +182,8 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
           total: calculateTotal(),
           logoUrl: logoUrl || '',
           email: data.email,
+          taxRate: vatRate,
+          applicationFee,
         };
 
         const saveResponse = await fetch('/api/links/manage-payment-links', {
@@ -294,7 +299,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
       {/* Totals Section */}
       <div className="mt-4 bg-gray-100 p-4 rounded-md shadow-sm">
         <p><strong>Subtotal:</strong> {symbol}{parseFloat(amount || '0').toFixed(2)}</p>
-        {taxNumber && <p><strong>{whichTax} ({(vatRate * 100).toFixed(0)}%):</strong> {symbol}{calculateVAT().toFixed(2)}</p>}
+        {taxNumber && <p><strong>{whichTax} :</strong> {symbol}{calculateVAT().toFixed(2)}</p>}
         <p><strong>Total:</strong> {symbol}{calculateTotal().toFixed(2)}</p>
       </div>
 
@@ -340,7 +345,8 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
       )}
 
       {/* Action Buttons */}
-      {!isNewLink && !isPaid ? (
+      {!isNewLink ? (
+      !isPaid ? (
         <div className="flex justify-center mt-4 space-x-4">
           {linkId && (
             <Button
@@ -373,7 +379,8 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
         <div className="text-center text-slate-400 text-2xl font-bold">
           PAID {linkData?.receiptDate}
         </div>
-      )}
+      )
+    ) : null}
 
       {/* Success/Error Message */}
       {message && (

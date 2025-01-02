@@ -225,7 +225,10 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
       )}
 
       {showPaymentModal && selectedLink && (
-        <Modal isOpen={showPaymentModal} onClose={() => setShowPaymentModal(false)}>
+        <Modal isOpen={showPaymentModal} onClose={() => {
+          setShowPaymentModal(false);
+          setSuccessMessage(null);
+        }}>
           <ModalContent>
             <ModalHeader>Payment Information</ModalHeader>
             <ModalBody>
@@ -261,6 +264,7 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
               ) : (
                 <p>Loading payment details...</p>
               )}
+              {successMessage && <p className="mt-4 text-green-500">{successMessage}</p>}
             </ModalBody>
             <ModalFooter>
               <Button

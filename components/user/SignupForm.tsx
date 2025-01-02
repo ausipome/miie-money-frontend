@@ -188,6 +188,7 @@ export default function MiieSignupForm() {
                     {status ? "Please Wait..." : "Sign Up"}
                     {status && <Spinner style={{ marginLeft: "4px", marginTop: "2px" }} color="warning" size="sm" />}
                     </button>
+                    <p className='mt-6 '>By signing up you agree to our <Link className='text-blue-500' href={'/terms'}>terms and conditions</Link></p>
                     {submitError && <div style={{ color: 'red' }}>{submitError}</div>}
                     </div>
                 </form>

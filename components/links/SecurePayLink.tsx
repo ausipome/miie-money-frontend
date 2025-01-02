@@ -29,6 +29,33 @@ export default function SecurePayLink() {
   const [message, setMessage] = useState<{ type: 'error'; text: string } | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [initializingPayment, setInitializingPayment] = useState(false);
+  const [whichTax, setWhichTax] = useState('Sales Tax ');
+  const [symbol, setSymbol] = useState('$');
+  const country = paymentLink?.countryCode || 'US';
+
+    // Update tax-related labels and messages based on the country
+    useEffect(() => {
+      switch (country) {
+        case 'GB':
+          setWhichTax('VAT ');
+          setSymbol('£');
+          break;
+        case 'US':
+          setWhichTax('Sales Tax ');
+          break;
+        case 'AU':
+          setWhichTax('GST ');
+          break;
+        case 'NZ':
+          setWhichTax('GST ');
+          break;
+        case 'CA':
+          setWhichTax('Tax ');
+          break;
+        default:
+          break;
+      }
+    }, [country]);
 
   useEffect(() => {
     if (!linkId) return;
@@ -161,17 +188,17 @@ export default function SecurePayLink() {
       <div className="border-t border-gray-300 mt-6 py-6">
         <div className="flex justify-end py-2">
           <span className="text-lg font-semibold text-gray-700 mr-4">Subtotal:</span>
-          <span className="text-lg font-medium text-gray-800">£{calculateSubtotal().toFixed(2)}</span>
+          <span className="text-lg font-medium text-gray-800">{symbol}{calculateSubtotal().toFixed(2)}</span>
         </div>
         {showVAT && (
           <div className="flex justify-end py-2">
-            <span className="text-lg font-semibold text-gray-700 mr-4">VAT:</span>
-            <span className="text-lg font-medium text-gray-800">£{calculateVAT().toFixed(2)}</span>
+            <span className="text-lg font-semibold text-gray-700 mr-4">{whichTax} :</span>
+            <span className="text-lg font-medium text-gray-800">{symbol}{calculateVAT().toFixed(2)}</span>
           </div>
         )}
         <div className="flex justify-end py-2 mt-4 border-t border-gray-300 pt-4">
           <span className="text-xl font-bold text-gray-900 mr-4">Total:</span>
-          <span className="text-xl font-bold text-gray-900">£{calculateTotal().toFixed(2)}</span>
+          <span className="text-xl font-bold text-gray-900">{symbol}{calculateTotal().toFixed(2)}</span>
         </div>
       </div>
 
