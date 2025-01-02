@@ -30,7 +30,33 @@ export default function SecurePayInvoice() {
   const [message, setMessage] = useState<{ type: 'error'; text: string } | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [initializingPayment, setInitializingPayment] = useState(false); // New state to track initialization
-  const VAT_RATE = 0.20;
+  const [whichTax, setWhichTax] = useState('Sales Tax ');
+  const [symbol, setSymbol] = useState('$');
+  const country = invoice?.countryCode || 'US';
+
+    // Update tax-related labels and messages based on the country
+    useEffect(() => {
+      switch (country) {
+        case 'GB':
+          setWhichTax('VAT ');
+          setSymbol('£');
+          break;
+        case 'US':
+          setWhichTax('Sales Tax ');
+          break;
+        case 'AU':
+          setWhichTax('GST ');
+          break;
+        case 'NZ':
+          setWhichTax('GST ');
+          break;
+        case 'CA':
+          setWhichTax('Tax ');
+          break;
+        default:
+          break;
+      }
+    }, [country]);
 
   useEffect(() => {
     if (!invoiceId) return;
@@ -87,7 +113,6 @@ export default function SecurePayInvoice() {
 
       if (!response.ok) throw new Error('Failed to create PaymentIntent');
       const { client_secret: newClientSecret } = await response.json();
-      console.log('New PaymentIntent client_secret:', newClientSecret);
         setClientSecret(newClientSecret);
     } catch (error) {
       console.error('Error creating PaymentIntent:', error);
@@ -180,7 +205,7 @@ export default function SecurePayInvoice() {
   const calculateSubtotal = () => invoice.items.reduce((acc, item) => 
     acc + (Number(item.quantity) || 0) * (Number(item.cost) || 0), 0);
 
-  const calculateVAT = () => (shouldCalculateVAT ? calculateSubtotal() * VAT_RATE : 0);
+  const calculateVAT = () => invoice?.vatAmount || 0;
   const calculateTotal = () => calculateSubtotal() + calculateVAT();
 
   const appearance = { theme: 'stripe' };
@@ -224,7 +249,7 @@ export default function SecurePayInvoice() {
             <tr className="border-b border-gray-300">
               <th className="pb-2">Item</th>
               <th className="pb-2">Quantity</th>
-              <th className="pb-2">Cost (£)</th>
+              <th className="pb-2">Cost ({symbol})</th>
             </tr>
           </thead>
           <tbody>
@@ -232,7 +257,7 @@ export default function SecurePayInvoice() {
               <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
                 <td className="py-2 font-medium">{item.itemName}</td>
                 <td className="py-2">{item.quantity}</td>
-                <td className="py-2">£{Number(item.cost).toFixed(2)}</td>
+                <td className="py-2">{symbol}{Number(item.cost).toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
@@ -243,17 +268,17 @@ export default function SecurePayInvoice() {
       <div className="border-t border-gray-300 mt-6 py-6">
         <div className="flex justify-end py-2">
           <span className="text-lg font-semibold text-gray-700 mr-4">Subtotal:</span>
-          <span className="text-lg font-medium text-gray-800">£{calculateSubtotal().toFixed(2)}</span>
+          <span className="text-lg font-medium text-gray-800">{symbol}{calculateSubtotal().toFixed(2)}</span>
         </div>
         {shouldCalculateVAT && (
           <div className="flex justify-end py-2">
-            <span className="text-lg font-semibold text-gray-700 mr-4">VAT ({VAT_RATE * 100}%):</span>
-            <span className="text-lg font-medium text-gray-800">£{calculateVAT().toFixed(2)}</span>
+            <span className="text-lg font-semibold text-gray-700 mr-4">{whichTax} :</span>
+            <span className="text-lg font-medium text-gray-800">{symbol}{calculateVAT().toFixed(2)}</span>
           </div>
         )}
         <div className="flex justify-end py-2 mt-4 border-t border-gray-300 pt-4">
           <span className="text-xl font-bold text-gray-900 mr-4">Total:</span>
-          <span className="text-xl font-bold text-gray-900">£{calculateTotal().toFixed(2)}</span>
+          <span className="text-xl font-bold text-gray-900">{symbol}{calculateTotal().toFixed(2)}</span>
         </div>
       </div>
 

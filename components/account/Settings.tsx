@@ -21,6 +21,7 @@ export default function Settings() {
   const [taxNumber, setTaxNumber] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
 
   const country = Cookies.get('country') || 'US';
   const [taxLabel, setTaxLabel] = useState<string>('Sales Tax Number');
@@ -76,6 +77,7 @@ export default function Settings() {
   }, [country]);
 
   const updateTaxNumber = async () => {
+    setMessage(null);
     try {
       const response = await fetch('/api/account/update-tax', {
         method: 'POST',
@@ -89,13 +91,13 @@ export default function Settings() {
 
       const data = await response.json();
       if (response.ok) {
-        alert(`Updated successfully!`);
+        setMessage('Updated successfully!');
       } else {
-        alert(`Failed to update! Please try again.`);
+        setMessage('Failed to update! Please try again.');
       }
     } catch (error) {
       console.error('Error updating tax number and tax rate:', error);
-      alert('An error occurred while updating the tax number and tax rate.');
+      setMessage('An error occurred while updating the tax number and tax rate.');
     }
   };
 
@@ -342,6 +344,7 @@ export default function Settings() {
               Update
             </Button>
 
+            {message && <p className="mt-4 text-green-500">{message}</p>}
           <div className="pt-4">
             <button className="text-blue-500 hover:underline" onClick={openPasswordModal}>
               Change Password

@@ -14,8 +14,41 @@ export default function PaymentReceipt() {
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
-  const VAT_RATE = 0.20;
   const RECEIPT_DATE = new Date().toLocaleDateString(); // Receipt date set to the current date when receipt is generated.
+  const [whichTax, setWhichTax] = useState('Sales Tax ');
+  const [symbol, setSymbol] = useState('$');
+  const country = invoice?.countryCode || 'US';
+  const [vatRate, setVatRate] = useState<number>(invoice?.taxRate || 0);
+
+    // Update tax-related labels and messages based on the country
+    useEffect(() => {
+      switch (country) {
+        case 'GB':
+          setVatRate(0.2);
+          setWhichTax('VAT ');
+          setSymbol('£');
+          break;
+        case 'US':
+          setVatRate(invoice?.taxRate || 0);
+          setWhichTax('Sales Tax ');
+          break;
+        case 'AU':
+          setVatRate(0.1);
+          setWhichTax('GST ');
+          break;
+        case 'NZ':
+          setVatRate(0.15);
+          setWhichTax('GST ');
+          break;
+        case 'CA':
+          setVatRate(invoice?.taxRate || 0);
+          setWhichTax('Tax ');
+          break;
+        default:
+          setVatRate(0);
+          break;
+      }
+    }, [country]);
 
   useEffect(() => {
     if (!invoiceId) return;
@@ -160,7 +193,7 @@ export default function PaymentReceipt() {
   const calculateSubtotal = () => invoice.items.reduce((acc, item) => 
     acc + (Number(item.quantity) || 0) * (Number(item.cost) || 0), 0);
 
-  const calculateVAT = () => (shouldCalculateVAT ? calculateSubtotal() * VAT_RATE : 0);
+  const calculateVAT = () => (shouldCalculateVAT ? calculateSubtotal() * vatRate : 0);
   const calculateTotal = () => calculateSubtotal() + calculateVAT();
 
   return (
@@ -201,7 +234,7 @@ export default function PaymentReceipt() {
             <tr className="border-b border-gray-300">
               <th className="pb-2">Item</th>
               <th className="pb-2">Quantity</th>
-              <th className="pb-2">Cost (£)</th>
+              <th className="pb-2">Cost ({symbol})</th>
             </tr>
           </thead>
           <tbody>
@@ -209,7 +242,7 @@ export default function PaymentReceipt() {
               <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
                 <td className="py-2 font-medium">{item.itemName}</td>
                 <td className="py-2">{item.quantity}</td>
-                <td className="py-2">£{Number(item.cost).toFixed(2)}</td>
+                <td className="py-2">{symbol}{Number(item.cost).toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
@@ -220,17 +253,17 @@ export default function PaymentReceipt() {
       <div className="border-t border-gray-300 mt-6 py-6">
         <div className="flex justify-end py-2">
           <span className="text-lg font-semibold text-gray-700 mr-4">Subtotal:</span>
-          <span className="text-lg font-medium text-gray-800">£{calculateSubtotal().toFixed(2)}</span>
+          <span className="text-lg font-medium text-gray-800">{symbol}{calculateSubtotal().toFixed(2)}</span>
         </div>
         {shouldCalculateVAT && (
           <div className="flex justify-end py-2">
-            <span className="text-lg font-semibold text-gray-700 mr-4">VAT ({VAT_RATE * 100}%):</span>
-            <span className="text-lg font-medium text-gray-800">£{calculateVAT().toFixed(2)}</span>
+            <span className="text-lg font-semibold text-gray-700 mr-4">{whichTax} :</span>
+            <span className="text-lg font-medium text-gray-800">{symbol}{calculateVAT().toFixed(2)}</span>
           </div>
         )}
         <div className="flex justify-end py-2 mt-4 border-t border-gray-300 pt-4">
           <span className="text-xl font-bold text-gray-900 mr-4">Total:</span>
-          <span className="text-xl font-bold text-gray-900">£{calculateTotal().toFixed(2)}</span>
+          <span className="text-xl font-bold text-gray-900">{symbol}{calculateTotal().toFixed(2)}</span>
         </div>
       </div>
 

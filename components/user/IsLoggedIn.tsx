@@ -44,12 +44,6 @@ export default function IsLoggedIn({ isMenuOpen }: IsLoggedInProps) {
                                 Account
                             </Link>
                             <Link 
-                                href="/account/settings" 
-                                className="block px-4 py-2 text-gray-800 hover:bg-pink-50"
-                            >
-                                Settings
-                            </Link>
-                            <Link 
                                 href="/logout" 
                                 className="block px-4 py-2 text-gray-800 hover:bg-pink-50"
                             >

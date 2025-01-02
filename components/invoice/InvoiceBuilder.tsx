@@ -27,7 +27,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   const [showEditModal, setShowEditModal] = useState(false);
   const [loadingAction, setLoadingAction] = useState<'save' | 'send' | 'delete' | null>(null);
   const country = Cookies.get('country') || 'US';
-  const [vatRate, setVatRate] = useState<number>(invoiceData?.taxRate || 0);
+  const [vatRate, setVatRate] = useState<number>(invoiceData?.taxRate || userData?.taxRate || 0);
   const INVOICE_DATE = invoiceData?.invoiceDate || new Date().toLocaleDateString();
   const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
   const [whichTax, setWhichTax] = useState('Sales Tax ');
@@ -46,7 +46,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
         setSymbol('£');
         break;
       case 'US':
-        setVatRate(invoiceData?.taxRate || 0);
+        setVatRate(invoiceData?.taxRate || userData?.taxRate || 0);
         setWhichTax('Sales Tax ');
         break;
       case 'AU':
@@ -58,7 +58,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
         setWhichTax('GST ');
         break;
       case 'CA':
-        setVatRate(invoiceData?.taxRate || 0);
+        setVatRate(invoiceData?.taxRate || userData?.taxRate || 0);
         setWhichTax('Tax ');
         break;
       default:
@@ -191,6 +191,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
       vatAmount: calculateVAT(),
       total: calculateTotal(),
       applicationFee,
+      taxRate: vatRate,
     };
 
     try {
@@ -326,7 +327,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
         </div>
         {shouldCalculateVAT && (
           <div className="flex justify-end mb-2">
-            <span>{whichTax} ({vatRate * 100}%) : </span>
+            <span>{whichTax} : </span>
             <span> {symbol}{calculateVAT().toFixed(2)}</span>
           </div>
         )}
