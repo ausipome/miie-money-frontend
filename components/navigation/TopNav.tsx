@@ -119,16 +119,6 @@ export default function TopNav() {
                     Address Book
                   </Link>
                   <Link
-                    href="/docs"
-                    className={`py-3 px-4 ${
-                      isMenuOpen
-                        ? "text-black hover:bg-pink-50"
-                        : "text-white hover:text-pink-200"
-                    }`}
-                  >
-                    Docs
-                  </Link>
-                  <Link
                     href="/learn"
                     className={`py-3 px-4 ${
                       isMenuOpen
@@ -152,16 +142,6 @@ export default function TopNav() {
               ) : (
                 // TopNav Links
                 <>
-                  <Link
-                    href="/docs"
-                    className={`py-3 px-4 ${
-                      isMenuOpen
-                        ? "text-black hover:bg-pink-50"
-                        : "text-white hover:text-pink-200"
-                    }`}
-                  >
-                    Docs
-                  </Link>
                   <Link
                     href="/learn"
                     className={`py-3 px-4 ${

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Skeleton } from '@nextui-org/skeleton';
 import { AccountInfo, Invoice } from '../../types';
+import moment from 'moment';
 
 export default function PaymentReceipt() {
   const searchParams = useSearchParams();
@@ -14,38 +15,44 @@ export default function PaymentReceipt() {
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
-  const RECEIPT_DATE = new Date().toLocaleDateString(); // Receipt date set to the current date when receipt is generated.
   const [whichTax, setWhichTax] = useState('Sales Tax ');
   const [symbol, setSymbol] = useState('$');
   const country = invoice?.countryCode || 'US';
-  const [vatRate, setVatRate] = useState<number>(invoice?.taxRate || 0);
+  const formatDate = (date: string, country: string) => {
+    switch (country) {
+        case 'GB':
+        case 'AU':
+        case 'NZ':
+        case 'CA':
+            return moment(date).format('DD/MM/YY');
+        case 'US':
+        default:
+            return moment(date).format('MM/DD/YY');
+    }
+};
+
+const [RECEIPT_DATE] = useState<string>(formatDate(new Date().toISOString(), country));
 
     // Update tax-related labels and messages based on the country
     useEffect(() => {
       switch (country) {
         case 'GB':
-          setVatRate(0.2);
           setWhichTax('VAT ');
           setSymbol('£');
           break;
         case 'US':
-          setVatRate(invoice?.taxRate || 0);
           setWhichTax('Sales Tax ');
           break;
         case 'AU':
-          setVatRate(0.1);
           setWhichTax('GST ');
           break;
         case 'NZ':
-          setVatRate(0.15);
           setWhichTax('GST ');
           break;
         case 'CA':
-          setVatRate(invoice?.taxRate || 0);
           setWhichTax('Tax ');
           break;
         default:
-          setVatRate(0);
           break;
       }
     }, [country]);
@@ -72,7 +79,6 @@ export default function PaymentReceipt() {
         setLoading(false);
       } 
     }
-    const RECEIPT_DATE = new Date().toLocaleDateString(); // Receipt date set to the current date when receipt is generated.
 
     async function updateInvoiceStatus() {
       try {
@@ -193,7 +199,7 @@ export default function PaymentReceipt() {
   const calculateSubtotal = () => invoice.items.reduce((acc, item) => 
     acc + (Number(item.quantity) || 0) * (Number(item.cost) || 0), 0);
 
-  const calculateVAT = () => (shouldCalculateVAT ? calculateSubtotal() * vatRate : 0);
+  const calculateVAT = () => invoice?.vatAmount || 0;
   const calculateTotal = () => calculateSubtotal() + calculateVAT();
 
   return (

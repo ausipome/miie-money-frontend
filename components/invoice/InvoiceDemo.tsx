@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { Spinner } from '@nextui-org/spinner';
+import Cookies from 'js-cookie';
 
 export default function InvoiceDemo() {
-  const VAT_RATE = 0.2;
-
+  
+  const [vatRate, setVatRate] = useState<number>(0.1);
   const [invoiceDate, setInvoiceDate] = useState('');
   const [items, setItems] = useState([
     { itemName: '', quantity: '', cost: '' },
@@ -14,6 +15,39 @@ export default function InvoiceDemo() {
   const [message, setMessage] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [isSending, setIsSending] = useState(false);
+  const country = Cookies.get('country') || 'US';
+  const [whichTax, setWhichTax] = useState('Sales Tax');
+  const [symbol, setSymbol] = useState('$');
+
+   // Update tax-related labels and messages based on the country
+   useEffect(() => {
+    switch (country) {
+      case 'GB':
+        setVatRate(0.2);
+        setWhichTax('VAT');
+        setSymbol('£');
+        break;
+      case 'US':
+        setVatRate(0.07);
+        setWhichTax('Sales Tax');
+        break;
+      case 'AU':
+        setVatRate(0.1);
+        setWhichTax('GST');
+        break;
+      case 'NZ':
+        setVatRate(0.15);
+        setWhichTax('GST');
+        break;
+      case 'CA':
+        setVatRate(0.06);
+        setWhichTax('Tax');
+        break;
+      default:
+        setVatRate(0);
+        break;
+    }
+  }, [country]);
 
   useEffect(() => {
     setInvoiceDate(new Date().toLocaleDateString());
@@ -27,7 +61,7 @@ export default function InvoiceDemo() {
     }, 0);
   };
 
-  const calculateVAT = () => calculateSubtotal() * VAT_RATE;
+  const calculateVAT = () => calculateSubtotal() * vatRate;
   const calculateTotal = () => calculateSubtotal() + calculateVAT();
 
   useEffect(() => {
@@ -136,7 +170,7 @@ export default function InvoiceDemo() {
               min="0"
               step="0.01"
               value={item.cost}
-              placeholder="Cost (£)"
+              placeholder="Cost ({symbol})"
               readOnly
               className="w-1/2 border p-2"
             />
@@ -148,15 +182,15 @@ export default function InvoiceDemo() {
       <div className="mt-8 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
         <div className="flex justify-end mb-2">
           <span>Subtotal:</span>
-          <span>£{calculateSubtotal().toFixed(2)}</span>
+          <span>{symbol}{calculateSubtotal().toFixed(2)}</span>
         </div>
         <div className="flex justify-end mb-2">
-          <span>VAT ({VAT_RATE * 100}%):</span>
-          <span>£{calculateVAT().toFixed(2)}</span>
+          <span>{whichTax} ({vatRate * 100}%):</span>
+          <span>{symbol}{calculateVAT().toFixed(2)}</span>
         </div>
         <div className="flex justify-end">
           <h2>Total:</h2>
-          <h2>£{calculateTotal().toFixed(2)}</h2>
+          <h2>{symbol}{calculateTotal().toFixed(2)}</h2>
         </div>
       </div>
 
