@@ -75,6 +75,8 @@ export interface Invoice {
   applicationFee: number;
   accountId: string;
   paymentIntent: string;
+  manualVat: boolean;
+  creationDate: string;
   }
 
   export interface InvoiceItem {
@@ -106,7 +108,23 @@ export interface PaymentLink {
   receiptDate: string;
   email: string;
   paymentIntent: string;
+  manualVat: boolean;
 }
 
-  
+export interface Payment {
+  receiptDate: string;
+  total: number;
+  customer?: {
+    company: string;
+    fullName: string;
+  };
+}
+
+export interface Payout {
+  description: string;
+  amount: number;
+  created: number;
+  arrivalDate: number;
+  status: string;
+}
  

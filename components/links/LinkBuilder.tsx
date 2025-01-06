@@ -7,8 +7,13 @@ import { AccountInfo, Contact, PaymentLink } from '../../types';
 import Cookies from 'js-cookie';
 import { Button } from '@nextui-org/button';
 import { Spinner } from '@nextui-org/spinner';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/modal';
 import { Input } from '@nextui-org/input';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
+import moment from 'moment';
 
 interface LinkBuilderProps {
   customer?: Contact;
@@ -36,10 +41,31 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
   const country = Cookies.get('country') || 'US';
   const [vatRate, setVatRate] = useState<number>(linkData?.taxRate || userData?.taxRate || 0);
   const applicationFeeRate = userData?.application_fee || 0.01;
-  const isNewLink = !linkId;
-  const isPaid = linkData?.status === 'paid' || false;
   const [whichTax, setWhichTax] = useState('Sales Tax ');
   const [symbol, setSymbol] = useState('$');
+  const [manualVat, setManualVat] = useState<boolean>(linkData?.manualVat || false);
+  const [manualVatAmount, setManualVatAmount] = useState<number>(linkData?.vatAmount || 0);
+  const [showVatModal, setShowVatModal] = useState(false);
+
+  const isNewLink = !linkId;
+  const isPaid = linkData?.status === 'paid' || false;
+  const shouldCalculateVAT = !isPaid ? !!taxNumber : isPaid && linkData?.vatAmount !== 0;
+
+  const formatDate = (date: string, country: string) => {
+    switch (country) {
+        case 'GB':
+        case 'AU':
+        case 'NZ':
+        case 'CA':
+            return moment(date).format('DD/MM/YY');
+        case 'US':
+        default:
+            return moment(date).format('MM/DD/YY');
+    }
+};
+
+const [linkDate] = useState<string>(formatDate(linkData?.creationDate || new Date().toISOString(), country));
+
 
   // Update tax-related labels and messages based on the country
   useEffect(() => {
@@ -84,7 +110,12 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
     }
   }, [userData]);
 
-  const calculateVAT = () => (taxNumber ? parseFloat(amount || '0') * vatRate : 0);
+  const calculateVAT = () => {
+    if (manualVat) {
+      return manualVatAmount;
+    }
+    return shouldCalculateVAT ? parseFloat(amount || '0') * vatRate : 0;
+  };
   const calculateTotal = () => parseFloat(amount || '0') + calculateVAT();
   const applicationFee = parseFloat((calculateTotal() * applicationFeeRate).toFixed(2));
 
@@ -222,18 +253,54 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
     }
   };
 
+  const handleUpdateVat = async () => {
+    setManualVat(true);
+    setShowVatModal(false);
+    try {
+      const response = await fetch('/api/links/update-vat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': xsrfToken,
+        },
+        credentials: 'include',
+        body: JSON.stringify({ linkId, vatAmount: manualVatAmount, manualVat: true }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update VAT');
+      }
+      setMessage({ type: 'success', text: 'VAT updated successfully!' });
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Failed to update VAT.' });
+      console.error('Error updating VAT:', error);
+    }
+  };
+
   return (
     <div className="max-w-[70%] mx-auto mt-8 p-6 bg-white rounded shadow-md">
       {/* Back and Home Buttons */}
       <div className="flex justify-between mb-4 text-base">
         <div className="flex space-x-2">
           {!isPaid && isNewLink && backButton}
-          <Button onClick={onHomeClick} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+          <Button onClick={onHomeClick} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
             Home
           </Button>
+          {!isPaid && linkId && (
+            <>
+            <Button
+              onClick={() => setShowEditModal(true)}
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Edit Customer
+            </Button>
+            <Button onClick={() => setShowVatModal(true)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Adjust VAT
+          </Button>
+          </>
+          )}
         </div>
         {isNewLink && (
-          <Button onClick={onNewLink} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+          <Button onClick={onNewLink} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
             New Link
           </Button>
         )}
@@ -258,18 +325,13 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
 
         <div>
           <h1 className="text-4xl font-bold">PAYMENT LINK</h1>
+          <p><strong>Link #: </strong> {linkId}</p>
+          <p><strong>Link Date: </strong> {linkDate}</p>
+          {taxNumber && <p><strong>{whichTax} Number:</strong> {taxNumber}</p>}
           <p><strong>Customer:</strong> {customerDetails.company || customerDetails.fullName}</p>
           <p>{customerDetails.address}, {customerDetails.townCity}, {customerDetails.countyState}, {customerDetails.postcodeZip}</p>
           <p><strong>Email:</strong> {customerDetails.email}</p>
           <p><strong>Phone:</strong> {customerDetails.phone}</p>
-          {!isPaid && linkId && (
-            <Button
-              onClick={() => setShowEditModal(true)}
-              className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 mt-2"
-            >
-              Edit Customer
-            </Button>
-          )}
         </div>
       </div>
 
@@ -308,7 +370,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
         {isNewLink && (
           <Button
             onClick={generateEmailAndSaveLink}
-            className="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600"
+            className="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-700"
             disabled={!description || loadingAction === 'generateEmail'}
           >
             {loadingAction === 'generateEmail' ? <Spinner color="warning" size="sm" /> : 'Generate Payment Link'}
@@ -336,7 +398,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
             <p className="text-blue-500">{linkUrl}</p>
             <Button
               onClick={() => navigator.clipboard.writeText(linkUrl || '')}
-              className="mt-2 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+              className="mt-2 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
             >
               Copy Link
             </Button>
@@ -351,7 +413,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
           {linkId && (
             <Button
               onClick={() => handleLinkAction('delete')}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
               disabled={loadingAction === 'delete'}
             >
               Delete Link
@@ -360,7 +422,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
           )}
           <Button
             onClick={() => handleLinkAction('save')}
-            className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600"
+            className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-700"
             disabled={loadingAction === 'save'}
           >
             Save Link
@@ -368,7 +430,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
           </Button>
           <Button
             onClick={() => handleLinkAction('send')}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
             disabled={loadingAction === 'send' || parseFloat(amount || '0') <= 0}
           >
             Send Link
@@ -405,6 +467,37 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
           </ModalBody>
           <ModalFooter>
             <Button onClick={() => handleLinkAction('save')} color="primary">Save</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* Modal for Adjusting VAT */}
+      <Modal isOpen={showVatModal} onClose={() => setShowVatModal(false)}>
+        <ModalContent>
+          <ModalHeader>Adjust VAT <Tippy content="`Setting the tax amount manually will override the calculated tax amount.`">
+          <span className="ml-2 cursor-pointer text-red-500"><FontAwesomeIcon icon={byPrefixAndName.far['circle-info']} /></span>
+        </Tippy>
+        </ModalHeader>
+          <ModalBody>
+            <Input
+              label="VAT Amount"
+              type="number"
+              value={String(manualVatAmount)}
+              onChange={(e) => setManualVatAmount(parseFloat(e.target.value))}
+              fullWidth
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={handleUpdateVat} color="primary">
+              Update
+            </Button>
+            <Button onClick={() => {
+              setManualVat(false);
+              setManualVatAmount(0);
+              setShowVatModal(false);
+            }} color="danger">
+              Reset
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

@@ -6,14 +6,29 @@ import useCheckUser from '../../hooks/useCheckUser';
 import Link from 'next/link';
 import { Card } from '@nextui-org/card';
 import { Skeleton } from '@nextui-org/skeleton';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/modal';
 import Settings from './Settings';
+import AccountInfo from './AccountInfo';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
 
 export default function AccountMain() {
     const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
     const [stripeAccountId, setStripeAccountId] = useState<string | undefined>(undefined);
     const [requiredInfo, setRequiredInfo] = useState<boolean>(false);
     const [disabled, setDisabled] = useState<boolean>(false);
-    const { userData, error, loading, setLoading } = useCheckUser();
+    const [isSettingsModalOpen, setSettingsModalOpen] = useState(false);
+    const { userData, error, loading } = useCheckUser();
+
+    // Button to open settings modal
+    const openSettingsButton = (
+        <button
+            className="bg-gray-400 text-white py-2 px-4 rounded-md shadow-md"
+            onClick={() => setSettingsModalOpen(true)}
+        >
+            <FontAwesomeIcon icon={byPrefixAndName.far['gear']} />
+        </button>
+    );
 
     useEffect(() => {
         if (userData?.stripe_account_id) {
@@ -35,8 +50,6 @@ export default function AccountMain() {
                     const data = await response.json();
                     if (data.requirements.currently_due.length > 0) setRequiredInfo(true);
                     if (data.requirements.disabled_reason.length != '') setDisabled(true);
-                } else {
-                    const errorData = await response.json();
                 }
             };
             getConnected();
@@ -45,26 +58,64 @@ export default function AccountMain() {
 
     if (loading) {
         return (
-            <div className="flex flex-col items-center h-screen w-full gap-6 bg-gray-100">
-                <Card className="w-[90%] max-w-3xl space-y-6 p-6" radius="lg">
-                    <Skeleton isLoaded={!loading} className="rounded-lg">
-                        <div className="h-64 w-full rounded-lg bg-secondary"></div>
-                    </Skeleton>
+            <div className="flex flex-col items-center h-screen w-full gap-6 bg-gray-100 p-8">
+                <Card className="w-full max-w-7xl space-y-8 p-8 bg-gradient-to-r from-blue-50 to-gray-100 rounded-lg shadow-lg">
+                    {/* Skeleton for Account Balance */}
                     <div className="space-y-4">
-                        <Skeleton isLoaded={!loading} className="w-full rounded-lg">
-                            <div className="h-6 w-full rounded-lg bg-secondary"></div>
-                        </Skeleton>
-                        <Skeleton isLoaded={!loading} className="w-4/5 rounded-lg">
-                            <div className="h-6 w-full rounded-lg bg-secondary-300"></div>
-                        </Skeleton>
-                        <Skeleton isLoaded={!loading} className="w-3/5 rounded-lg">
-                            <div className="h-6 w-full rounded-lg bg-secondary-200"></div>
-                        </Skeleton>
+                        <Skeleton isLoaded={!loading} className="h-8 w-1/4 rounded-md"></Skeleton>
+                        <div className="space-y-2">
+                            <div className="grid grid-cols-2 gap-4">
+                                <Skeleton isLoaded={!loading} className="h-6 w-1/4 rounded-md"></Skeleton>
+                                <Skeleton isLoaded={!loading} className="h-6 w-1/4 rounded-md"></Skeleton>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <Skeleton isLoaded={!loading} className="h-6 w-1/4 rounded-md"></Skeleton>
+                                <Skeleton isLoaded={!loading} className="h-6 w-1/4 rounded-md"></Skeleton>
+                            </div>
+                        </div>
+                    </div>
+    
+                    {/* Skeleton for Payment Assets */}
+                    <div className="space-y-4">
+                        <Skeleton isLoaded={!loading} className="h-8 w-1/3 rounded-md"></Skeleton>
+                        <div className="space-y-2">
+                            <div className="grid grid-cols-3 gap-4">
+                                <Skeleton isLoaded={!loading} className="h-6 w-full rounded-md"></Skeleton>
+                                <Skeleton isLoaded={!loading} className="h-6 w-full rounded-md"></Skeleton>
+                                <Skeleton isLoaded={!loading} className="h-6 w-full rounded-md"></Skeleton>
+                            </div>
+                            <div className="grid grid-cols-3 gap-4">
+                                <Skeleton isLoaded={!loading} className="h-6 w-full rounded-md"></Skeleton>
+                                <Skeleton isLoaded={!loading} className="h-6 w-full rounded-md"></Skeleton>
+                                <Skeleton isLoaded={!loading} className="h-6 w-full rounded-md"></Skeleton>
+                            </div>
+                        </div>
+                    </div>
+    
+                    {/* Skeleton for Recent Payouts */}
+                    <div className="space-y-4">
+                        <Skeleton isLoaded={!loading} className="h-8 w-1/3 rounded-md"></Skeleton>
+                        <div className="space-y-2">
+                            <div className="grid grid-cols-4 gap-4">
+                                <Skeleton isLoaded={!loading} className="h-6 w-full rounded-md"></Skeleton>
+                                <Skeleton isLoaded={!loading} className="h-6 w-full rounded-md"></Skeleton>
+                                <Skeleton isLoaded={!loading} className="h-6 w-full rounded-md"></Skeleton>
+                                <Skeleton isLoaded={!loading} className="h-6 w-full rounded-md"></Skeleton>
+                            </div>
+                            <div className="grid grid-cols-4 gap-4">
+                                <Skeleton isLoaded={!loading} className="h-6 w-full rounded-md"></Skeleton>
+                                <Skeleton isLoaded={!loading} className="h-6 w-full rounded-md"></Skeleton>
+                                <Skeleton isLoaded={!loading} className="h-6 w-full rounded-md"></Skeleton>
+                                <Skeleton isLoaded={!loading} className="h-6 w-full rounded-md"></Skeleton>
+                            </div>
+                        </div>
+                        <Skeleton isLoaded={!loading} className="h-10 w-1/5 rounded-md mt-4"></Skeleton>
                     </div>
                 </Card>
             </div>
         );
     }
+    
 
     if (error) {
         return <div>Error: {error.message}</div>;
@@ -107,16 +158,33 @@ export default function AccountMain() {
                 </div>
             )}
 
-            {/* New Section for Components */}
-            <div className="flex flex-col md:flex-row gap-4 w-full p-4">
-                <div className="flex-1">
-                    
-                </div>
-                <div className="flex-1">
-                    {/* Settings Component */}
-                    <Settings />
+            {/* Main Layout */}
+            <div className="flex flex-col gap-4 w-full md:w-2/3 p-4 mx-auto">
+                {/* AccountInfo Component */}
+                <div className="w-full">
+                <AccountInfo settingsButton={openSettingsButton} />
                 </div>
             </div>
+
+            {/* Settings Modal */}
+            <Modal isOpen={isSettingsModalOpen} size={'3xl'} onClose={() => setSettingsModalOpen(false)}>
+                <ModalContent>
+                <ModalHeader className="border-b border-gray-200 text-center">
+                    <h3 className='w-full'>Settings</h3>
+                </ModalHeader>
+                    <ModalBody className="border-b border-gray-200 py-10">
+                        <Settings />
+                    </ModalBody>
+                    <ModalFooter className="border-t border-gray-200">
+                        <button
+                            className="bg-gray-500 text-white py-2 px-4 rounded-md"
+                            onClick={() => setSettingsModalOpen(false)}
+                        >
+                            Close
+                        </button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </>
     );
 }

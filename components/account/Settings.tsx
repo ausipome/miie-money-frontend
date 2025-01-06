@@ -7,8 +7,6 @@ import { Skeleton } from "@nextui-org/skeleton";
 import { useEffect, useState, useRef } from 'react';
 import { AccountInfo } from '../../types';
 import Link from "next/link";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
 import ChangePasswordModal from '../user/ChangePasswordModal';
 import { Button } from '@nextui-org/button';
 
@@ -262,8 +260,8 @@ export default function Settings() {
     <>
       <ChangePasswordModal isOpen={isPasswordModalOpen} onClose={closePasswordModal} />
 
-      <div className="flex flex-col items-center py-10 bg-white">
-        <Card className="w-[90%] max-w-xl space-y-6 p-6 rounded-lg shadow-lg bg-gray-50">
+      <div className="flex flex-col items-center bg-white">
+        <Card className="w-full space-y-6 p-6 rounded-lg shadow-lg bg-gray-50">
           <h1 className="text-2xl font-bold text-center">Account Information</h1>
 
           <div className="relative flex flex-col items-center my-6">
