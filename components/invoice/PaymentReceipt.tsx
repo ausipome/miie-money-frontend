@@ -17,21 +17,29 @@ export default function PaymentReceipt() {
   const [message, setMessage] = useState<string | null>(null);
   const [whichTax, setWhichTax] = useState('Sales Tax ');
   const [symbol, setSymbol] = useState('$');
-  const country = invoice?.countryCode || 'US';
-  const formatDate = (date: string, country: string) => {
-    switch (country) {
-        case 'GB':
-        case 'AU':
-        case 'NZ':
-        case 'CA':
-            return moment(date).format('DD/MM/YY');
-        case 'US':
-        default:
-            return moment(date).format('MM/DD/YY');
-    }
-};
+  const [country, setCountry] = useState<string | null>(null);
+  const [receiptDate, setReceiptDate] = useState<string | null>(null);
 
-const [RECEIPT_DATE] = useState<string>(formatDate(new Date().toISOString(), country));
+useEffect(() => {
+  if (country) {
+    const formatDate = (date: string, country: string) => {
+      switch (country) {
+        case 'GB': // United Kingdom
+        case 'AU': // Australia
+        case 'NZ': // New Zealand
+          setReceiptDate(moment(date).format('DD/MM/YY'));
+          break;
+        case 'US': // United States
+        case 'CA': // Canada
+          setReceiptDate(moment(date).format('MM/DD/YY'));
+          break;
+        default:
+          setReceiptDate(moment(date).format('MM/DD/YY'));
+      }
+    };
+    formatDate(new Date().toISOString(), country);
+  }
+}, [country]);
 
     // Update tax-related labels and messages based on the country
     useEffect(() => {
@@ -79,16 +87,28 @@ const [RECEIPT_DATE] = useState<string>(formatDate(new Date().toISOString(), cou
         setLoading(false);
       } 
     }
+    fetchInvoice();
+    
+  }, [invoiceId]);
+
+  useEffect(() => {
+    if (!invoice) return;
+
+    setCountry(invoice?.countryCode);
+
+  }, [invoice]);
+
+  useEffect(() => {
+    if (!receiptDate) return;
 
     async function updateInvoiceStatus() {
       try {
         const response = await fetch('/payment-complete-invoice', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ invoiceId, paymentIntent, receiptDate: RECEIPT_DATE }),
+          body: JSON.stringify({ invoiceId, paymentIntent, receiptDate: receiptDate }),
         });
         if (!response.ok) throw new Error('Failed to update invoice status');
-        
         setMessage('Your payment has been successfully completed. A copy of this receipt has been emailed to you.');
         setLoading(false);
       } catch (error) {
@@ -97,10 +117,8 @@ const [RECEIPT_DATE] = useState<string>(formatDate(new Date().toISOString(), cou
         setLoading(false);
       }
     }
-
-    fetchInvoice();
     updateInvoiceStatus();
-  }, [invoiceId]);
+  }, [receiptDate]);
 
   if (loading) { 
     return (
@@ -210,7 +228,7 @@ const [RECEIPT_DATE] = useState<string>(formatDate(new Date().toISOString(), cou
         </div>
         <h1 className="text-4xl font-bold text-gray-800">PAYMENT RECEIPT</h1>
         <p className="text-lg text-gray-500 mt-2">Receipt Number: {invoice.invoiceNumber}</p>
-        <p className="text-lg text-gray-500">Date: {RECEIPT_DATE}</p>
+        <p className="text-lg text-gray-500">Date: {receiptDate}</p>
       </header>
 
       {/* Sender and Receiver Information */}

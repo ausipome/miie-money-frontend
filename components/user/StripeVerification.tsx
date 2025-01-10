@@ -206,12 +206,13 @@ export default function StripeVerification() {
                         Please follow the prompts below to add or update the required account information.
                         </p>
                     </div>
-        
+              <div className="w-full md:w-1/2 lg:w-1/3 mx-auto px-10 sm:px-6">
               <ConnectComponentsProvider connectInstance={stripeConnectInstance}>
               <ConnectAccountOnboarding
                  onExit={updateAccount}
               />
               </ConnectComponentsProvider>
+              </div>
     </div>
       );
     }
