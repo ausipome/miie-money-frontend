@@ -17,21 +17,29 @@ export default function PaymentLinkReceipt() {
   const [message, setMessage] = useState<string | null>(null);
   const [whichTax, setWhichTax] = useState('Sales Tax ');
   const [symbol, setSymbol] = useState('$');
-  const country = paymentLink?.countryCode || 'US';
-  const formatDate = (date: string, country: string) => {
-            switch (country) {
-                case 'GB':
-                case 'AU':
-                case 'NZ':
-                case 'CA':
-                    return moment(date).format('DD/MM/YY');
-                case 'US':
-                default:
-                    return moment(date).format('MM/DD/YY');
-            }
-        };
+  const [country, setCountry] = useState<string | null>(null);
+  const [receiptDate, setReceiptDate] = useState<string | null>(null);
   
-      const [RECEIPT_DATE] = useState<string>(formatDate(new Date().toISOString(), country));
+  useEffect(() => {
+    if (country) {
+      const formatDate = (date: string, country: string) => {
+        switch (country) {
+          case 'GB': // United Kingdom
+          case 'AU': // Australia
+          case 'NZ': // New Zealand
+            setReceiptDate(moment(date).format('DD/MM/YY'));
+            break;
+          case 'US': // United States
+          case 'CA': // Canada
+            setReceiptDate(moment(date).format('MM/DD/YY'));
+            break;
+          default:
+            setReceiptDate(moment(date).format('MM/DD/YY'));
+        }
+      };
+      formatDate(new Date().toISOString(), country);
+    }
+  }, [country]);
 
 
     // Update tax-related labels and messages based on the country
@@ -81,12 +89,25 @@ export default function PaymentLinkReceipt() {
       } 
     }
 
+    fetchPaymentLink();
+  }, [linkId]);
+
+  useEffect(() => {
+    if (!paymentLink) return;
+
+    setCountry(paymentLink?.countryCode);
+
+  }, [paymentLink]);
+
+  useEffect(() => {
+    if (!receiptDate) return;
+
     async function updatePaymentLinkStatus() {
       try {
         const response = await fetch('/payment-complete-link', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ linkId, paymentIntent, receiptDate: RECEIPT_DATE }),
+          body: JSON.stringify({ linkId, paymentIntent, receiptDate: receiptDate }),
         });
         if (!response.ok) throw new Error('Failed to update payment link status');
         
@@ -98,10 +119,9 @@ export default function PaymentLinkReceipt() {
         setLoading(false);
       }
     }
-
-    fetchPaymentLink();
     updatePaymentLinkStatus();
-  }, [linkId]);
+
+  }, [receiptDate]);
 
   if (loading) { 
     return (
@@ -135,7 +155,7 @@ export default function PaymentLinkReceipt() {
         </div>
         <h1 className="text-4xl font-bold text-gray-800">PAYMENT RECEIPT</h1>
         <p className="text-lg text-gray-500 mt-2">Receipt Number: {paymentLink.linkId}</p>
-        <p className="text-lg text-gray-500">Date: {RECEIPT_DATE}</p>
+        <p className="text-lg text-gray-500">Date: {receiptDate}</p>
       </header>
 
       {/* Sender and Receiver Information */}
@@ -143,6 +163,7 @@ export default function PaymentLinkReceipt() {
         <div>
           <h2 className="text-xl font-semibold text-gray-700">From:</h2>
           <p className="text-gray-600">{accountInfo?.first_name} {accountInfo?.last_name}</p>
+          {accountInfo?.name && <p className="text-gray-600">{accountInfo?.name}</p>}
           <p className="text-gray-600">{accountInfo?.address?.line1}</p>
           <p className="text-gray-600">{accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
         </div>

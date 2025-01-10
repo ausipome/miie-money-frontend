@@ -17,7 +17,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   const { userData } = useCheckUser();
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(invoiceData?.logoUrl || null);
-  const [taxNumber, setTaxNumber] = useState<string | null>(invoiceData?.taxNumber || null);
+  const [taxNumber, setTaxNumber] = useState<string>(invoiceData?.taxNumber || '');
   const [invoiceId, setInvoiceId] = useState<string | null>(invoiceData?.invoiceId || null);
   const [invoiceNumber, setInvoiceNumber] = useState<string>(invoiceData?.invoiceNumber || '');
   const [items, setItems] = useState<InvoiceItem[]>(invoiceData?.items || [{ itemName: '', quantity: '', cost: '' }]);
@@ -51,7 +51,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
       }
   };
   
-  const [invoiceDate] = useState<string>(formatDate(invoiceData?.creationDate || new Date().toISOString(), country));
+  const [invoiceDate] = useState<string>(formatDate(invoiceData?.invoiceDate || new Date().toISOString(), country));
 
   useEffect(() => {
     switch (country) {
@@ -93,7 +93,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
         const parsedAccount: AccountInfo = JSON.parse(userData.account);
         setAccountInfo(parsedAccount);
         setLogoUrl(userData.logo_url || null);
-        setTaxNumber(userData.taxNumber || null);
+        setTaxNumber(userData.taxNumber || '');
       } catch (e) {
         console.error('Error parsing account:', e);
       }
@@ -261,7 +261,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   };
 
   return (
-    <div className="max-w-[70%] mx-auto mt-8 p-6 bg-white rounded shadow-md">
+    <div className="w-full sm:w-['80%'] mx-auto mt-8 p-10 sm:p-6 bg-white rounded shadow-md">
       {/* Back, Home, and Edit Buttons */}
       <div className="flex justify-between mb-4 text-base">
         <div className="flex space-x-2">

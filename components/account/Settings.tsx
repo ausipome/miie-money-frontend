@@ -37,7 +37,7 @@ export default function Settings() {
         setAccountInfo(parsedAccount);
         setLogoUrl(userData.logo_url || null);
         setTaxNumber(userData.taxNumber || '');
-        setTaxRate(userData.taxRate || 0);
+        setTaxRate(userData.taxRate*100 || 0);
       } catch (e) {
         console.error('Error parsing account:', e);
       }
@@ -84,7 +84,7 @@ export default function Settings() {
           'X-CSRF-Token': xsrfToken,
         },
         credentials: 'include',
-        body: JSON.stringify({ email, taxNumber, taxRate: taxRate }),
+        body: JSON.stringify({ email, taxNumber, taxRate: taxRate/100 }),
       });
 
       const data = await response.json();

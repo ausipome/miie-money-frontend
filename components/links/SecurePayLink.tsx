@@ -165,6 +165,7 @@ export default function SecurePayLink() {
         <div>
           <h2 className="text-xl font-semibold text-gray-700">From:</h2>
           <p className="text-gray-600">{accountInfo?.first_name} {accountInfo?.last_name}</p>
+          {accountInfo?.name && <p className="text-gray-600">{accountInfo?.name}</p>}
           <p className="text-gray-600">{accountInfo?.address?.line1}</p>
           <p className="text-gray-600">{accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
         </div>
