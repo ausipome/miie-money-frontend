@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Skeleton } from '@nextui-org/skeleton';
 import { AccountInfo, Invoice } from '../../types';
 import moment from 'moment';
+import Image from "next/image";
 
 export default function PaymentReceipt() {
   const searchParams = useSearchParams();
@@ -205,7 +206,7 @@ useEffect(() => {
     return (
       <div className="bg-red-500 text-white p-4 rounded-md shadow-md my-2 text-xl w-3/4 mx-auto">
         <p className="text-center">
-          Unfortunately, the invoice you're looking for could not be found.<br />
+          Unfortunately, the invoice you&apos;re looking for could not be found.<br />
           If you believe this is an error, please contact the sender for assistance.
         </p>
       </div>
@@ -224,7 +225,11 @@ useEffect(() => {
     <div className="container mx-auto mt-8 p-10 max-w-3xl bg-white rounded-lg shadow-md border border-gray-200">
       <header className="text-center mb-8">
         <div className="mb-4">
-          <img src={invoice.logoUrl || "/logo_side_transparent-background_black.png"} alt="Company Logo" className="w-auto h-auto max-w-[200px] max-h-[100px] mx-auto" />
+          <Image src={invoice.logoUrl || "/logo_side_transparent-background_black.png"} 
+          alt="Company Logo" 
+          className="w-auto h-auto max-w-[200px] max-h-[100px] mx-auto"
+          width={200}
+          height={100} />
         </div>
         <h1 className="text-4xl font-bold text-gray-800">PAYMENT RECEIPT</h1>
         <p className="text-lg text-gray-500 mt-2">Receipt Number: {invoice.invoiceNumber}</p>

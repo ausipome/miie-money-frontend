@@ -54,7 +54,7 @@ export default function AccountMain() {
             };
             getConnected();
         }
-    }, [userData]);
+    }, [userData,xsrfToken]);
 
     if (loading) {
         return (

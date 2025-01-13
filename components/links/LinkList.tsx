@@ -170,7 +170,7 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
       )}
 
       {!loading && !error && links.length === 0 && (
-        <p className="text-gray-500 text-center">You have no payment links. Click "New Link" to create one.</p>
+        <p className="text-gray-500 text-center">You have no payment links. Click &quot;New Link&quot; to create one.</p>
       )}
 
       {!loading && !error && filteredLinks.length > 0 && (

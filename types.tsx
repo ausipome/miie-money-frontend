@@ -127,4 +127,9 @@ export interface Payout {
   arrivalDate: number;
   status: string;
 }
+
+export type LocationResponse = {
+  location: string;
+  country: string;
+};
  

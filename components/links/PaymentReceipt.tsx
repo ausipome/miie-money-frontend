@@ -140,7 +140,7 @@ export default function PaymentLinkReceipt() {
     return (
       <div className="bg-red-500 text-white p-4 rounded-md shadow-md my-2 text-xl w-3/4 mx-auto">
         <p className="text-center">
-          Unfortunately, the payment link you're looking for could not be found.<br />
+          Unfortunately, the payment link you&apos;re looking for could not be found.<br />
           If you believe this is an error, please contact the sender for assistance.
         </p>
       </div>
