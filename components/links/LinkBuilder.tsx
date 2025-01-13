@@ -53,15 +53,16 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
 
   const formatDate = (date: string, country: string) => {
     switch (country) {
-        case 'GB':
-        case 'AU':
-        case 'NZ':
-        case 'CA':
-            return moment(date).format('DD/MM/YY');
-        case 'US':
-        default:
-            return moment(date).format('MM/DD/YY');
-    }
+              case 'GB':
+              case 'AU':
+              case 'NZ':
+                  return moment(date).format('DD/MM/YY');
+              case 'CA':
+              case 'US':
+                  return moment(date).format('MM/DD/YY');
+              default:
+                  return moment(date).format('MM/DD/YY');
+          }
 };
 
 const [linkDate] = useState<string>(formatDate(linkData?.creationDate || new Date().toISOString(), country));

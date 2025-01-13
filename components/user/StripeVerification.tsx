@@ -15,8 +15,8 @@ import { Card } from "@nextui-org/card";
 import { Spinner } from '@nextui-org/spinner';
 
 export default function StripeVerification() {
-    const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
-    const [email, setEmail] = useState(Cookies.get('email') || '');
+    const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
+    const [email] = useState(Cookies.get('email') || '');
     const [stripeAccountId, setStripeAccountId] = useState<string | undefined>(undefined);
     const [countryCode, setCountryCode] = useState<string>('GB');
     const [status, setStatus] = useState<boolean>(false);

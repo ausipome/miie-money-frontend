@@ -9,12 +9,13 @@ import { AccountInfo } from '../../types';
 import Link from "next/link";
 import ChangePasswordModal from '../user/ChangePasswordModal';
 import { Button } from '@nextui-org/button';
+import Image from "next/image";
 
 export default function Settings() {
   const { userData, error, loading } = useCheckUser();
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
-  const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
-  const [email, setEmail] = useState(Cookies.get('email') || '');
+  const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
+  const [email] = useState(Cookies.get('email') || '');
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [taxNumber, setTaxNumber] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -108,11 +109,12 @@ export default function Settings() {
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && email) {
-      const img = new Image();
+      const img = new window.Image();
       img.src = URL.createObjectURL(file);
       img.onload = async function () {
         if (img.width <= 300 && img.height <= 300) {
           await uploadLogo(email, file);
+          setLogoUrl(img.src);
         } else {
           alert('Logo dimensions must not exceed 300px by 300px.');
         }
@@ -267,7 +269,12 @@ export default function Settings() {
           <div className="relative flex flex-col items-center my-6">
             {logoUrl ? (
               <div className="relative">
-                <img src={logoUrl} alt="Company Logo" className="max-w-[300px] max-h-[150px] object-contain border rounded-lg bg-white" />
+                <Image 
+                src={logoUrl} 
+                alt="Company Logo" 
+                className="max-w-[300px] max-h-[150px] object-contain border rounded-lg bg-white"
+                width={300}
+                height={150} />
                 <button
                   className="absolute -bottom-8 -right-4 bg-blue-500 text-white rounded-full p-2"
                   onClick={handleLogoChange}

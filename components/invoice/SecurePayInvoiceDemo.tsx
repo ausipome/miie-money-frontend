@@ -3,18 +3,77 @@
 import { useEffect, useState, useMemo } from 'react';
 import { Skeleton } from '@nextui-org/skeleton';
 import DemoCheckoutForm from './DemoCheckoutForm';
+import moment from 'moment';
+import Cookies from 'js-cookie';
+import { LocationResponse } from '@/types';
 
 export default function SecurePayInvoiceDemo() {
   const [loading, setLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
   const VAT_RATE = 0.2;
+  const [location, setLocation] = useState<string | null>(null);
+  const [symbol, setSymbol] = useState<string>('$');
+  const [invoiceDate, setInvoiceDate] = useState<string>('');
+  const [whichTax, setWhichTax] = useState('Tax');
+
+  
+  
+  
+  useEffect(() => {
+    const storedLocation = Cookies.get('location');
+    if (storedLocation) {
+      setLocation(storedLocation);
+    } else {
+      const fetchLocation = async () => {
+          const response = await fetch("/get-location");
+          if (!response.ok) {
+            Cookies.set('location', 'US');
+          }
+          const data: LocationResponse = await response.json();
+          Cookies.set('location', data.country);
+          setLocation(data.country);
+      };
+      fetchLocation();
+    }
+  }, []);
+
+
+  const formatDate = (date: string, location: string) => {
+    switch (location) {
+      case 'GB':
+        setWhichTax('VAT');
+        return moment(date).format('DD/MM/YY');
+      case 'AU':
+        setWhichTax('GST');
+        return moment(date).format('DD/MM/YY');
+      case 'NZ':
+        setWhichTax('GST');
+        return moment(date).format('DD/MM/YY');
+      case 'CA':
+        setWhichTax('Tax');
+        return moment(date).format('MM/DD/YY');
+      case 'US':
+        setWhichTax('Sales Tax');
+        return moment(date).format('MM/DD/YY');
+      default:
+        setWhichTax('Tax');
+        return moment(date).format('MM/DD/YY');
+    }
+  };
+
+  useEffect(() => {
+    if (location) {
+      setSymbol(location === 'GB' ? '£' : '$');
+      setInvoiceDate(formatDate(new Date().toISOString(), location));
+    }
+  }, [location]);
 
   // Simulated demo invoice data
   const invoice = useMemo(
     () => ({
       logoUrl: '/logo_side_transparent-background_black.png',
       invoiceNumber: 'DEMO-001',
-      invoiceDate: new Date().toLocaleDateString(),
+      invoiceDate: invoiceDate,
       status: 'unpaid',
       taxNumber: 'DEMO-VAT-123',
       customer: {
@@ -182,7 +241,7 @@ export default function SecurePayInvoiceDemo() {
             <tr className="border-b border-gray-300">
               <th className="pb-2">Item</th>
               <th className="pb-2">Quantity</th>
-              <th className="pb-2">Cost (£)</th>
+              <th className="pb-2">Cost ({symbol})</th>
             </tr>
           </thead>
           <tbody>
@@ -190,7 +249,7 @@ export default function SecurePayInvoiceDemo() {
               <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
                 <td className="py-2 font-medium">{item.itemName}</td>
                 <td className="py-2">{item.quantity}</td>
-                <td className="py-2">£{Number(item.cost).toFixed(2)}</td>
+                <td className="py-2">{symbol}{Number(item.cost).toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
@@ -201,15 +260,15 @@ export default function SecurePayInvoiceDemo() {
       <div className="border-t border-gray-300 mt-6 py-6">
         <div className="flex justify-end py-2">
           <span className="text-lg font-semibold text-gray-700 mr-4">Subtotal:</span>
-          <span className="text-lg font-medium text-gray-800">£{calculateSubtotal().toFixed(2)}</span>
+          <span className="text-lg font-medium text-gray-800">{symbol}{calculateSubtotal().toFixed(2)}</span>
         </div>
         <div className="flex justify-end py-2">
-          <span className="text-lg font-semibold text-gray-700 mr-4">VAT:</span>
-          <span className="text-lg font-medium text-gray-800">£{calculateVAT().toFixed(2)}</span>
+          <span className="text-lg font-semibold text-gray-700 mr-4">{whichTax}:</span>
+          <span className="text-lg font-medium text-gray-800">{symbol}{calculateVAT().toFixed(2)}</span>
         </div>
         <div className="flex justify-end py-2 mt-4 border-t border-gray-300 pt-4">
           <span className="text-xl font-bold text-gray-900 mr-4">Total:</span>
-          <span className="text-xl font-bold text-gray-900">£{calculateTotal().toFixed(2)}</span>
+          <span className="text-xl font-bold text-gray-900">{symbol}{calculateTotal().toFixed(2)}</span>
         </div>
       </div>
 

@@ -4,33 +4,39 @@ import React, { useEffect, useState } from "react";
 import { pricingData, PricingData } from "./priceData";
 import { Skeleton } from "@nextui-org/skeleton";
 import Footer from "./footer";
+import { LocationResponse } from "@/types";
+import Cookies from 'js-cookie';
 
-type LocationResponse = {
-  location: string;
-  country: string;
-};
+
 
 export default function DisplayPrices() {
   const [location, setLocation] = useState<string | null>(null);
   const [prices, setPrices] = useState<PricingData[keyof PricingData] | null>(null);
   const [error, setError] = useState<string | null>(null);
-
+  
   useEffect(() => {
-    const fetchLocation = async () => {
-      try {
-        const response = await fetch("/get-location");
-        if (!response.ok) {
-          throw new Error("Failed to fetch location");
+    const storedLocation = Cookies.get('location');
+    if (storedLocation) {
+      setLocation(storedLocation);
+      setPrices(pricingData[storedLocation] || null);
+    } else {
+      const fetchLocation = async () => {
+        try {
+          const response = await fetch("/get-location");
+          if (!response.ok) {
+            throw new Error("Failed to fetch location");
+          }
+          const data: LocationResponse = await response.json();
+          Cookies.set('location', data.country);
+          setLocation(data.country);
+          setPrices(pricingData[data.country] || null);
+        } catch (err: unknown) {
+          setError(err instanceof Error ? err.message : "An unknown error occurred");
         }
-        const data: LocationResponse = await response.json();
-        setLocation(data.country);
-        setPrices(pricingData[data.country] || null);
-      } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : "An unknown error occurred");
-      }
-    };
-
-    fetchLocation();
+      };
+  
+      fetchLocation();
+    }
   }, []);
 
   if (error) {
@@ -131,7 +137,7 @@ export default function DisplayPrices() {
         <p className="text-lg md:text-xl font-light mb-6">
         Get Paid On The Web is free to sign up with no monthly subscription fees—you only pay when you receive payments for your business. 
         <br />
-        ** Below, you'll find detailed pricing for our out-of-the-box standard components. Custom pricing is also available for high-volume or unique requirements.
+        ** Below, you&apos;ll find detailed pricing for our out-of-the-box standard components. Custom pricing is also available for high-volume or unique requirements.
         <br />
         <span className="text-lg italic">** For {location} customers</span>
         </p>

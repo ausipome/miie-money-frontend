@@ -88,7 +88,7 @@ export default function Login() {
                     </button>
                     {submitError && <div style={{ color: 'red' }}>{submitError}</div>}
                     <Link href="/forgotpassword"><h3 className="text-center my-6">Forgot your Password?</h3></Link>
-                    <h3 className="text-center my-6 text-[#5752FC]"><span className="text-slate-400">Don't have an account? </span><Link href="/signup">Sign up here!</Link></h3>
+                    <h3 className="text-center my-6 text-[#5752FC]"><span className="text-slate-400">Don&apos;t have an account? </span><Link href="/signup">Sign up here!</Link></h3>
                 </div>
             </form>
         </div>

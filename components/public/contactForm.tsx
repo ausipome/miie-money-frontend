@@ -51,7 +51,7 @@ export default function ContactForm() {
     <div className="bg-white p-8 rounded-lg shadow-lg w-[70%] mx-auto text-black">
       <h2 className="text-2xl font-bold mb-4">Get in Touch</h2>
       {submitted ? (
-        <p className="text-green-500">Thank you for reaching out! We'll get back to you shortly.</p>
+        <p className="text-green-500">Thank you for reaching out! We&apos;ll get back to you shortly.</p>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && <p className="text-red-500">{error}</p>}

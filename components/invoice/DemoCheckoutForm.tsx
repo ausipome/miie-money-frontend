@@ -15,10 +15,6 @@ export default function DemoCheckoutForm({
     cvc: "",
   });
 
-  useEffect(() => {
-    startDemo();
-  }, []);
-
   const startDemo = () => {
     setIsTyping(true);
     setFormData({ cardholderName: "", cardNumber: "", expiry: "", cvc: "" });
@@ -67,6 +63,10 @@ export default function DemoCheckoutForm({
 
     typeStep();
   };
+
+  useEffect(() => {
+    startDemo();
+  }, [startDemo]);
 
   const handleSubmit = () => {
     setIsTyping(false);

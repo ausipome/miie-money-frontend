@@ -71,7 +71,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 setIsAuthenticated(true);
                 setXsrfToken(data.csrfToken);
                 setEmailAddress(email);
-                setLoading(false);
                 router.push('/account'); // Redirect to account page
             } else {
                 const errorData = await response.json();

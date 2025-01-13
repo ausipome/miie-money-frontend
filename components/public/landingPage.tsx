@@ -10,6 +10,9 @@ import CustomSubscriptionForm from './subscribe';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
 import Footer from './footer';
+import { useEffect, useState } from 'react';
+import { LocationResponse } from "@/types";
+import Cookies from 'js-cookie';
 
 const textItem = {
   hidden: { opacity: 0, y: 20 },
@@ -28,6 +31,21 @@ const boxVariants = {
 };
 
 export default function LandingPage() {
+  
+  useEffect(() => {
+    const storedLocation = Cookies.get('location');
+    if (!storedLocation) {
+      const fetchLocation = async () => {
+          const response = await fetch("/get-location");
+          if (!response.ok) {
+            Cookies.set('location', 'US');
+          }
+          const data: LocationResponse = await response.json();
+          Cookies.set('location', data.country);
+      };
+      fetchLocation();
+    }
+  }, []);
   
   return (
     <>
@@ -171,7 +189,7 @@ export default function LandingPage() {
           >
             <h3 className="text-2xl font-bold mb-4">Secure Payments</h3>
             <p className="text-lg">
-              Payments made through getpaidontheweb.com are much more secure than traditional bank transfers, providing peace of mind and protecting your business and your customers' sensitive information.
+              Payments made through getpaidontheweb.com are much more secure than traditional bank transfers, providing peace of mind and protecting your business and your customers&apos; sensitive information.
             </p>
           </motion.div>
 
@@ -182,7 +200,7 @@ export default function LandingPage() {
           >
             <h3 className="text-2xl font-bold mb-4">Save Time on Business Management</h3>
             <p className="text-lg">
-              getpaidontheweb.com's all-in-one platform allows you to streamline your business operations, freeing up your time to focus on what really matters - growing your business and serving your customers.
+              getpaidontheweb.com&apos;s all-in-one platform allows you to streamline your business operations, freeing up your time to focus on what really matters - growing your business and serving your customers.
             </p>
           </motion.div>
           <motion.div

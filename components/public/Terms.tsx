@@ -29,9 +29,9 @@ const TermsAndConditions = () => {
           {/* Section Template */}
           <Section title="1. Introduction">
             <p>
-              This <strong>Get Paid on the Web User Agreement</strong> ("Agreement") is a legal contract between{" "}
-              <strong>Blue Collar Industries</strong> ("we," "our," or "us") and the entity or individual ("you" or
-              "your") who accesses or uses our platform and services. By using our platform, you agree to this
+              This <strong>Get Paid on the Web User Agreement</strong> (&quot;Agreement&quot;) is a legal contract between{" "}
+              <strong>Blue Collar Industries</strong> (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) and the entity or individual (&quot;you&quot; or
+              &quot;your&quot;) who accesses or uses our platform and services. By using our platform, you agree to this
               Agreement, our <strong>Privacy Policy</strong>, and our <strong>Cookie Policy</strong>. If you do not
               agree, you must not use our services.
             </p>
@@ -40,15 +40,15 @@ const TermsAndConditions = () => {
           <Section title="2. Definitions">
             <ul className="list-disc list-inside space-y-2">
               <li>
-                <strong>“Services”:</strong> The tools, web components, and features provided through our platform,
+                <strong>&quot;Services&quot;:</strong> The tools, web components, and features provided through our platform,
                 including invoicing, payment links, and subscriptions.
               </li>
               <li>
-                <strong>“Affiliate Marketing”:</strong> Advertising third-party products or services on our platform
+                <strong>&quot;Affiliate Marketing&quot;:</strong> Advertising third-party products or services on our platform
                 through affiliate arrangements.
               </li>
               <li>
-                <strong>“Subscription”:</strong> A recurring payment model managed through our platform for user-provided
+                <strong>&quot;Subscription&quot;:</strong> A recurring payment model managed through our platform for user-provided
                 services or products.
               </li>
             </ul>
@@ -121,8 +121,8 @@ const TermsAndConditions = () => {
 
           <Section title="9. Changes to These Policies">
             <p>
-              We may update these Terms and Conditions periodically. Changes will be posted with a revised "Last
-              Updated" date. Continued use after changes signifies acceptance.
+              We may update these Terms and Conditions periodically. Changes will be posted with a revised &quot;Last
+              Updated&quot; date. Continued use after changes signifies acceptance.
             </p>
           </Section>
 

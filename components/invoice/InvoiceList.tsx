@@ -196,7 +196,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onNewInvoiceClick, onOpenInvo
       )}
 
       {!loading && !error && recentInvoices.length === 0 && (
-        <p className="text-gray-500 text-center">You have no invoices. Click "New Invoice" to create one.</p>
+        <p className="text-gray-500 text-center">You have no invoices. Click &quot;New Invoice&quot; to create one.</p>
       )}
 
       {!loading && !error && filteredInvoices.length > 0 && (

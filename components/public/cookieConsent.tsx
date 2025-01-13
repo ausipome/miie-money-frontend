@@ -30,7 +30,7 @@ export default function CookieConsent() {
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-md text-center">
         <h2 className="text-xl font-semibold mb-2">We Use Essential Cookies</h2>
         <p className="text-sm text-gray-600 mb-4">
-          To ensure our site works properly, we use only essential cookies. These cookies are necessary for core functionality. By clicking "Accept," you agree to their use.
+          To ensure our site works properly, we use only essential cookies. These cookies are necessary for core functionality. By clicking &quot;Accept,&quot; you agree to their use.
         </p>
         <div className="flex justify-center gap-4">
           <button

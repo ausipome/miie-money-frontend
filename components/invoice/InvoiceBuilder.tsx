@@ -43,9 +43,10 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
           case 'GB':
           case 'AU':
           case 'NZ':
-          case 'CA':
               return moment(date).format('DD/MM/YY');
+          case 'CA':
           case 'US':
+              return moment(date).format('MM/DD/YY');
           default:
               return moment(date).format('MM/DD/YY');
       }

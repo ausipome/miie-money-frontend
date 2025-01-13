@@ -2,16 +2,46 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@nextui-org/button';
 import { Spinner } from '@nextui-org/spinner';
 import { Input } from '@nextui-org/input';
+import Cookies from 'js-cookie';
+import { LocationResponse } from '@/types';
 
 const LinkBuilderDemo = () => {
   const [description, setDescription] = useState('');
-  const [amount, setAmount] = useState('');
+  const [symbol, setSymbol] = useState<string>('$');
+  const [amount, setAmount] = useState(`${symbol}85.99`);
   const [generatedEmail, setGeneratedEmail] = useState('');
   const [typingStage, setTypingStage] = useState(0);
   const [loadingAction, setLoadingAction] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
   const animationLoop = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stopTyping = useRef(false);
+  const [location, setLocation] = useState<string | null>(null);
+  
+  useEffect(() => {
+  const storedLocation = Cookies.get('location');
+  if (storedLocation) {
+    setLocation(storedLocation);
+  } else {
+    const fetchLocation = async () => {
+      const response = await fetch("/get-location");
+      if (!response.ok) {
+        Cookies.set('location', 'US');
+      }
+      const data: LocationResponse = await response.json();
+      Cookies.set('location', data.country);
+      setLocation(data.country);
+    };
+    fetchLocation();
+  }
+}, []);
+
+useEffect(() => {
+  if (location) {
+    const newSymbol = location === 'GB' ? '£' : '$';
+    setSymbol(newSymbol);
+    setAmount(`${newSymbol}85.99`);
+  }
+}, [location]);
 
   const customer = {
     fullName: 'Jonny Doeson',
@@ -31,10 +61,9 @@ const LinkBuilderDemo = () => {
   };
 
   const steps = [
-    { setter: setDescription, value: 'Cleaning gutters at your property' },
-    { setter: setAmount, value: '£85.99' },
+    { setter: setDescription, value: 'Cleaning gutters at your property' }
   ];
-
+  
   const animateTyping = async () => {
     stopTyping.current = false;
     for (let i = 0; i < steps.length; i++) {
@@ -49,14 +78,6 @@ const LinkBuilderDemo = () => {
     }
     setTypingStage(steps.length);
     startFlashing();
-  };
-
-  const startTypingLoop = () => {
-    if (!generatedEmail) {
-      setDescription('');
-      setAmount('');
-      animateTyping();
-    }
   };
 
   const startFlashing = () => {
@@ -130,7 +151,7 @@ const LinkBuilderDemo = () => {
       <div className="mb-6">
         <Input
           type="text"
-          label="Amount (£)"
+          label={`Amount (${symbol})`}
           placeholder="Enter amount"
           value={amount}
           readOnly={true}

@@ -56,11 +56,15 @@ const AccountInfo = ({ settingsButton }: { settingsButton: React.ReactNode }) =>
       };
       fetchBalances();
     }
-  }, [userData]);
+  }, [userData,xsrfToken]);
 
   useEffect(() => {
     if (accountId) {
-      const fetchPayments = async (endpoint: string, setPayments: React.Dispatch<React.SetStateAction<Payment[]>>) => {
+      const fetchPayments = async (
+        endpoint: string,
+        setPayments: React.Dispatch<React.SetStateAction<Payment[]>>,
+        dataKey: string
+      ) => {
         try {
           const response = await fetch(endpoint, {
             method: 'POST',
@@ -69,15 +73,15 @@ const AccountInfo = ({ settingsButton }: { settingsButton: React.ReactNode }) =>
             body: JSON.stringify({ accountId }),
           });
           const data = await response.json();
-          setPayments(data.paymentLinks.slice(0, 5));
+          setPayments(data[dataKey].slice(0, 5));
         } catch (error) {
           console.error('Error fetching payments:', error);
         }
       };
-      fetchPayments('/api/invoice/get-paid-invoices', setInvoicePayments);
-      fetchPayments('/api/links/get-paid-links', setLinkPayments);
+      fetchPayments('/api/invoice/get-paid-invoices', setInvoicePayments, 'invoices');
+      fetchPayments('/api/links/get-paid-links', setLinkPayments, 'paymentLinks');
     }
-  }, [accountId]);
+  }, [accountId,xsrfToken]);
 
   useEffect(() => {
     if (userData?.stripe_account_id) {
@@ -98,7 +102,7 @@ const AccountInfo = ({ settingsButton }: { settingsButton: React.ReactNode }) =>
       };
       fetchPayouts();
     }
-  }, [userData]);
+  }, [userData,xsrfToken]);
 
   return (
     <div className="p-8 space-y-8 bg-gradient-to-r from-blue-50 to-gray-100 rounded-lg shadow-lg">
@@ -166,7 +170,7 @@ const AccountInfo = ({ settingsButton }: { settingsButton: React.ReactNode }) =>
                   <tr key={index}>
                     <td className="border border-gray-300 px-4 py-2">{payment.receiptDate}</td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {payment.customer?.company || 'N/A'} ({payment.customer?.fullName})
+                    {payment.customer?.company ? payment.customer.company + ', ' : ''}{payment.customer?.fullName}
                     </td>
                     <td className="border border-gray-300 px-4 py-2">{symbol}{payment.total}</td>
                   </tr>
@@ -199,7 +203,7 @@ const AccountInfo = ({ settingsButton }: { settingsButton: React.ReactNode }) =>
                   <tr key={index}>
                     <td className="border border-gray-300 px-4 py-2">{payment.receiptDate}</td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {payment.customer?.company || 'N/A'} ({payment.customer?.fullName})
+                    {payment.customer?.company ? payment.customer.company + ', ' : ''}{payment.customer?.fullName}
                     </td>
                     <td className="border border-gray-300 px-4 py-2">{symbol}{payment.total}</td>
                   </tr>
