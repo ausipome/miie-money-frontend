@@ -9,8 +9,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
 
 export default function ChangePasswordModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void; }) {
-  const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
-  const [email, setEmail] = useState(Cookies.get('email') || '');
+  const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
+  const [email] = useState(Cookies.get('email') || '');
   
   // Password field states
   const [currentPassword, setCurrentPassword] = useState('');

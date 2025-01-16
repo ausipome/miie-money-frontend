@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
 
 export default function AccountMain() {
-    const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
+    const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
     const [stripeAccountId, setStripeAccountId] = useState<string | undefined>(undefined);
     const [requiredInfo, setRequiredInfo] = useState<boolean>(false);
     const [disabled, setDisabled] = useState<boolean>(false);
@@ -54,7 +54,7 @@ export default function AccountMain() {
             };
             getConnected();
         }
-    }, [userData,xsrfToken]);
+    }, [userData]);
 
     if (loading) {
         return (

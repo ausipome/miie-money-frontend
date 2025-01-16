@@ -66,7 +66,7 @@ export default function DemoCheckoutForm({
 
   useEffect(() => {
     startDemo();
-  }, [startDemo]);
+  }, []);
 
   const handleSubmit = () => {
     setIsTyping(false);

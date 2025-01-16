@@ -147,8 +147,8 @@ export default function SecurePayLink() {
 
   const isPaid = paymentLink.status === 'paid';
 
-  const appearance = { theme: 'stripe' };
-  const options = { clientSecret, appearance };
+  const appearance = { theme: 'stripe' as 'stripe' };
+  const options = clientSecret ? { clientSecret, appearance } : { appearance };
 
   return (
     <div className="container mx-auto mt-8 p-10 max-w-3xl bg-white rounded-lg shadow-md border border-gray-200">

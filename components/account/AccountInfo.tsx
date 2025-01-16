@@ -56,7 +56,7 @@ const AccountInfo = ({ settingsButton }: { settingsButton: React.ReactNode }) =>
       };
       fetchBalances();
     }
-  }, [userData,xsrfToken]);
+  }, [userData]);
 
   useEffect(() => {
     if (accountId) {
@@ -81,7 +81,7 @@ const AccountInfo = ({ settingsButton }: { settingsButton: React.ReactNode }) =>
       fetchPayments('/api/invoice/get-paid-invoices', setInvoicePayments, 'invoices');
       fetchPayments('/api/links/get-paid-links', setLinkPayments, 'paymentLinks');
     }
-  }, [accountId,xsrfToken]);
+  }, [accountId]);
 
   useEffect(() => {
     if (userData?.stripe_account_id) {
@@ -102,7 +102,7 @@ const AccountInfo = ({ settingsButton }: { settingsButton: React.ReactNode }) =>
       };
       fetchPayouts();
     }
-  }, [userData,xsrfToken]);
+  }, [userData]);
 
   return (
     <div className="p-8 space-y-8 bg-gradient-to-r from-blue-50 to-gray-100 rounded-lg shadow-lg">
