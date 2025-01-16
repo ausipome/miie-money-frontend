@@ -62,7 +62,7 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
     };
 
     fetchLinks();
-  }, [xsrfToken]);
+  }, []);
 
   const handleLinkClick = async (linkId: string) => {
     try {

@@ -54,7 +54,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
         };
         checkAuth();
-    }, [xsrfToken]);
+    }, []);
 
     const login = async (email: string, password: string) => {
         try {

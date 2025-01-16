@@ -6,8 +6,8 @@ import { UserData, Error, UseCheckUserResult } from '../types';
 import Cookies from 'js-cookie';
 
 const useCheckUser = (): UseCheckUserResult => {
-    const [xsrfToken, setXsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
-    const [email, setEmail] = useState(Cookies.get('email') || '');
+    const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
+    const [email] = useState(Cookies.get('email') || '');
     const [userData, setUserData] = useState<UserData | null>(null);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState(true);  

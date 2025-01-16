@@ -9,7 +9,6 @@ import { AccountInfo } from '../../types';
 import Link from "next/link";
 import ChangePasswordModal from '../user/ChangePasswordModal';
 import { Button } from '@nextui-org/button';
-import Image from "next/image";
 
 export default function Settings() {
   const { userData, error, loading } = useCheckUser();
@@ -109,12 +108,11 @@ export default function Settings() {
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && email) {
-      const img = new window.Image();
+      const img = new Image();
       img.src = URL.createObjectURL(file);
       img.onload = async function () {
         if (img.width <= 300 && img.height <= 300) {
           await uploadLogo(email, file);
-          setLogoUrl(img.src);
         } else {
           alert('Logo dimensions must not exceed 300px by 300px.');
         }
@@ -194,7 +192,7 @@ export default function Settings() {
           </div>
         </div>
       )}
-    
+
       {/* Account Information Skeleton */}
       <div className="flex flex-col items-center py-10 bg-white">
         <div className="w-[90%] max-w-xl space-y-6 p-6 rounded-lg shadow-lg bg-gray-50">
@@ -202,7 +200,7 @@ export default function Settings() {
           <Skeleton isLoaded={!loading} className="rounded-lg">
             <div className="h-8 w-1/2 mx-auto bg-gray-300 rounded"></div> {/* Title */}
           </Skeleton>
-    
+
           {/* Logo Section Skeleton */}
           <div className="relative flex flex-col items-center">
             <Skeleton isLoaded={!loading} className="rounded-lg">
@@ -212,7 +210,7 @@ export default function Settings() {
               <div className="h-8 w-8 bg-gray-300 rounded-full"></div> {/* Add Logo Button */}
             </Skeleton>
           </div>
-    
+
           {/* Form Fields Skeleton */}
           <div className="flex flex-col items-center space-y-4 pt-6">
             {[...Array(2)].map((_, index) => (
@@ -221,12 +219,12 @@ export default function Settings() {
               </Skeleton>
             ))}
           </div>
-    
+
           {/* Edit Link Skeleton */}
           <Skeleton isLoaded={!loading} className="rounded-lg">
             <div className="h-6 w-1/4 mx-auto bg-gray-300 rounded"></div> {/* Edit Link */}
           </Skeleton>
-    
+
           {/* Tax Fields Skeleton */}
           <Skeleton isLoaded={!loading} className="rounded-lg">
             <div className="h-6 w-1/3 bg-gray-300 mx-auto rounded"></div> {/* Tax Label */}
@@ -234,12 +232,12 @@ export default function Settings() {
           <Skeleton isLoaded={!loading} className="rounded-lg">
             <div className="h-10 w-full bg-gray-300 rounded"></div> {/* Tax Input */}
           </Skeleton>
-    
+
           {/* Tax Message Skeleton */}
           <Skeleton isLoaded={!loading} className="rounded-lg">
             <div className="h-4 w-3/4 mx-auto bg-gray-300 rounded"></div> {/* Tax Message */}
           </Skeleton>
-    
+
           {/* Change Password Skeleton */}
           <Skeleton isLoaded={!loading} className="rounded-lg mt-4">
             <div className="h-6 w-1/4 mx-auto bg-gray-300 rounded"></div> {/* Change Password Link */}
@@ -269,12 +267,7 @@ export default function Settings() {
           <div className="relative flex flex-col items-center my-6">
             {logoUrl ? (
               <div className="relative">
-                <Image 
-                src={logoUrl} 
-                alt="Company Logo" 
-                className="max-w-[300px] max-h-[150px] object-contain border rounded-lg bg-white"
-                width={300}
-                height={150} />
+                <img src={logoUrl} alt="Company Logo" className="max-w-[300px] max-h-[150px] object-contain border rounded-lg bg-white" />
                 <button
                   className="absolute -bottom-8 -right-4 bg-blue-500 text-white rounded-full p-2"
                   onClick={handleLogoChange}
@@ -312,7 +305,7 @@ export default function Settings() {
           </div>
           </div>
 
-          
+
           <div className="relative">
           <label htmlFor="vat" className="block text-xl font-medium text-gray-700">{taxLabel}</label>
             <input
@@ -326,7 +319,7 @@ export default function Settings() {
             <p className="mt-0 text-sm text-gray-500">{taxMessage}</p>
           </div>
 
-          
+
 
           {(country === 'CA' || country === 'US') && (
             <>

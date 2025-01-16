@@ -208,8 +208,8 @@ export default function SecurePayInvoice() {
   const calculateVAT = () => invoice?.vatAmount || 0;
   const calculateTotal = () => calculateSubtotal() + calculateVAT();
 
-  const appearance = { theme: 'stripe' };
-  const options = { clientSecret, appearance };
+  const appearance = { theme: 'stripe' as 'stripe' };
+  const options = clientSecret ? { clientSecret, appearance } : undefined;
 
   return (
     <div className="container mx-auto mt-8 p-10 max-w-3xl bg-white rounded-lg shadow-md border border-gray-200">
@@ -287,7 +287,7 @@ export default function SecurePayInvoice() {
         <div style={{ textAlign: 'center', color: 'green', fontSize: '2rem', fontWeight: 'bold' }}>
           PAID
         </div>
-      ) : clientSecret ? (
+      ) : options ? (
         <Elements stripe={stripePromise} options={options}>
           <CheckoutForm invoiceId={invoiceId} />
         </Elements>
