@@ -37,6 +37,10 @@ const AddressBook: React.FC<AddressBookProps> = ({ mode = 'default', onUseContac
   });
   const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
 
+  useEffect(() => {
+    fetchContacts();
+  }, []);
+
   const fetchContacts = async () => {
     try {
       const response = await fetch('/api/account/get-contacts', {
@@ -55,10 +59,6 @@ const AddressBook: React.FC<AddressBookProps> = ({ mode = 'default', onUseContac
       console.error('Error fetching contacts:', error);
     }
   };
-
-  useEffect(() => {
-    fetchContacts();
-  }, [fetchContacts]);
 
   const addContact = async () => {
     try {
