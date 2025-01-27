@@ -36,7 +36,7 @@ const options = {
 const WordCloud: React.FC = () => {
   return (
     <div className="word-cloud-container">
-      <div className="lg:max-w-[60%] md:max-w-[80%] sm:max-w-[100%]">
+      <div className="lg:max-w-[80%] md:max-w-[80%] sm:max-w-[100%]">
         <ReactWordcloud options={options} words={words} />
       </div>
     </div>

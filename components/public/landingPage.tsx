@@ -81,67 +81,67 @@ export default function LandingPage() {
         </section>
 
         {/* Payment Demo Section */}
-        <section className="py-16 bg-gradient-to-r from-blue-950 to-blue-600 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-blue-800 opacity-20 pointer-events-none"></div>
-        <div className="max-w-[98%] 2xl:max-w-[80%] mx-auto px-6 md:grid md:grid-cols-1 lg:grid-cols-2 lg:gap-10 h-full flex items-center justify-center">
-          {/* Left Side: Static Container with Animated Text */}
-          <motion.div
-            className="bg-gradient-to-br from-blue-700 to-blue-800 p-10 rounded-lg shadow-lg flex flex-col justify-between"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={staggerContainer}
-            style={{ height: 'fit-content' }}
+    <section className="py-16 bg-gradient-to-r from-blue-950 to-blue-600 text-white relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent to-blue-800 opacity-20 pointer-events-none"></div>
+      <div className="max-w-[98%] 2xl:max-w-[80%] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 lg:gap-10 h-full flex items-center justify-center">
+        {/* Left Side: Static Container with Animated Text */}
+        <motion.div
+          className="bg-gradient-to-br from-blue-700 to-blue-800 p-10 rounded-lg shadow-lg flex flex-col justify-between"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={staggerContainer}
+          style={{ height: 'fit-content' }}
+        >
+          <motion.h2
+            className="text-4xl md:text-5xl font-extrabold leading-tight drop-shadow-md"
+            variants={textItem}
           >
-            <motion.h2
-              className="text-4xl md:text-5xl font-extrabold leading-tight drop-shadow-md"
-              variants={textItem}
-            >
-              Powerful payment components for invoices, links, subscriptions, or whatever your business needs.
-            </motion.h2>
-            <motion.p
-              className="mt-6 text-lg font-light"
-              variants={textItem}
-            >
-              Streamline payments with seamless components that work for you. From professional invoices to versatile payment links and subscription management, we can adapt our solutions to any business model.
-            </motion.p>
-            <motion.h3
-              className="mt-10 text-2xl font-semibold text-blue-300"
-              variants={textItem}
-            >
-              Country-dependent payment options available:
-            </motion.h3>
-            <motion.ul
-              className="mt-6 space-y-2 text-lg"
-              variants={staggerContainer}
-            >
-              {[
-                'Credit and Debit Cards',
-                'International Card Payments',
-                'Stripe Link',
-                'Buy Now Pay Later (Afterpay, Klarna, ZIP)',
-                'Google Pay',
-                'Apple Pay',
-                'BACS and ACH Direct Debits',
-                'iDEAL',
-              ].map((option, index) => (
-                <motion.li key={index} variants={textItem}>
-                  {option}
-                </motion.li>
-              ))}
-            </motion.ul>
-          </motion.div>
+            Powerful payment components for invoices, links, subscriptions, or whatever your business needs.
+          </motion.h2>
+          <motion.p
+            className="mt-6 text-lg font-light"
+            variants={textItem}
+          >
+            Streamline payments with seamless components that work for you. From professional invoices to versatile payment links and subscription management, we can adapt our solutions to any business model.
+          </motion.p>
+          <motion.h3
+            className="mt-10 text-2xl font-semibold text-blue-300"
+            variants={textItem}
+          >
+            Country-dependent payment options available:
+          </motion.h3>
+          <motion.ul
+            className="mt-6 space-y-2 text-lg"
+            variants={staggerContainer}
+          >
+            {[
+              'Credit and Debit Cards',
+              'International Card Payments',
+              'Stripe Link',
+              'Buy Now Pay Later (Afterpay, Klarna, ZIP)',
+              'Google Pay',
+              'Apple Pay',
+              'BACS and ACH Direct Debits',
+              'iDEAL',
+            ].map((option, index) => (
+              <motion.li key={index} variants={textItem}>
+                {option}
+              </motion.li>
+            ))}
+          </motion.ul>
+        </motion.div>
 
-          {/* Right Side: Invoice Component */}
-          <div className="flex justify-center mt-10 lg:mt-0">
-            <div className="w-full relative overflow-hidden">
-              <div className="relative z-10">
-                <SecurePayInvoiceDemo />
-              </div>
+        {/* Right Side: Invoice Component */}
+        <div className="flex justify-center mt-10 lg:mt-0">
+          <div className="w-full relative overflow-hidden">
+            <div className="relative z-10">
+              <SecurePayInvoiceDemo />
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
 
               {/* About Section */}
@@ -218,9 +218,9 @@ export default function LandingPage() {
       {/* AI-Powered Demo Section */}
 <section className="py-16 bg-gradient-to-r from-gray-900 to-gray-700 text-white relative overflow-hidden">
   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-gray-800 opacity-20 pointer-events-none"></div>
-  <div className="max-w-[98%] 2xl:max-w-[80%] mx-auto px-6 md:grid md:grid-cols-1 lg:grid-cols-2 lg:gap-10 h-full flex items-center justify-center">
+  <div className="max-w-[98%] 2xl:max-w-[80%] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 lg:gap-10 h-full flex items-center justify-center">
     {/* Left Side: AI-Powered Demo Component */}
-    <div className="flex justify-center mt-10 lg:mt-0 text-black">
+    <div className="flex justify-center mt-10 lg:mt-0 text-black mb-10">
       <div className="w-full relative overflow-hidden">
         <div className="relative z-10">
           <LinkBuilderDemo />
