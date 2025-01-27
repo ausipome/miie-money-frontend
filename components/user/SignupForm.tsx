@@ -77,8 +77,8 @@ export default function MiieSignupForm() {
         setStatus(true);
         e.preventDefault();
         setSubmitError('');
-        const passwordValidationError = validatePassword(values.password);
-        const emailValidationError = validateEmail(values.email);
+        const passwordValidationError = validatePassword(String(values.password) || '');
+        const emailValidationError = validateEmail(String(values.email) || '');
         if (passwordValidationError || emailValidationError) {
             setPasswordError(passwordValidationError);
             setEmailError(emailValidationError);

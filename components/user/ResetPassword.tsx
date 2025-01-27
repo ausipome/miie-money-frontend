@@ -80,7 +80,7 @@ export default function ResetPassword() {
         setStatus(true);
         e.preventDefault();
         setError('');
-        const passwordValidationError = validatePassword(values.newPassword);
+        const passwordValidationError = validatePassword(String(values.newPassword) || '');
         if (passwordValidationError) {
             setPasswordError(passwordValidationError);
             setStatus(false);
