@@ -24,12 +24,11 @@ export default function StripeVerification() {
     const [stripeConnectInstance, setStripeConnectInstance] = useState<StripeConnectInstance | undefined>(undefined);
     const router = useRouter();
 
-
-
     useEffect(() => { 
       setStripeAccountId(userData?.stripe_account_id);
 
         if (stripeAccountId) {
+          console.log(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
             const fetchClientSecret = async () => {
               const response = await fetch('/api/account/account_session', {
                   method: 'POST',

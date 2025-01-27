@@ -32,7 +32,7 @@ export default function Login() {
         e.preventDefault();
         setSubmitError('');
         try {
-          await login(values.email, values.password);
+          await login(values.email as string, values.password as string);
           setStatus(false);
         } catch (error: any) {
             setStatus(false);
