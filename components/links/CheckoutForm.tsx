@@ -27,7 +27,7 @@ export default function CheckoutForm({ linkId }: { linkId: string | null }) {
       elements,
       confirmParams: {
         // Change this to your payment completion page
-        return_url: `https://getpaidontheweb.com/payment-receipt-link?link=${linkId}`,
+        return_url: `http://localhost:3000/payment-receipt-link?link=${linkId}`,
       },
     });
 

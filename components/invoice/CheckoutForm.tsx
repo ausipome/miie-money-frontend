@@ -27,7 +27,7 @@ export default function CheckoutForm({ invoiceId }: { invoiceId: string | null }
       elements,
       confirmParams: {
         // Change this to your payment completion page
-        return_url: `https://getpaidontheweb.com/payment-receipt-invoice?invoice=${invoiceId}`,
+        return_url: `http://localhost:3000/payment-receipt-invoice?invoice=${invoiceId}`,
       },
     });
 
