@@ -307,31 +307,31 @@ const [linkDate] = useState<string>(formatDate(linkData?.creationDate || new Dat
       </div>
 
       {/* Sender and Customer Details */}
-      <div className="flex justify-between items-start mb-8 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
+      <div className="flex justify-between items-start mb-8 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50 overflow-x-auto">
         <div>
           <img src={logoUrl || '/logo_side_transparent-background_black.png'} alt="Company Logo" className="w-auto h-auto max-w-[200px] max-h-[100px] mb-2" />
           {userData?.business_type === 'individual' ? (
             <>
-              <p className="text-sm sm:text-base">{accountInfo?.first_name} {accountInfo?.last_name}</p>
-              <p className="text-sm sm:text-base">{accountInfo?.address?.line1}, {accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
+              <p className="text-sm md:text-base">{accountInfo?.first_name} {accountInfo?.last_name}</p>
+              <p className="text-sm md:text-base">{accountInfo?.address?.line1}, {accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
             </>
           ) : userData?.business_type === 'company' ? (
             <>
-              <p className="text-sm sm:text-base">{accountInfo?.name}</p>
-              <p className="text-sm sm:text-base">{accountInfo?.address?.line1}, {accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
+              <p className="text-sm md:text-base">{accountInfo?.name}</p>
+              <p className="text-sm md:text-base">{accountInfo?.address?.line1}, {accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
             </>
           ) : null}
         </div>
 
         <div>
-          <h1 className="text-2xl sm:text-4xl font-bold">PAYMENT LINK</h1>
-          <p className="text-sm sm:text-base"><strong>Link #: </strong> {linkId}</p>
-          <p className="text-sm sm:text-base"><strong>Link Date: </strong> {linkDate}</p>
-          {taxNumber && <p className="text-sm sm:text-base"><strong>{whichTax} Number:</strong> {taxNumber}</p>}
-          <p className="text-sm sm:text-base"><strong>Customer:</strong> {customerDetails.company || customerDetails.fullName}</p>
-          <p className="text-sm sm:text-base">{customerDetails.address}, {customerDetails.townCity}, {customerDetails.countyState}, {customerDetails.postcodeZip}</p>
-          <p className="text-sm sm:text-base"><strong>Email:</strong> {customerDetails.email}</p>
-          <p className="text-sm sm:text-base"><strong>Phone:</strong> {customerDetails.phone}</p>
+          <h1 className="text-2xl md:text-4xl font-bold">PAYMENT LINK</h1>
+          <p className="text-sm md:text-base"><strong>Link #: </strong> {linkId}</p>
+          <p className="text-sm md:text-base"><strong>Link Date: </strong> {linkDate}</p>
+          {taxNumber && <p className="text-sm md:text-base"><strong>{whichTax} Number:</strong> {taxNumber}</p>}
+          <p className="text-sm md:text-base"><strong>Customer:</strong> {customerDetails.company || customerDetails.fullName}</p>
+          <p className="text-sm md:text-base">{customerDetails.address}, {customerDetails.townCity}, {customerDetails.countyState}, {customerDetails.postcodeZip}</p>
+          <p className="text-sm md:text-base"><strong>Email:</strong> {customerDetails.email}</p>
+          <p className="text-sm md:text-base"><strong>Phone:</strong> {customerDetails.phone}</p>
         </div>
       </div>
 

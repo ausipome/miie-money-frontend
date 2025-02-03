@@ -168,7 +168,7 @@ export default function AccountMain() {
 
             {/* Settings Modal */}
             <Modal isOpen={isSettingsModalOpen} size={'3xl'} onClose={() => setSettingsModalOpen(false)}>
-                <ModalContent>
+                <ModalContent className="max-h-screen overflow-y-auto">
                 <ModalHeader className="border-b border-gray-200 text-center">
                     <h3 className='w-full'>Settings</h3>
                 </ModalHeader>
