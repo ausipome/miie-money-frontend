@@ -1,5 +1,9 @@
 import SecurePayInvoice from '../../../components/invoice/SecurePayInvoice';
 
 export default function Page() {
-    return <SecurePayInvoice />
+    return( 
+    <div className="min-w-[440px]">
+    <SecurePayInvoice />
+    </div>
+    )
 }

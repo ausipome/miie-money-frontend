@@ -111,7 +111,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="max-w-[90%] mx-auto mt-8 p-6 bg-white rounded shadow-md">
+    <div className="max-w-full mx-auto mt-8 p-6 bg-white rounded shadow-md">
       {/* Logo and Header */}
       <div className="text-center mb-8">
         <img src={business.logoUrl} alt="Business Logo" className="mx-auto mb-4 max-w-[220px]" />

@@ -2,6 +2,8 @@ import LinkFlow from "@/components/links/LinkFlow"
 
 export default function Page() {
     return (
-        <LinkFlow />      
+        <div className="min-w-[500px]">
+        <LinkFlow />          
+        </div>
     )
 }

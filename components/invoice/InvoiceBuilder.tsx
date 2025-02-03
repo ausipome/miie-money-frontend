@@ -1,7 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import Cookies from 'js-cookie';
 import { Spinner } from '@nextui-org/spinner';
-import { Button } from '@nextui-org/button';
 import HomeButton from '../navigation/HomeButton';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/modal';
 import { Input } from '@nextui-org/input';
@@ -52,7 +51,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
       }
   };
   
-  const [invoiceDate] = useState<string>(formatDate(invoiceData?.invoiceDate || new Date().toISOString(), country));
+  const [invoiceDate] = useState<string>(invoiceData?.invoiceDate || formatDate(new Date().toISOString(), country));
 
   useEffect(() => {
     switch (country) {
@@ -262,60 +261,60 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   };
 
   return (
-    <div className="w-full sm:w-['80%'] mx-auto mt-8 p-10 sm:p-6 bg-white rounded shadow-md">
+    <div className="w-full sm:w-['100%'] mx-auto mt-2 md:mt-8 md:p-10 p-2 sm:p-6 bg-white rounded shadow-md">
       {/* Back, Home, and Edit Buttons */}
       <div className="flex justify-between mb-4 text-base">
         <div className="flex space-x-2">
           {!invoiceId && backButton}
           <HomeButton onClick={onHomeClick} />
           {!isPaid && invoiceId && (
-            <>
-            <Button onClick={handleOpenEditModal} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+            <button onClick={handleOpenEditModal} className="px-2 py-2 md:px-4 bg-blue-500 text-white rounded hover:bg-blue-700 text-sm md:text-base">
               Edit Customer
-            </Button>
-            <Button onClick={() => setShowVatModal(true)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
-            Adjust VAT
-          </Button>
-          </>
+            </button>
           )}
+          {!isPaid && shouldCalculateVAT && (
+              <button onClick={() => setShowVatModal(true)} className="px-2 py-2 md:px-4 bg-blue-500 text-white rounded hover:bg-blue-700 text-sm md:text-base">
+              Adjust VAT
+            </button>
+            )}
         </div>
-        <Button onClick={onNewInvoice} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <button onClick={onNewInvoice} className="px-2 py-2 md:px-4 bg-blue-500 text-white rounded hover:bg-blue-700 text-sm md:text-base">
           New Invoice
-        </Button>
+        </button>
       </div>
   
       {/* Invoice Details */}
       <div className="flex justify-between items-start mb-8 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
-        <div>
-          <img
-            src={logoUrl || "/logo_side_transparent-background_black.png"}
-            alt="Company Logo"
-            className="w-auto h-auto max-w-[200px] max-h-[100px] mb-2"
-          />
-          {userData?.business_type === 'individual' ? (
-            <>
-              <p>{accountInfo?.first_name} {accountInfo?.last_name}</p>
-              <p>{accountInfo?.address?.line1}, {accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
-            </>
-          ) : userData?.business_type === 'company' ? (
-            <>
-              <p>{accountInfo?.name}</p>
-              <p>{accountInfo?.address?.line1}, {accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
-            </>
-          ) : null}
-        </div>
-  
-        <div>
-          <h1 className="text-4xl font-bold">INVOICE</h1>
-          <p><strong>Invoice #: </strong> {invoiceNumber}</p>
-          <p><strong>Invoice Date: </strong> {invoiceDate}</p>
-          {taxNumber && <p><strong>{whichTax} Number:</strong> {taxNumber}</p>}
-          <p><strong>Customer:</strong> {customerDetails.company || customerDetails.fullName}</p>
-          <p>{customerDetails.address}, {customerDetails.townCity}, {customerDetails.countyState}, {customerDetails.postcodeZip}</p>
-          <p><strong>Email:</strong> {customerDetails.email}</p>
-          <p><strong>Phone:</strong> {customerDetails.phone}</p>
-        </div>
+      <div>
+        <img
+          src={logoUrl || "/logo_side_transparent-background_black.png"}
+          alt="Company Logo"
+          className="w-auto h-auto max-w-[200px] max-h-[100px] mb-2"
+        />
+        {userData?.business_type === 'individual' ? (
+          <>
+            <p className="text-sm sm:text-base">{accountInfo?.first_name} {accountInfo?.last_name}</p>
+            <p className="text-sm sm:text-base">{accountInfo?.address?.line1}, {accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
+          </>
+        ) : userData?.business_type === 'company' ? (
+          <>
+            <p className="text-sm sm:text-base">{accountInfo?.name}</p>
+            <p className="text-sm sm:text-base">{accountInfo?.address?.line1}, {accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
+          </>
+        ) : null}
       </div>
+
+      <div>
+        <h1 className="text-2xl sm:text-4xl font-bold">INVOICE</h1>
+        <p className="text-sm sm:text-base"><strong>Invoice #: </strong> {invoiceNumber}</p>
+        <p className="text-sm sm:text-base"><strong>Invoice Date: </strong> {invoiceDate}</p>
+        {taxNumber && <p className="text-sm sm:text-base"><strong>{whichTax} Number:</strong> {taxNumber}</p>}
+        <p className="text-sm sm:text-base"><strong>Customer:</strong> {customerDetails.company || customerDetails.fullName}</p>
+        <p className="text-sm sm:text-base">{customerDetails.address}, {customerDetails.townCity}, {customerDetails.countyState}, {customerDetails.postcodeZip}</p>
+        <p className="text-sm sm:text-base"><strong>Email:</strong> {customerDetails.email}</p>
+        <p className="text-sm sm:text-base"><strong>Phone:</strong> {customerDetails.phone}</p>
+      </div>
+    </div>
   
       {/* Items Section */}
       {items.map((item, index) => (
@@ -350,9 +349,9 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
               onBlur={(e) => handleItemChange(index, 'cost', parseFloat(e.target.value || '0').toFixed(2))}
             />
             {!isPaid && index !== 0 && (
-              <Button onClick={() => handleRemoveItem(index)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">
+              <button onClick={() => handleRemoveItem(index)} className="px-2 py-2 md:px-4 bg-red-500 text-white rounded hover:bg-red-700 text-sm md:text-base">
                 Remove
-              </Button>
+              </button>
             )}
           </div>
         </div>
@@ -362,9 +361,9 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
       <div className="mt-8 p-4 border border-gray-300 rounded-md shadow-sm bg-gray-50">
         {!isPaid && (
           <div className="flex justify-end mb-4">
-            <Button onClick={handleAddItem} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+            <button onClick={handleAddItem} className="px-2 py-2 md:px-4 bg-blue-500 text-white rounded hover:bg-blue-700 text-sm md:text-base">
               Add Item
-            </Button>
+            </button>
           </div>
         )}
         <div className="flex justify-end mb-2">
@@ -384,36 +383,36 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
         {!isPaid ? (
           <div className="flex justify-center mt-4 space-x-4">
             {invoiceId && (
-              <Button
+              <button
                 onClick={() => handleInvoiceAction('delete')}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
+                className="px-2 py-2 md:px-4 bg-red-500 text-white rounded hover:bg-red-700 text-sm md:text-base"
                 disabled={loadingAction === 'delete'}
               >
                 Delete Invoice
                 {loadingAction === 'delete' && <Spinner className="ml-1 mt-1" color="warning" size="sm" />}
-              </Button>
+              </button>
             )}
-            <Button
+            <button
               onClick={() => handleInvoiceAction('save')}
-              className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-700"
+              className="px-2 py-2 md:px-4 bg-amber-500 text-white rounded hover:bg-amber-700 text-sm md:text-base"
               disabled={loadingAction === 'save'}
             >
               Save Invoice
               {loadingAction === 'save' && <Spinner className="ml-1 mt-1" color="warning" size="sm" />}
-            </Button>
+            </button>
             <Tippy
               content={calculateTotal() <= 1 ? `Total must be more than ${symbol}1 to send the invoice.` : ''}
               disabled={calculateTotal() > 1}
             >
               <div>
-                <Button
+                <button
                   onClick={() => handleInvoiceAction('send')}
-                  className={`bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 ${calculateTotal() <= 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`px-2 py-2 md:px-4 bg-green-500 text-white rounded hover:bg-green-700 text-sm md:text-base ${calculateTotal() <= 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
                   disabled={loadingAction === 'send' || calculateTotal() <= 1}
                 >
                   Send Invoice
                   {loadingAction === 'send' && <Spinner className="ml-1 mt-1" color="warning" size="sm" />}
-                </Button>
+                </button>
               </div>
             </Tippy>
           </div>
@@ -426,7 +425,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   
       {/* Success/Error Message */}
       {message && (
-        <div className={`mt-4 p-2 rounded ${message.type === 'success' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>
+        <div className={`mt-4 p-2 rounded ${message.type === 'success' ? 'bg-green-200 text-green-700 text-sm md:text-base' : 'bg-red-200 text-red-700 text-sm md:text-base'}`}>
           {message.text}
         </div>
       )}
@@ -450,9 +449,9 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
                   />
           </ModalBody>
           <ModalFooter>
-            <Button onClick={handleSaveCustomerDetails} color="primary">
+            <button onClick={handleSaveCustomerDetails} className="px-2 py-2 md:px-4 bg-blue-500 text-white rounded hover:bg-blue-700 text-sm md:text-base">
               Save
-            </Button>
+            </button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -474,16 +473,16 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
             />
           </ModalBody>
           <ModalFooter>
-            <Button onClick={handleUpdateVat} color="primary">
+            <button onClick={handleUpdateVat} className="px-2 py-2 md:px-4 bg-blue-500 text-white rounded hover:bg-blue-700 text-sm md:text-base">
               Update
-            </Button>
-            <Button onClick={() => {
+            </button>
+            <button onClick={() => {
               setManualVat(false);
               setManualVatAmount(0);
               setShowVatModal(false);
-            }} color="danger">
+            }} className="px-2 py-2 md:px-4 bg-red-500 text-white rounded hover:bg-red-700 text-sm md:text-base">
               Reset
-            </Button>
+            </button>
           </ModalFooter>
         </ModalContent>
       </Modal>
