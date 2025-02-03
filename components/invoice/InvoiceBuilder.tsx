@@ -25,6 +25,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   const [showEditModal, setShowEditModal] = useState(false);
   const [loadingAction, setLoadingAction] = useState<'save' | 'send' | 'delete' | null>(null);
   const country = Cookies.get('country') || 'US';
+  const stripeId = Cookies.get('stripeId');
   const [vatRate, setVatRate] = useState<number>(invoiceData?.taxRate || userData?.taxRate || 0);
   const [manualVat, setManualVat] = useState<boolean>(invoiceData?.manualVat || false);
   const [manualVatAmount, setManualVatAmount] = useState<number>(invoiceData?.vatAmount || 0);
@@ -32,6 +33,9 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
   const [whichTax, setWhichTax] = useState('Sales Tax');
   const [symbol, setSymbol] = useState('$');
+
+  // check if cookies are present
+  const areCookiesPresent = !!country && !!stripeId;
 
   const applicationFeeRate = userData?.application_fee || 0.01;
   const isPaid = invoiceData?.status === 'paid';
@@ -182,7 +186,13 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   const applicationFee = parseFloat((calculateTotal() * applicationFeeRate).toFixed(2));
 
   const handleInvoiceAction = async (action: 'save' | 'send' | 'delete') => {
+
     setLoadingAction(action);
+
+    if (!areCookiesPresent && action === 'send') {
+      alert('You cannot send an invoice before setting up a Stripe account in the main account menu!');
+      return;
+    }
 
     const formattedItems = items.map((item) => ({
       ...item,

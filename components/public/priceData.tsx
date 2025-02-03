@@ -10,7 +10,7 @@ export type PricingData = {
   };
 
 export const pricingData: PricingData = {
-    UK: {
+    GB: {
       "Credit and Debit Cards": [
         { description: "Standard UK cards", rate: "2.5% + 20p" },
         { description: "Premium UK cards", rate: "2.9% + 20p" },
