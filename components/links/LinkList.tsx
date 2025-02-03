@@ -143,7 +143,7 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
   return (
     <div className="p-6 bg-white rounded-lg shadow-md w-full">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">Payment Links</h2>
+        <h2 className="text-xl font-bold hidden md:block">Payment Links</h2>
         <div className="flex items-center space-x-4">
           <input
             type="text"

@@ -36,7 +36,6 @@ export default function IsLoggedIn({ isMenuOpen, setIsMenuOpen }: IsLoggedInProp
                     <Link 
                         href="/account"
                         className={`py-2 px-4 text-2xl mr-4 text-${isMenuOpen ? 'black' : 'white'} hover:${isMenuOpen ? 'bg-pink-50' : 'text-pink-200'}`}
-                        onClick={closeMenu}
                     >
                         <FontAwesomeIcon icon={byPrefixAndName.fal['user']} />
                     </Link>
