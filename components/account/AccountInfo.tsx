@@ -105,7 +105,7 @@ const AccountInfo = ({ settingsButton }: { settingsButton: React.ReactNode }) =>
   }, [userData]);
 
   return (
-    <div className="p-8 space-y-8 bg-gradient-to-r from-blue-50 to-gray-100 rounded-lg shadow-lg">
+    <div className="p-1 md:p-8 space-y-8 bg-gradient-to-r from-blue-50 to-gray-100 rounded-lg shadow-lg">
       {/* Render the settings button */}
       <div className="mt-4 flex justify-end">
                 {settingsButton}
@@ -236,20 +236,28 @@ const AccountInfo = ({ settingsButton }: { settingsButton: React.ReactNode }) =>
             </tr>
           </thead>
           <tbody>
-            {payouts.map((payout, index) => (
-              <tr key={index}>
-                <td className="border border-gray-300 px-4 py-2">
-                  {new Date(payout.created * 1000).toLocaleDateString()}
+            {payouts.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="border border-gray-300 px-4 py-2 text-center">
+                  No Payouts Have Been Made
                 </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {symbol}{payout.amount.toFixed(2)}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {new Date(payout.arrivalDate * 1000).toLocaleDateString()}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">{payout.status}</td>
               </tr>
-            ))}
+            ) : (
+              payouts.map((payout, index) => (
+                <tr key={index}>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {new Date(payout.created * 1000).toLocaleDateString()}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {symbol}{payout.amount.toFixed(2)}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {new Date(payout.arrivalDate * 1000).toLocaleDateString()}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">{payout.status}</td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
         <Button color="primary" className="mt-4" onClick={() => setPayoutsModalOpen(true)}>
@@ -274,20 +282,28 @@ const AccountInfo = ({ settingsButton }: { settingsButton: React.ReactNode }) =>
                 </tr>
               </thead>
               <tbody>
-                {allPayouts.map((payout, index) => (
-                  <tr key={index}>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {new Date(payout.created * 1000).toLocaleDateString()}
+                {allPayouts.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="border border-gray-300 px-4 py-2 text-center">
+                    No Payouts Have Been Made
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {symbol}{payout.amount.toFixed(2)}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {new Date(payout.arrivalDate * 1000).toLocaleDateString()}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">{payout.status}</td>
                   </tr>
-                ))}
+                ) : (
+                  allPayouts.map((payout, index) => (
+                    <tr key={index}>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {new Date(payout.created * 1000).toLocaleDateString()}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {symbol}{payout.amount.toFixed(2)}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {new Date(payout.arrivalDate * 1000).toLocaleDateString()}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">{payout.status}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </ModalBody>
