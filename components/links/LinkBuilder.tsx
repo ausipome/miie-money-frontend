@@ -5,7 +5,6 @@ import useCheckUser from '@/hooks/useCheckUser';
 import { useEffect, useState } from 'react';
 import { AccountInfo, Contact, PaymentLink } from '../../types';
 import Cookies from 'js-cookie';
-import { Button } from '@nextui-org/button';
 import { Spinner } from '@nextui-org/spinner';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
@@ -278,32 +277,32 @@ const [linkDate] = useState<string>(formatDate(linkData?.creationDate || new Dat
   };
 
   return (
-    <div className="max-w-[70%] mx-auto mt-8 p-6 bg-white rounded shadow-md">
+    <div className="w-full sm:w-['100%'] mx-auto mt-2 md:mt-8 md:p-10 p-2 sm:p-6 bg-white rounded shadow-md">
       {/* Back and Home Buttons */}
       <div className="flex justify-between mb-4 text-base">
         <div className="flex space-x-2">
           {!isPaid && isNewLink && backButton}
-          <Button onClick={onHomeClick} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+          <button onClick={onHomeClick} className="px-2 py-2 md:px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm md:text-base">
             Home
-          </Button>
+          </button>
           {!isPaid && linkId && (
-            <>
-            <Button
+            <button
               onClick={() => setShowEditModal(true)}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+              className="px-2 py-2 md:px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm md:text-base"
             >
               Edit Customer
-            </Button>
-            <Button onClick={() => setShowVatModal(true)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
-            Adjust VAT
-          </Button>
-          </>
+            </button>
+          )}
+          {!isPaid && taxNumber && (
+             <button onClick={() => setShowVatModal(true)} className="px-2 py-2 md:px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm md:text-base">
+             Adjust VAT
+           </button>
           )}
         </div>
         {isNewLink && (
-          <Button onClick={onNewLink} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+          <button onClick={onNewLink} className="px-2 py-2 md:px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm md:text-base">
             New Link
-          </Button>
+          </button>
         )}
       </div>
 
@@ -313,26 +312,26 @@ const [linkDate] = useState<string>(formatDate(linkData?.creationDate || new Dat
           <img src={logoUrl || '/logo_side_transparent-background_black.png'} alt="Company Logo" className="w-auto h-auto max-w-[200px] max-h-[100px] mb-2" />
           {userData?.business_type === 'individual' ? (
             <>
-              <p>{accountInfo?.first_name} {accountInfo?.last_name}</p>
-              <p>{accountInfo?.address?.line1}, {accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
+              <p className="text-sm sm:text-base">{accountInfo?.first_name} {accountInfo?.last_name}</p>
+              <p className="text-sm sm:text-base">{accountInfo?.address?.line1}, {accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
             </>
           ) : userData?.business_type === 'company' ? (
             <>
-              <p>{accountInfo?.name}</p>
-              <p>{accountInfo?.address?.line1}, {accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
+              <p className="text-sm sm:text-base">{accountInfo?.name}</p>
+              <p className="text-sm sm:text-base">{accountInfo?.address?.line1}, {accountInfo?.address?.city}, {accountInfo?.address?.postal_code}</p>
             </>
           ) : null}
         </div>
 
         <div>
-          <h1 className="text-4xl font-bold">PAYMENT LINK</h1>
-          <p><strong>Link #: </strong> {linkId}</p>
-          <p><strong>Link Date: </strong> {linkDate}</p>
-          {taxNumber && <p><strong>{whichTax} Number:</strong> {taxNumber}</p>}
-          <p><strong>Customer:</strong> {customerDetails.company || customerDetails.fullName}</p>
-          <p>{customerDetails.address}, {customerDetails.townCity}, {customerDetails.countyState}, {customerDetails.postcodeZip}</p>
-          <p><strong>Email:</strong> {customerDetails.email}</p>
-          <p><strong>Phone:</strong> {customerDetails.phone}</p>
+          <h1 className="text-2xl sm:text-4xl font-bold">PAYMENT LINK</h1>
+          <p className="text-sm sm:text-base"><strong>Link #: </strong> {linkId}</p>
+          <p className="text-sm sm:text-base"><strong>Link Date: </strong> {linkDate}</p>
+          {taxNumber && <p className="text-sm sm:text-base"><strong>{whichTax} Number:</strong> {taxNumber}</p>}
+          <p className="text-sm sm:text-base"><strong>Customer:</strong> {customerDetails.company || customerDetails.fullName}</p>
+          <p className="text-sm sm:text-base">{customerDetails.address}, {customerDetails.townCity}, {customerDetails.countyState}, {customerDetails.postcodeZip}</p>
+          <p className="text-sm sm:text-base"><strong>Email:</strong> {customerDetails.email}</p>
+          <p className="text-sm sm:text-base"><strong>Phone:</strong> {customerDetails.phone}</p>
         </div>
       </div>
 
@@ -369,13 +368,13 @@ const [linkDate] = useState<string>(formatDate(linkData?.creationDate || new Dat
       {/* Email Generation Section */}
       <div className="mt-6">
         {isNewLink && (
-          <Button
+          <button
             onClick={generateEmailAndSaveLink}
-            className="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-700"
+            className='px-2 py-2 md:px-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 text-sm md:text-base'
             disabled={!description || loadingAction === 'generateEmail'}
           >
             {loadingAction === 'generateEmail' ? <Spinner color="warning" size="sm" /> : 'Generate Payment Link'}
-          </Button>
+          </button>
         )}
         {generatedEmail && (
           <div className="mt-4 p-4 bg-gray-100 border rounded-md">
@@ -397,46 +396,46 @@ const [linkDate] = useState<string>(formatDate(linkData?.creationDate || new Dat
           <div className="p-2 bg-gray-100 border rounded-md">
             <p className="text-sm">Payment Link:</p>
             <p className="text-blue-500">{linkUrl}</p>
-            <Button
+            <button
               onClick={() => navigator.clipboard.writeText(linkUrl || '')}
-              className="mt-2 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
+              className="px-2 py-2 md:px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm md:text-base"
             >
               Copy Link
-            </Button>
+            </button>
           </div>
         </div>
       )}
 
-      {/* Action Buttons */}
+      {/* Action buttons */}
       {!isNewLink ? (
       !isPaid ? (
         <div className="flex justify-center mt-4 space-x-4">
           {linkId && (
-            <Button
+            <button
               onClick={() => handleLinkAction('delete')}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
+              className='px-2 py-2 md:px-4 bg-red-500 text-white rounded-md hover:bg-red-600 text-sm md:text-base'
               disabled={loadingAction === 'delete'}
             >
               Delete Link
               {loadingAction === 'delete' && <Spinner color="warning" className="ml-2" size="sm" />}
-            </Button>
+            </button>
           )}
-          <Button
+          <button
             onClick={() => handleLinkAction('save')}
-            className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-700"
+            className='px-2 py-2 md:px-4 bg-amber-500 text-white rounded-md hover:bg-amber-600 text-sm md:text-base'
             disabled={loadingAction === 'save'}
           >
             Save Link
             {loadingAction === 'save' && <Spinner color="warning" className="ml-2" size="sm" />}
-          </Button>
-          <Button
+          </button>
+          <button
             onClick={() => handleLinkAction('send')}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
+            className='px-2 py-2 md:px-4 bg-green-500 text-white rounded-md hover:bg-green-600 text-sm md:text-base'
             disabled={loadingAction === 'send' || parseFloat(amount || '0') <= 0}
           >
             Send Link
             {loadingAction === 'send' && <Spinner color="warning" className="ml-2" size="sm" />}
-          </Button>
+          </button>
         </div>
       ) : (
         <div className="text-center text-slate-400 text-2xl font-bold">
@@ -467,7 +466,7 @@ const [linkDate] = useState<string>(formatDate(linkData?.creationDate || new Dat
             <Input label="Phone" value={customerDetails.phone || ''} onChange={(e) => setCustomerDetails({ ...customerDetails, phone: e.target.value })} fullWidth />
           </ModalBody>
           <ModalFooter>
-            <Button onClick={() => handleLinkAction('save')} color="primary">Save</Button>
+            <button onClick={() => handleLinkAction('save')} className='px-2 py-2 md:px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm md:text-base'>Save</button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -489,16 +488,16 @@ const [linkDate] = useState<string>(formatDate(linkData?.creationDate || new Dat
             />
           </ModalBody>
           <ModalFooter>
-            <Button onClick={handleUpdateVat} color="primary">
+            <button onClick={handleUpdateVat} className='px-2 py-2 md:px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm md:text-base'>
               Update
-            </Button>
-            <Button onClick={() => {
+            </button>
+            <button onClick={() => {
               setManualVat(false);
               setManualVatAmount(0);
               setShowVatModal(false);
-            }} color="danger">
+            }} className='px-2 py-2 md:px-4 bg-red-500 text-white rounded-md hover:bg-red-600 text-sm md:text-base'>
               Reset
-            </Button>
+            </button>
           </ModalFooter>
         </ModalContent>
       </Modal>

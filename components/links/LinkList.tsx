@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { Skeleton } from '@nextui-org/skeleton';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/modal';
-import { Button } from '@nextui-org/button';
 import { Spinner } from '@nextui-org/spinner';
 
 interface LinkListProps {
@@ -155,7 +154,7 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
           />
           <button
             onClick={onNewLinkClick}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            className="px-2 py-2 md:px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm md:text-base"
           >
             New Link
           </button>
@@ -207,7 +206,7 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
                   <td className="px-4 py-2">
                     {link.status === 'paid' && (
                       <button
-                        className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                        className="px-2 py-2 md:px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm md:text-base"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleViewPayment(link);
@@ -267,14 +266,14 @@ const LinkList: React.FC<LinkListProps> = ({ onNewLinkClick, onOpenLink }) => {
               {successMessage && <p className="mt-4 text-green-500">{successMessage}</p>}
             </ModalBody>
             <ModalFooter>
-              <Button
+              <button
                               onClick={() => handleResendReceipt(selectedLink.linkId)}
-                              color="primary"
                               disabled={loadingAction === 'resend'}
+                              className='px-2 py-2 md:px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm md:text-base'
                             >
                               Resend Receipt
                               {loadingAction === 'resend' && <Spinner className="ml-2" color="warning" size="sm" />}
-                            </Button>
+                            </button>
             </ModalFooter>
           </ModalContent>
         </Modal>

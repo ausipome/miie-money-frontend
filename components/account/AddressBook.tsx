@@ -243,18 +243,18 @@ const AddressBook: React.FC<AddressBookProps> = ({ mode = 'default', onUseContac
         </h1>
 
         {/* Search Bar */}
-        <Input
+        <input
           placeholder="Search"
           value={searchTerm}
           onChange={handleSearchChange}
-          fullWidth
-          className="mb-4"
+          type="text"
+          className="stdInput mb-4"
         />
 
         {/* Add Contact Button */}
-        <Button color="primary" onClick={openAddModal} className="mb-4">
+        <button onClick={openAddModal} className='mt-4 w-full p-2 text-white rounded bg-blue-500 hover:bg-blue-600'>
           Add Contact
-        </Button>
+        </button>
 
         {/* Success Message */}
         {successMessage && (
@@ -269,7 +269,7 @@ const AddressBook: React.FC<AddressBookProps> = ({ mode = 'default', onUseContac
             filteredContacts.map((contact, index) => (
               <div
                 key={index}
-                className="p-4 mb-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 cursor-pointer transition transform hover:scale-105"
+                className="p-4 mb-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 cursor-pointer"
                 onClick={() => openEditModal(index)}
               >
                 <strong className="text-lg font-semibold">{contact.fullName}</strong>

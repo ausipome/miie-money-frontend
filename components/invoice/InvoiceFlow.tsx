@@ -51,7 +51,7 @@ const InvoiceFlow: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto py-12">
+    <div className="container mx-auto py-4 md:py-12">
       {selectedInvoice ? (
         <InvoiceBuilder
           invoiceData={selectedInvoice}

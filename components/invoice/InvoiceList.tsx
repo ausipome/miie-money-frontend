@@ -151,7 +151,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onNewInvoiceClick, onOpenInvo
           />
           <button
             onClick={onNewInvoiceClick}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            className="px-2 py-2 md:px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm md:text-base"
           >
             New Invoice
           </button>
@@ -240,7 +240,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onNewInvoiceClick, onOpenInvo
                           setSelectedInvoice(invoice);
                           handlePaymentInfo(invoice.paymentIntent);
                         }}
-                        className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                        className="px-2 py-2 md:px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm md:text-base"
                       >
                         View Payment
                       </button>
