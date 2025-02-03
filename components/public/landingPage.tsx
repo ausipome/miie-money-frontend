@@ -31,9 +31,10 @@ const boxVariants = {
 };
 
 export default function LandingPage() {
+
+  const [storedLocation, setStoredLocation] = useState(Cookies.get('location') || null);
   
   useEffect(() => {
-    const storedLocation = Cookies.get('location');
     if (!storedLocation) {
       const fetchLocation = async () => {
           const response = await fetch("/get-location");
@@ -42,10 +43,11 @@ export default function LandingPage() {
           }
           const data: LocationResponse = await response.json();
           Cookies.set('location', data.country);
+          setStoredLocation(data.country);
       };
       fetchLocation();
     }
-  }, []);
+  }, [storedLocation]);
   
   return (
     <>
@@ -83,7 +85,7 @@ export default function LandingPage() {
         {/* Payment Demo Section */}
     <section className="py-16 bg-gradient-to-r from-blue-950 to-blue-600 text-white relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-transparent to-blue-800 opacity-20 pointer-events-none"></div>
-      <div className="max-w-[98%] 2xl:max-w-[80%] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 lg:gap-10 h-full flex items-center justify-center">
+      <div className="max-w-full 2xl:max-w-[80%] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 lg:gap-10 h-full flex items-center justify-center">
         {/* Left Side: Static Container with Animated Text */}
         <motion.div
           className="bg-gradient-to-br from-blue-700 to-blue-800 p-10 rounded-lg shadow-lg flex flex-col justify-between"
@@ -156,7 +158,7 @@ export default function LandingPage() {
           GET PAID ON THE WEB DOT COM
         </motion.h2>
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6 max-w-[98%]  xl:max-w-[90%] 2xl:max-w-[80%] mx-auto px-6"
+          className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6 max-w-full  xl:max-w-[90%] 2xl:max-w-[80%] mx-auto px-6"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
@@ -218,7 +220,7 @@ export default function LandingPage() {
       {/* AI-Powered Demo Section */}
 <section className="py-16 bg-gradient-to-r from-gray-900 to-gray-700 text-white relative overflow-hidden">
   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-gray-800 opacity-20 pointer-events-none"></div>
-  <div className="max-w-[98%] 2xl:max-w-[80%] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 lg:gap-10 h-full flex items-center justify-center">
+  <div className="max-w-full 2xl:max-w-[80%] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 lg:gap-10 h-full flex items-center justify-center">
     {/* Left Side: AI-Powered Demo Component */}
     <div className="flex justify-center mt-10 lg:mt-0 text-black mb-10">
       <div className="w-full relative overflow-hidden">

@@ -29,13 +29,19 @@ export default function TopNav() {
   }, []);
 
   return (
-    <div className="bg-white w-full h-[80px] z-50">
+    <div className="bg-white w-full h-[80px] z-100">
       <nav className="m-auto w-[97%] left-[1.5%] bg-[rgba(108,159,193)] rounded-full p-4">
         <div className="w-full mx-auto flex justify-between items-center gap-6">
           {/* Left side */}
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <Link href="/">
+              <Link href="/"
+              onClick={() => {
+                if (isMenuOpen !== false) {
+                  setIsMenuOpen(false);
+                }
+              }}
+              >
                 <Image
                   src="/logo_side.png"
                   alt="Miie Money logo which is a pink and blue smile formed in the shape of an M"
@@ -65,7 +71,7 @@ export default function TopNav() {
           >
             {/* Middle (Links) */}
             <div
-              className={`flex flex-col lg:flex-row lg:items-center text-xl lg:ml-8 ${
+              className={`flex flex-col lg:flex-row lg:items-center text-xl lg:ml-8 z-1000 ${
                 isMenuOpen ? "space-y-2" : ""
               }`}
             >
@@ -91,18 +97,33 @@ export default function TopNav() {
                       <Link
                         href="/account/invoice"
                         className="block px-4 py-2 text-gray-800 hover:bg-pink-50"
+                        onClick={() => {
+                          if (isMenuOpen !== false) {
+                            setIsMenuOpen(false);
+                          }
+                        }}
                       >
                         Invoice
                       </Link>
                       <Link
                         href="/account/payment-link"
                         className="block px-4 py-2 text-gray-800 hover:bg-pink-50"
+                        onClick={() => {
+                          if (isMenuOpen !== false) {
+                            setIsMenuOpen(false);
+                          }
+                        }}
                       >
                         Payment Link
                       </Link>
                       <Link
                         href="/account/subscription"
                         className="block px-4 py-2 text-gray-800 hover:bg-pink-50"
+                        onClick={() => {
+                          if (isMenuOpen !== false) {
+                            setIsMenuOpen(false);
+                          }
+                        }}
                       >
                         Subscription
                       </Link>
@@ -115,6 +136,11 @@ export default function TopNav() {
                         ? "text-black hover:bg-pink-50"
                         : "text-white hover:text-pink-200"
                     }`}
+                    onClick={() => {
+                      if (isMenuOpen !== false) {
+                        setIsMenuOpen(false);
+                      }
+                    }}
                   >
                     Address Book
                   </Link>
@@ -125,6 +151,11 @@ export default function TopNav() {
                         ? "text-black hover:bg-pink-50"
                         : "text-white hover:text-pink-200"
                     }`}
+                    onClick={() => {
+                      if (isMenuOpen !== false) {
+                        setIsMenuOpen(false);
+                      }
+                    }}
                   >
                     Learn
                   </Link>
@@ -135,6 +166,11 @@ export default function TopNav() {
                         ? "text-black hover:bg-pink-50"
                         : "text-white hover:text-pink-200"
                     }`}
+                    onClick={() => {
+                      if (isMenuOpen !== false) {
+                        setIsMenuOpen(false);
+                      }
+                    }}
                   >
                     Help
                   </Link>
@@ -149,6 +185,11 @@ export default function TopNav() {
                         ? "text-black hover:bg-pink-50"
                         : "text-white hover:text-pink-200"
                     }`}
+                    onClick={() => {
+                      if (isMenuOpen !== false) {
+                        setIsMenuOpen(false);
+                      }
+                    }}
                   >
                     Learn
                   </Link>
@@ -159,6 +200,11 @@ export default function TopNav() {
                         ? "text-black hover:bg-pink-50"
                         : "text-white hover:text-pink-200"
                     }`}
+                    onClick={() => {
+                      if (isMenuOpen !== false) {
+                        setIsMenuOpen(false);
+                      }
+                    }}
                   >
                     Help
                   </Link>
@@ -169,6 +215,11 @@ export default function TopNav() {
                         ? "text-black hover:bg-pink-50"
                         : "text-white hover:text-pink-200"
                     }`}
+                    onClick={() => {
+                      if (isMenuOpen !== false) {
+                        setIsMenuOpen(false);
+                      }
+                    }}
                   >
                     Pricing
                   </Link>
@@ -178,14 +229,14 @@ export default function TopNav() {
               {/* Logged In Component (Visible only in Collapsed Menu) */}
               {isMenuOpen && (
                 <div className="mt-4 lg:hidden">
-                  <IsLoggedIn isMenuOpen={isMenuOpen} />
+                  <IsLoggedIn isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
                 </div>
               )}
             </div>
 
             {/* Right Side */}
             <div className="mt-4 lg:mt-0 flex justify-center lg:justify-end items-center">
-              {!isMenuOpen && <IsLoggedIn isMenuOpen={isMenuOpen} />}
+              {!isMenuOpen && <IsLoggedIn isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />}
             </div>
           </div>
         </div>
