@@ -73,7 +73,6 @@ export default function SecurePayInvoiceDemo() {
     () => ({
       logoUrl: '/logo_side_transparent-background_black.png',
       invoiceNumber: 'DEMO-001',
-      invoiceDate: invoiceDate,
       status: 'unpaid',
       taxNumber: 'DEMO-VAT-123',
       customer: {
@@ -205,7 +204,7 @@ export default function SecurePayInvoiceDemo() {
         />
         <h1 className="text-4xl font-bold text-gray-800">INVOICE</h1>
         <p className="text-lg text-gray-500 mt-2">Invoice Number: {invoice.invoiceNumber}</p>
-        <p className="text-lg text-gray-500">Date: {invoice.invoiceDate}</p>
+        <p className="text-lg text-gray-500">Date: {invoiceDate}</p>
       </header>
 
       {/* Sender and Receiver Information */}

@@ -98,32 +98,36 @@ export default function StripeVerification() {
 
     const updateAccount = async () => {
       setLoading(true);
+      if (stripeAccountId) {
+        Cookies.set('stripeId', stripeAccountId, { httpOnly: true });
+      }
+      Cookies.set('country', countryCode, { httpOnly: false });
       try {
-        const response = await fetch('/api/account/update-connected', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': xsrfToken,
-            },
-            credentials: 'include',
-            body: JSON.stringify({
-              stripe_account_id: stripeAccountId,
-              email: email,
-            }),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-        } else {
+          const response = await fetch('/api/account/update-connected', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-Token': xsrfToken,
+              },
+              credentials: 'include',
+              body: JSON.stringify({
+                  stripe_account_id: stripeAccountId,
+                  email: email,
+              }),
+          });
+  
+          if (response.ok) {
+              const data = await response.json();
+          } else {
+              setLoading(false);
+          }
+      } catch (error: any) {
           setLoading(false);
-        }
-    } catch (error: any) {
-      setLoading(false);
-    }finally{
-      setLoading(false);
-      router.push('/account');
-    }
-    };
+      } finally {
+          setLoading(false);
+          router.push('/account');
+      }
+  };
 
     if (loading) { 
       return (
