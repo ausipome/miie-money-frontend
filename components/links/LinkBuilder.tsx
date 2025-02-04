@@ -37,7 +37,8 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [generatedEmail, setGeneratedEmail] = useState<string>(linkData?.email || '');
   const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
-  const country = Cookies.get('country') || 'US';
+  const [country] = useState<string | null>(Cookies.get('country') || null);
+  const [areCookiesPresent, setAreCookiesPresent] = useState<boolean>(false);
   const [vatRate, setVatRate] = useState<number>(linkData?.taxRate || userData?.taxRate || 0);
   const applicationFeeRate = userData?.application_fee || 0.01;
   const [whichTax, setWhichTax] = useState('Sales Tax ');
@@ -45,10 +46,16 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
   const [manualVat, setManualVat] = useState<boolean>(linkData?.manualVat || false);
   const [manualVatAmount, setManualVatAmount] = useState<number>(linkData?.vatAmount || 0);
   const [showVatModal, setShowVatModal] = useState(false);
-
   const isNewLink = !linkId;
   const isPaid = linkData?.status === 'paid' || false;
   const shouldCalculateVAT = !isPaid ? !!taxNumber : isPaid && linkData?.vatAmount !== 0;
+
+   // check if cookies are present
+   useEffect(() => {
+    if (country) {
+      setAreCookiesPresent(true);
+    }
+    }, [country]);
 
   const formatDate = (date: string, country: string) => {
     switch (country) {
@@ -64,7 +71,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
           }
 };
 
-const [linkDate] = useState<string>(formatDate(linkData?.creationDate || new Date().toISOString(), country));
+const [linkDate] = useState<string>(formatDate(linkData?.creationDate || new Date().toISOString(), country || ''));
 
 
   // Update tax-related labels and messages based on the country
@@ -121,6 +128,12 @@ const [linkDate] = useState<string>(formatDate(linkData?.creationDate || new Dat
 
   const handleLinkAction = async (action: 'save' | 'send' | 'delete') => {
     setLoadingAction(action);
+
+    if (!areCookiesPresent && action === 'send') {
+      alert('You cannot send a payment link before setting up a Stripe account in the main account menu!');
+      setLoadingAction(null);
+      return;
+    }
 
     if (action === 'delete' && !confirm('Are you sure you want to delete this link?')) {
       setLoadingAction(null);
