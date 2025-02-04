@@ -24,7 +24,8 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   const [customerDetails, setCustomerDetails] = useState<Contact>(invoiceData?.customer || customer || {} as Contact);
   const [showEditModal, setShowEditModal] = useState(false);
   const [loadingAction, setLoadingAction] = useState<'save' | 'send' | 'delete' | null>(null);
-  const country = Cookies.get('country') || 'US';
+  const [country] = useState<string | null>(Cookies.get('country') || null);
+  const [areCookiesPresent, setAreCookiesPresent] = useState<boolean>(false);
   const [vatRate, setVatRate] = useState<number>(invoiceData?.taxRate || userData?.taxRate || 0);
   const [manualVat, setManualVat] = useState<boolean>(invoiceData?.manualVat || false);
   const [manualVatAmount, setManualVatAmount] = useState<number>(invoiceData?.vatAmount || 0);
@@ -32,10 +33,16 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
   const [xsrfToken] = useState(Cookies.get('XSRF-TOKEN') || '');
   const [whichTax, setWhichTax] = useState('Sales Tax');
   const [symbol, setSymbol] = useState('$');
-
   const applicationFeeRate = userData?.application_fee || 0.01;
   const isPaid = invoiceData?.status === 'paid';
   const shouldCalculateVAT = !isPaid ? !!taxNumber : isPaid && invoiceData?.vatAmount !== 0;
+
+   // check if cookies are present
+  useEffect(() => {
+  if (country) {
+    setAreCookiesPresent(true);
+  }
+  }, [country]);
 
   const formatDate = (date: string, country: string) => {
       switch (country) {
@@ -51,7 +58,7 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
       }
   };
   
-  const [invoiceDate] = useState<string>(invoiceData?.invoiceDate || formatDate(new Date().toISOString(), country));
+  const [invoiceDate] = useState<string>(invoiceData?.invoiceDate || formatDate(new Date().toISOString(), country || ''));
 
   useEffect(() => {
     switch (country) {
@@ -183,6 +190,12 @@ export default function InvoiceBuilder({ customer, invoiceData, backButton, onNe
 
   const handleInvoiceAction = async (action: 'save' | 'send' | 'delete') => {
     setLoadingAction(action);
+
+    if (!areCookiesPresent && action === 'send') {
+      alert('You cannot send an invoice before setting up a Stripe account in the main account menu!');
+      setLoadingAction(null);
+      return;
+    }
 
     const formattedItems = items.map((item) => ({
       ...item,
