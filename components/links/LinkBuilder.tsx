@@ -71,7 +71,7 @@ const LinkBuilder: React.FC<LinkBuilderProps> = ({ customer, linkData, backButto
           }
 };
 
-const [linkDate] = useState<string>(formatDate(linkData?.creationDate || new Date().toISOString(), country || ''));
+const [linkDate] = useState<string>(linkData?.creationDate || formatDate(new Date().toISOString(), country || ''));
 
 
   // Update tax-related labels and messages based on the country
@@ -144,7 +144,7 @@ const [linkDate] = useState<string>(formatDate(linkData?.creationDate || new Dat
       whereFrom: action,
       linkId,
       url: linkUrl,
-      creationDate: new Date().toISOString(),
+      creationDate: linkDate,
       description,
       status: 'unpaid',
       customer: customerDetails,
@@ -216,7 +216,7 @@ const [linkDate] = useState<string>(formatDate(linkData?.creationDate || new Dat
           whereFrom: 'save',
           linkId,
           url: linkUrl,
-          creationDate: new Date().toISOString(),
+          creationDate: linkDate,
           description,
           status: 'unpaid',
           customer: customerDetails,

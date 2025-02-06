@@ -158,7 +158,7 @@ export default function SecurePayLink() {
         </div>
         <h1 className="text-4xl font-bold text-gray-800">PAYMENT LINK</h1>
         <p className="text-lg text-gray-500 mt-2">Payment Link ID: {paymentLink.linkId}</p>
-        <p className="text-lg text-gray-500">Date: {new Date(paymentLink.creationDate).toLocaleDateString()}</p>
+        <p className="text-lg text-gray-500">Date: {paymentLink.creationDate}</p>
       </header>
 
       <div className="border-t border-gray-300 py-6 flex justify-between">
