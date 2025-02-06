@@ -113,10 +113,7 @@ export default function StripeVerification() {
               body: JSON.stringify({
                   stripe_account_id: stripeAccountId,
                   email: email,
-<<<<<<< HEAD
-=======
                   countryCode: countryCode,
->>>>>>> master
               }),
           });
   
