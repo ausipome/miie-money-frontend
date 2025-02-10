@@ -222,7 +222,7 @@ const AccountInfo = ({ settingsButton }: { settingsButton: React.ReactNode }) =>
 
       {/* Recent Payouts */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Recent Payouts <Tippy content="Payouts will be automatically sent to your bank account at the end of the business day (Created), and arrive on Arrival Date.">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Recent Payouts <Tippy content="Payouts will be automatically sent to your bank account at the end of the business day (Created), and arrive on Arrival Date. The first payout will take 7 - 10 days.">
           <span className="ml-2 cursor-pointer text-red-500"><FontAwesomeIcon icon={byPrefixAndName.far['circle-info']} /></span>
         </Tippy>
         </h2>
