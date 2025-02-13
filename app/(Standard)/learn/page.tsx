@@ -5,33 +5,50 @@ import { motion } from 'framer-motion';
 import CustomSubscriptionForm from "@/components/public/subscribe";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
+import Countdown from 'react-countdown';
 
 export default function Page() {
+
+const Completionist = () => <span>This offer has now expired!</span>;
+
+const CountdownTimer = ({ endDate }: { endDate: string }) => {
+  const countdownRenderer = ({ days, hours, minutes, seconds, completed }: { days: number, hours: number, minutes: number, seconds: number, completed: boolean }) => {
+    if (completed) {
+      return <Completionist />;
+    } else {
+      return (
+        <div>
+          <p className="text-lg md:text-4xl font-bold mb-6 text-red-500">
+            Offer ends in {days} days, {hours} hours, {minutes} minutes, and {seconds} seconds.
+          </p>
+        </div>
+      );
+    }
+  };
+
+  return <Countdown date={new Date(endDate)} renderer={countdownRenderer} />;
+};
+
     return (
         <>
-        {/* Header Section */}
-        <section className="text-center bg-gradient-to-r from-blue-950 to-blue-600 text-white py-8 mt-6">
-        <h1 className="text-3xl md:text-5xl font-extrabold mb-4 text-pink-200">Coming Soon!</h1>
-        <div className="md:w-2/3 sm:w-full m-auto">
-          <p className="text-lg md:text-xl font-light mb-6">
-            We’re excited to announce that our learning platform is growing, and we can’t wait to share our upcoming courses with you! Whether you’re just starting your online journey or looking to refine your skills, our courses are designed to empower you with the knowledge and tools you need to succeed.
-          </p>
-          <p className="text-lg md:text-xl font-light mb-6">
-            Here’s a sneak peek at some of the courses we’ll be offering:
-          </p>
-          <ol className="text-lg md:text-xl font-light mb-6 list-decimal list-inside text-left mx-auto max-w-md">
-            <li>Setting up your first store on Shopify</li>
-            <li>Creating a stunning shop with Wix Studio</li>
-            <li>Launching your first online business</li>
-          </ol>
-          <p className="text-lg md:text-xl font-light mb-6">
-            These hands-on courses will guide you step-by-step, making the process approachable and easy to follow.
-          </p>
-          <p className="text-lg md:text-xl font-light">
-            Stay in the loop and be the first to know when these courses go live! Subscribe to our community or follow us using the links below. By joining, you’ll gain access to updates, exclusive content, and special offers for our courses. Your entrepreneurial journey starts here—let’s build something amazing together!
-          </p>
-          </div>
-        </section>
+       {/* Header Section */}
+    <section className="text-center bg-gradient-to-r from-blue-950 to-blue-600 text-white py-8 mt-6">
+      <h1 className="text-3xl md:text-5xl font-extrabold mb-4 text-pink-200">Let's Celebrate!</h1>
+      <div className="md:w-2/3 sm:w-full m-auto">
+      <p className="text-lg md:text-2xl font-light mb-6">
+        To celebrate the launch of Get Paid On The Web, subscribe to our newsletter before March 31, 2025, and enjoy free access to all our content for life! This exclusive, one-time offer grants you unlimited access to our entire library&mdash;both existing and upcoming resources&mdash;ensuring you never miss out on our valuable content. Don&apos;t miss this unparalleled opportunity, it&apos;s an offer we&apos;ll never repeat!
+      </p>
+      <CountdownTimer endDate="2025-03-30" />
+      <p className="text-lg md:text-3xl font-light mb-6 text-pink-200">Sign up now and get instant access to the Masterplan</p>
+      <p className="text-lg md:text-2xl font-light mb-6">
+        Each week until the end of March, we are enriching the Masterplan with a new chapter, which our subscribers will have exclusive first access to. Additionally, to complement the newly added content, we will send you a complimentary eBook every week that delves into the specialty subject introduced in the Masterplan.
+      </p>
+      <p className="text-lg md:text-2xl font-light">
+        On March 31, 2025, our academy will go live, subscribers will receive full access to all our courses, tutorials, and resources, ensuring you have the tools and knowledge to succeed in the digital world. Your entrepreneurial journey starts here&mdash;let&apos;s build something amazing together!
+      </p>
+      </div>
+    </section>
+
 
 
         {/* Community Subscription Section */}
