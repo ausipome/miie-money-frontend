@@ -372,7 +372,7 @@ export default function LandingPage() {
           <a href="https://www.tiktok.com/@get.paid.on.the.web" target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon={byPrefixAndName.fab['tiktok']} />
           </a>
-          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.facebook.com/getpaidonthewebx" target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon={byPrefixAndName.fab['facebook']} />
           </a>
           <a href="https://www.instagram.com/get.paid.on.the.web" target="_blank" rel="noopener noreferrer">
