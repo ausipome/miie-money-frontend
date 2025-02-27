@@ -33,7 +33,7 @@ const CountdownTimer = ({ endDate }: { endDate: string }) => {
         <>
        {/* Header Section */}
     <section className="text-center bg-gradient-to-r from-blue-950 to-blue-600 text-white py-8 mt-6">
-      <h1 className="text-3xl md:text-5xl font-extrabold mb-4 text-pink-200">Let's Celebrate!</h1>
+      <h1 className="text-3xl md:text-5xl font-extrabold mb-4 text-pink-200">Let&apos;s Celebrate!</h1>
       <div className="md:w-2/3 sm:w-full m-auto">
       <p className="text-lg md:text-2xl font-light mb-6">
         To celebrate the launch of Get Paid On The Web, subscribe to our newsletter before March 31, 2025, and enjoy free access to all our content for life! This exclusive, one-time offer grants you unlimited access to our entire library&mdash;both existing and upcoming resources&mdash;ensuring you never miss out on our valuable content. Don&apos;t miss this unparalleled opportunity, it&apos;s an offer we&apos;ll never repeat!
@@ -147,7 +147,7 @@ const CountdownTimer = ({ endDate }: { endDate: string }) => {
           <a href="https://www.tiktok.com/@get.paid.on.the.web" target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon={byPrefixAndName.fab['tiktok']} />
           </a>
-          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.facebook.com/getpaidontheweb" target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon={byPrefixAndName.fab['facebook']} />
           </a>
           <a href="https://www.instagram.com/get.paid.on.the.web" target="_blank" rel="noopener noreferrer">
@@ -161,6 +161,3 @@ const CountdownTimer = ({ endDate }: { endDate: string }) => {
         </>
     );
 }
-
-
-
