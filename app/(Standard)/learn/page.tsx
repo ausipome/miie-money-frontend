@@ -33,19 +33,12 @@ const CountdownTimer = ({ endDate }: { endDate: string }) => {
         <>
        {/* Header Section */}
     <section className="text-center bg-gradient-to-r from-blue-950 to-blue-600 text-white py-8 mt-6">
-      <h1 className="text-3xl md:text-5xl font-extrabold mb-4 text-pink-200">Let&apos;s Celebrate!</h1>
       <div className="md:w-2/3 sm:w-full m-auto">
+      <p className="text-lg md:text-3xl font-light mb-6 text-pink-200">Academy Launches March 31</p>
       <p className="text-lg md:text-2xl font-light mb-6">
-        To celebrate the launch of Get Paid On The Web, subscribe to our newsletter before March 31, 2025, and enjoy free access to all our content for life! This exclusive, one-time offer grants you unlimited access to our entire library&mdash;both existing and upcoming resources&mdash;ensuring you never miss out on our valuable content. Don&apos;t miss this unparalleled opportunity, it&apos;s an offer we&apos;ll never repeat!
+      Subscribe below and receive free lifetime access to our entire content library. Each week until the launch, we&apos;ll also gift a free eBook. <br /> This week&apos;s book is &quot;TikTok Viral Marketing.&quot;
       </p>
       <CountdownTimer endDate="2025-03-30" />
-      <p className="text-lg md:text-3xl font-light mb-6 text-pink-200">Sign up now and get instant access to the Masterplan</p>
-      <p className="text-lg md:text-2xl font-light mb-6">
-        Each week until the end of March, we are enriching the Masterplan with a new chapter, which our subscribers will have exclusive first access to. Additionally, to complement the newly added content, we will send you a complimentary eBook every week that delves into the specialty subject introduced in the Masterplan.
-      </p>
-      <p className="text-lg md:text-2xl font-light">
-        On March 31, 2025, our academy will go live, subscribers will receive full access to all our courses, tutorials, and resources, ensuring you have the tools and knowledge to succeed in the digital world. Your entrepreneurial journey starts here&mdash;let&apos;s build something amazing together!
-      </p>
       </div>
     </section>
 
@@ -152,6 +145,9 @@ const CountdownTimer = ({ endDate }: { endDate: string }) => {
           </a>
           <a href="https://www.instagram.com/get.paid.on.the.web" target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon={byPrefixAndName.fab['instagram']} />
+          </a>
+          <a href="https://www.youtube.com/@GetPaidOnTheWeb" target="_blank" rel="noopener noreferrer">
+          <FontAwesomeIcon icon={byPrefixAndName.fab['youtube']} />
           </a>
         </motion.div>
       </div>

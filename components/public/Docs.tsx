@@ -124,6 +124,9 @@ export default function Docs() {
           <a href="https://www.instagram.com/get.paid.on.the.web" target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon={byPrefixAndName.fab['instagram']} />
           </a>
+          <a href="https://www.youtube.com/@GetPaidOnTheWeb" target="_blank" rel="noopener noreferrer">
+          <FontAwesomeIcon icon={byPrefixAndName.fab['youtube']} />
+          </a>
         </motion.div>
       </div>
     </section>

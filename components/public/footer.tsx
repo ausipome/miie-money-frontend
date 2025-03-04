@@ -70,6 +70,9 @@ const Footer = () => {
             <li>
               <a href="https://www.facebook.com/getpaidontheweb" target="_blank" rel="noopener noreferrer" className="hover:underline"><FontAwesomeIcon icon={byPrefixAndName.fab['facebook']} /></a>
             </li>
+            <li>
+              <a href="https://www.youtube.com/@GetPaidOnTheWeb" target="_blank" rel="noopener noreferrer" className="hover:underline"><FontAwesomeIcon icon={byPrefixAndName.fab['youtube']} /></a>
+            </li>
           </ul>
         </div>
       </div>
