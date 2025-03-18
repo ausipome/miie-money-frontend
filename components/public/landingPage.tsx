@@ -65,13 +65,8 @@ export default function LandingPage() {
           </p>
           <div className="space-x-4">
             <Link href="/signup">
-              <button className="px-6 py-3 text-lg font-semibold bg-white text-blue-500 rounded-full shadow hover:bg-blue-100">
-                Get Started
-              </button>
-            </Link>
-            <Link href="/docs">
-              <button className="px-6 py-3 text-lg font-semibold bg-transparent border border-white rounded-full hover:bg-white hover:text-blue-500">
-                See Docs
+              <button className="px-6 py-3 text-lg font-semibold bg-white text-blue-500 rounded-full shadow hover:bg-blue-100 mt-8">
+                Sign Up
               </button>
             </Link>
           </div>
@@ -132,6 +127,13 @@ export default function LandingPage() {
               </motion.li>
             ))}
           </motion.ul>
+          <motion.div className="space-x-4">
+            <Link href="/signup">
+              <motion.button className="px-6 py-3 text-lg font-semibold bg-white text-blue-500 rounded-full shadow hover:bg-blue-100 mt-8">
+                Sign Up
+              </motion.button>
+            </Link>
+          </motion.div>
         </motion.div>
 
         {/* Right Side: Invoice Component */}
@@ -272,6 +274,13 @@ export default function LandingPage() {
           </motion.li>
         ))}
       </motion.ul>
+      <motion.div className="space-x-4">
+            <Link href="/signup">
+              <motion.button className="px-6 py-3 text-lg font-semibold bg-white text-blue-500 rounded-full shadow hover:bg-blue-100 mt-8">
+                Sign Up
+              </motion.button>
+            </Link>
+          </motion.div>
     </motion.div>
   </div>
 </section>

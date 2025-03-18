@@ -133,3 +133,28 @@ export type LocationResponse = {
   country: string;
 };
  
+
+export type SubscriptionData = {
+  subscription_id: string;
+  status: string;
+  customer_id: string;
+  items: any[];  // Adjust according to the actual data structure received
+  current_period_end: number;
+  cancel_at_period_end: boolean;
+  error?: string;
+}
+
+export type Book = {
+  id: number;
+  title: string;
+  image: string;
+  download: string;
+  tags: string[];
+  description: string;
+  detailedDescription?: {
+    intro: string;
+    whatsInside: string[];
+    whatReadersWillLearn: string[];
+    outro?: string;
+  };
+}
