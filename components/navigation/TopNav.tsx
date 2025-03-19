@@ -145,7 +145,7 @@ export default function TopNav() {
                     Address Book
                   </Link>
                   <Link
-                    href="/learn"
+                    href="academy"
                     className={`py-3 px-4 ${
                       isMenuOpen
                         ? "text-black hover:bg-pink-50"
@@ -157,7 +157,7 @@ export default function TopNav() {
                       }
                     }}
                   >
-                    Learn
+                    Academy
                   </Link>
                   <Link
                     href="/help"

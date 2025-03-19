@@ -68,7 +68,7 @@ export default function IsLoggedIn({ isMenuOpen, setIsMenuOpen }: IsLoggedInProp
                         className={`text-${isMenuOpen ? 'black' : 'white'} py-2 px-4 text-xl hover:${isMenuOpen ? 'bg-pink-50' : 'text-pink-200'}`}
                         onClick={closeMenu}
                     >
-                        Signup
+                        Sign-Up
                     </Link>
                     <Link 
                         href="/login" 

@@ -30,7 +30,7 @@ const Footer = () => {
               <Link href="/docs" className="hover:underline">Docs</Link>
             </li>
             <li>
-              <Link href="/learn" className="hover:underline">Learn</Link>
+              <Link href="/learn" className="hover:underline">Academy</Link>
             </li>
             <li>
               <Link href="/terms" className="hover:underline">Terms</Link>
@@ -52,7 +52,7 @@ const Footer = () => {
               <Link href="/login" className="hover:underline">Login</Link>
             </li>
             <li>
-              <Link href="/signup" className="hover:underline">Signup</Link>
+              <Link href="/signup" className="hover:underline">Sign-Up</Link>
             </li>
           </ul>
         </div>
