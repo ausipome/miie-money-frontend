@@ -24,7 +24,7 @@ export const books: Book[] = [
           'Easy-to-follow strategies for adapting to marketing trends and making continuous improvements.',
           'How to build a cohesive brand voice that connects with customers.'
         ],
-        outro: 'With this ebook, you will gain a complete yet easy-to-understand plan to boost your marketing efforts and help your business grow confidently. It&rsquo;s a resource packed with actionable strategies to make marketing more focused, efficient, and successful for any business looking to stand out.'
+        outro: "With this ebook, you will gain a complete yet easy-to-understand plan to boost your marketing efforts and help your business grow confidently. It's a resource packed with actionable strategies to make marketing more focused, efficient, and successful for any business looking to stand out."
       }
     },
     {
@@ -97,7 +97,7 @@ export const books: Book[] = [
           "Time management: Balance your side hustle with your day job",
           "Revenue focus: Prioritize activities that boost your bottom line",
           "Burnout prevention: Maintain work-life balance while growing your business",
-          "Career transition: Know when it&apos;s safe to go all-in on your side hustle"
+          "Career transition: Know when it's safe to go all-in on your side hustle"
         ],
         "whatReadersWillLearn": [
           "How to choose the perfect side hustle that aligns with your skills and passion",
@@ -136,7 +136,7 @@ export const books: Book[] = [
           "Methods for providing excellent customer service that builds loyalty",
           "Techniques for amplifying content to drive ongoing sales growth"
         ],
-        "outro": "You will gain a clear, actionable plan to better understand and navigate the world of eCommerce. The book covers everything from mobile optimization and social media integration to creating compelling product descriptions and implementing effective email sequences. Whether new to online business or looking to refine your skills, this guide will help them create successful online stores that thrive in today&apos;s competitive market."
+        "outro": "You will gain a clear, actionable plan to better understand and navigate the world of eCommerce. The book covers everything from mobile optimization and social media integration to creating compelling product descriptions and implementing effective email sequences. Whether new to online business or looking to refine your skills, this guide will help them create successful online stores that thrive in today's competitive market."
       }
     },
     {
@@ -175,7 +175,7 @@ export const books: Book[] = [
       detailedDescription: {
         intro: 'This ebook helps you create a powerful brand that stands out and connects with your audience. It provides clear, step-by-step instructions on defining brand values, developing a unique brand identity, and crafting messages that resonate. Perfect for entrepreneurs and marketers, this guide offers practical strategies to build a memorable brand that drives business growth and customer loyalty.',
         whatsInside: [
-          'Step-by-step guidance on defining your brand&rsquo;s mission, vision, and values.',
+          "Step-by-step guidance on defining your brand's mission, vision, and values.",
           'Techniques for developing a unique and consistent brand identity.',
           'Strategies for creating persuasive messaging that resonates with your audience.',
           'Tips on leveraging marketing channels to enhance brand visibility.',
@@ -183,7 +183,7 @@ export const books: Book[] = [
         ],
         whatReadersWillLearn: [
           'How to craft a brand that stands out in a crowded market.',
-          'Developing a brand identity that reflects your business&rsquo;s core values.',
+          "Developing a brand identity that reflects your business's core values.",
           'Creating messages that connect with your target audience on a deeper level.',
           'Leveraging marketing strategies to grow brand awareness and loyalty.',
           'Adapting your brand to stay relevant in an ever-changing marketplace.'
@@ -223,17 +223,17 @@ export const books: Book[] = [
       image: 'http://localhost:3000/eBook/TikTok-Viral-Marketing/cover.png',
       download: 'http://localhost:3000/eBook/TikTok-Viral-Marketing/book.pdf',
       tags: ['Business', 'Social media', 'Marketing'],
-      description: 'This ebook equips you with essential strategies for mastering TikTok marketing and growing your businesses. Packed with practical insights, it provides clear, step-by-step instructions for creating engaging content, building a strong presence on the platform, and leveraging TikTok&rsquo;s unique features for maximum impact.',
+      description: "This ebook equips you with essential strategies for mastering TikTok marketing and growing your businesses. Packed with practical insights, it provides clear, step-by-step instructions for creating engaging content, building a strong presence on the platform, and leveraging TikTok's unique features for maximum impact.",
       detailedDescription: {
-        intro: 'This ebook equips you with essential strategies for mastering TikTok marketing and growing your businesses. Packed with practical insights, it provides clear, step-by-step instructions for creating engaging content, building a strong presence on the platform, and leveraging TikTok&rsquo;s unique features for maximum impact.',
+        intro: "This ebook equips you with essential strategies for mastering TikTok marketing and growing your businesses. Packed with practical insights, it provides clear, step-by-step instructions for creating engaging content, building a strong presence on the platform, and leveraging TikTok's unique features for maximum impact.",
         whatsInside: [
           'Step-by-step account setup and optimization',
-          'Content creation strategies that captivate TikTok&rsquo;s audience',
-          'Techniques for leveraging TikTok&rsquo;s unique features',
+          "Content creation strategies that captivate TikTok's audience",
+          "Techniques for leveraging TikTok's unique features",
           'Tips for running successful hashtag challenges and contests',
           'Strategies for cross-platform promotion',
           'Best practices for follower growth and engagement',
-          'Essential do&rsquo;s and don&rsquo;ts of TikTok marketing',
+          "Essential do's and don'ts of TikTok marketing",
           'Overview of premium TikTok marketing tools and services'
         ],
         whatReadersWillLearn: [
@@ -241,10 +241,10 @@ export const books: Book[] = [
           'Techniques for producing engaging, trend-setting content',
           'Methods to boost brand awareness and community engagement',
           'Ways to integrate TikTok into broader marketing strategies',
-          'Understanding of TikTok&rsquo;s demographics and policies',
-          'How to use TikTok&rsquo;s analytics for performance improvement'
+          "Understanding of TikTok's demographics and policies",
+          "How to use TikTok's analytics for performance improvement"
         ],
-        outro: 'Give you the tools you need to harness TikTok&rsquo;s viral potential and drive business growth. Whether you&rsquo;re new to TikTok or looking to refine your marketing approach, this resource will guide them in achieving success on the platform.'
+        outro: "Give you the tools you need to harness TikTok's viral potential and drive business growth. Whether you're new to TikTok or looking to refine your marketing approach, this resource will guide them in achieving success on the platform."
       }
     },
     {
@@ -263,20 +263,20 @@ export const books: Book[] = [
           "Instagram Insights analysis for data-driven decisions",
           "Photo capture and editing best practices",
           "Proven marketing strategies like contests and influencer partnerships",
-          "Do&apos;s and don&apos;ts of Instagram marketing",
+          "Do's and don'ts of Instagram marketing",
           "Top tools and services for Instagram marketers"
         ],
         "whatReadersWillLearn": [
           "Build brand awareness and engage customers effectively",
           "Create visually stunning, on-brand content",
           "Grow followers and boost engagement rates",
-          "Utilize Instagram&apos;s business features like ads and insights",
+          "Utilize Instagram's business features like ads and insights",
           "Optimize posts and profiles for better discoverability",
           "Drive traffic and sales through Instagram",
           "Implement best practices for Instagram success",
           "Avoid common pitfalls in Instagram marketing."
         ],
-        "outro": "Give you an actionable plan to improve your Instagram marketing. With these strategies, you&apos;ll be able to create content and campaigns that truly engage your audience, driving business growth. Whether you&apos;re new to Instagram or looking to enhance your skills, this resource will guide them toward success on the platform."
+        "outro": "Give you an actionable plan to improve your Instagram marketing. With these strategies, you'll be able to create content and campaigns that truly engage your audience, driving business growth. Whether you're new to Instagram or looking to enhance your skills, this resource will guide them toward success on the platform."
       }
     },
     {
@@ -328,7 +328,7 @@ export const books: Book[] = [
           'Strategies for building and nurturing an email list',
           'Methods to scale an affiliate marketing business'
         ],
-        outro: 'Offer readers a guide that turns affiliate marketing into a sustainable business. The book provides practical insights and it&rsquo;s packed with real-world examples and actionable advice. By offering this product, you give customers a clear, actionable plan to generate passive income or establish a full-time online business.'
+        outro: "Offer readers a guide that turns affiliate marketing into a sustainable business. The book provides practical insights and it's packed with real-world examples and actionable advice. By offering this product, you give customers a clear, actionable plan to generate passive income or establish a full-time online business."
       }
     },
     {
@@ -339,7 +339,7 @@ export const books: Book[] = [
       tags: ['Entrepreneurship', 'Business', 'Social media', 'Marketing'],
       description: 'This ebook teaches you how to use psychology and behavioral insights to create powerful marketing strategies that drive conversions and build stronger customer relationships. It offers practical techniques and step-by-step guidance to understand what motivates people, enabling businesses to connect with your audience on a deeper level and achieve lasting success.',
       detailedDescription: {
-        intro: 'This ebook teaches you how to use psychology and behavioral insights to create powerful marketing strategies that drive conversions and build stronger customer relationships. It offers practical techniques and step-by-step guidance to understand what motivates people, enabling businesses to connect with your audience on a deeper level and achieve lasting success.',
+        intro: "This ebook teaches you how to use psychology and behavioral insights to create powerful marketing strategies that drive conversions and build stronger customer relationships. It offers practical techniques and step-by-step guidance to understand what motivates people, enabling businesses to connect with your audience on a deeper level and achieve lasting success.",
         whatsInside: [
           'Clear explanations of how psychology shapes decision-making in marketing.',
           'Strategies for leveraging cognitive biases and emotional triggers to boost engagement.',
@@ -354,7 +354,7 @@ export const books: Book[] = [
           'Practical ways to design customer experiences that look great and drive results.',
           'How to use psychology ethically to build trust and long-term customer loyalty.'
         ],
-        outro: 'With this ebook, you will gain actionable insights to improve your marketing efforts, increase engagement, and boost sales. Whether you&rsquo;re starting fresh or refining your current strategies, this resource gives them the tools to create smarter, psychology-driven marketing campaigns for sustainable growth.'
+        outro: "With this ebook, you will gain actionable insights to improve your marketing efforts, increase engagement, and boost sales. Whether you're starting fresh or refining your current strategies, this resource gives them the tools to create smarter, psychology-driven marketing campaigns for sustainable growth."
       }
     },
     {
@@ -491,7 +491,7 @@ export const books: Book[] = [
           "Strategies for building a cohesive brand presence across platforms",
           "How to use social media advertising to drive business growth"
         ],
-        "outro": "Offer you the knowledge and tools you need to create effective social media campaigns. With clear guidance, readers can master key social media platforms and drive real results for your business. Whether you&apos;re new to social media or looking to refine your strategies, this ebook provides valuable insights for growth."
+        "outro": "Offer you the knowledge and tools you need to create effective social media campaigns. With clear guidance, readers can master key social media platforms and drive real results for your business. Whether you're new to social media or looking to refine your strategies, this ebook provides valuable insights for growth."
       }
     },
     {
@@ -504,10 +504,10 @@ export const books: Book[] = [
       "detailedDescription": {
         "intro": "This ebook equips you with essential knowledge to master Search Engine Optimization (SEO) and boost your online presence. It provides clear, step-by-step guidance on how to improve search engine rankings, increase website traffic, and generate more leads through effective SEO strategies.",
         "whatsInside": [
-          "Gain a clear, actionable plan to help you improve your online visibility. With these strategies, you&apos;ll be able to optimize your websites, attract more traffic, and boost your search engine rankings, driving business growth. Whether you are new to SEO or looking to refine your skills, this resource will guide them in implementing effective techniques and achieving goals."
+          "Gain a clear, actionable plan to help you improve your online visibility. With these strategies, you'll be able to optimize your websites, attract more traffic, and boost your search engine rankings, driving business growth. Whether you are new to SEO or looking to refine your skills, this resource will guide them in implementing effective techniques and achieving goals."
         ],
         "whatReadersWillLearn": [
-          "Gain a clear, actionable plan to help you improve your online visibility. With these strategies, you&apos;ll be able to optimize your websites, attract more traffic, and boost your search engine rankings, driving business growth. Whether you are new to SEO or looking to refine your skills, this resource will guide them in implementing effective techniques and achieving goals."
+          "Gain a clear, actionable plan to help you improve your online visibility. With these strategies, you'll be able to optimize your websites, attract more traffic, and boost your search engine rankings, driving business growth. Whether you are new to SEO or looking to refine your skills, this resource will guide them in implementing effective techniques and achieving goals."
         ],
         "outro": "With this ebook, you will receive a complete toolkit for mastering SEO, enhancing your web presence, and realizing substantial growth in your digital endeavors."
       }
@@ -563,7 +563,7 @@ export const books: Book[] = [
           "Ways to build and nurture long-term customer loyalty",
           "Methods to monitor and improve traffic results without paid ads"
         ],
-        "outro": "You will gain practical, actionable insights to grow your online presence, increase traffic, and build a growing business with organic marketing strategies. Whether you&apos;re new to digital marketing or looking to sharpen your skills, this ebook provides the tools and knowledge to succeed online."
+        "outro": "You will gain practical, actionable insights to grow your online presence, increase traffic, and build a growing business with organic marketing strategies. Whether you're new to digital marketing or looking to sharpen your skills, this ebook provides the tools and knowledge to succeed online."
       }
     },
     {
@@ -598,7 +598,7 @@ export const books: Book[] = [
       "image": "http://localhost:3000/eBook/Optimizing-Email-Open-Rates/cover.jpg",
       download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Business', 'Marketing'],
-      "description": "This ebook equips you with the knowledge you need to boost your email marketing success. It provides easy-to-follow guidance on how to create emails that get opened and read. It&apos;s perfect for entrepreneurs, marketers, and anyone who wants to improve your email marketing results.",
+      "description": "This ebook equips you with the knowledge you need to boost your email marketing success. It provides easy-to-follow guidance on how to create emails that get opened and read. It's perfect for entrepreneurs, marketers, and anyone who wants to improve your email marketing results.",
       "detailedDescription": {
         "intro": "This ebook equips you with the knowledge you need to boost your email marketing success.",
         "whatsInside": [
@@ -612,7 +612,7 @@ export const books: Book[] = [
           "How to write subject lines that get noticed in crowded inboxes.",
           "Ways to personalize emails that lead to stronger customer connections.",
           "The best strategies for sending emails at the right time.",
-          "How to use data to create emails that meet your audience&apos;s needs.",
+          "How to use data to create emails that meet your audience's needs.",
           "Steps to improve your email marketing efforts and see better results."
         ],
         "outro": "Businesses can gain a clear, actionable plan to make your email marketing more effective. By reselling this product, you offer valuable strategies that lead to better engagement, higher open rates, and stronger business growth."
@@ -641,7 +641,7 @@ export const books: Book[] = [
           "Key legal guidelines to follow for SMS marketing success.",
           "Proven methods to integrate SMS with other marketing efforts for greater impact."
         ],
-        "outro": "With this ebook, you will have all the tools and know-how to start using SMS marketing right away and see real results. Whether you&apos;re new to marketing or looking to add SMS to your existing strategies, this resource gives them everything you need to boost sales and build stronger customer relationships."
+        "outro": "With this ebook, you will have all the tools and know-how to start using SMS marketing right away and see real results. Whether you're new to marketing or looking to add SMS to your existing strategies, this resource gives them everything you need to boost sales and build stronger customer relationships."
       }
     },
     {
@@ -666,7 +666,7 @@ export const books: Book[] = [
           "Best practices for marketing and customer engagement",
           "Steps to automate sales and customer support for greater efficiency"
         ],
-        "outro": "Offer this resource to your clients, helping them turn your expertise into profitable digital products. By reselling this ebook, you provide valuable content that equips them to grow your business, generate passive income, and reach new customers. Whether you&apos;re new to digital products or experienced entrepreneurs, this guide offers practical steps for long-term success."
+        "outro": "Offer this resource to your clients, helping them turn your expertise into profitable digital products. By reselling this ebook, you provide valuable content that equips them to grow your business, generate passive income, and reach new customers. Whether you're new to digital products or experienced entrepreneurs, this guide offers practical steps for long-term success."
       }
     },
     {
@@ -692,7 +692,7 @@ export const books: Book[] = [
           "How to apply successful funnel strategies to your own business.",
           "Tips on building funnels that convert and drive business growth."
         ],
-        "outro": "Equip you with a clear, actionable plan to build and optimize sales funnels. With these strategies, you&apos;ll be able to improve your marketing efforts, drive more conversions, and increase revenue. Whether new to funnels or experienced marketers looking to sharpen your skills, this ebook provides valuable insights for greater success."
+        "outro": "Equip you with a clear, actionable plan to build and optimize sales funnels. With these strategies, you'll be able to improve your marketing efforts, drive more conversions, and increase revenue. Whether new to funnels or experienced marketers looking to sharpen your skills, this ebook provides valuable insights for greater success."
       }
     },
     {
@@ -718,7 +718,7 @@ export const books: Book[] = [
           "Proven methods for building customer trust and loyalty through transparency and quality.",
           "How to scale a business using automation, while maintaining consistency and quality."
         ],
-        "outro": "Equip you with the knowledge to create a powerful, profitable business that doesn&apos;t rely on personal branding. Whether you are just starting or looking to expand, this resource provides the tools and strategies you need to build a faceless brand that grows successfully and stands out."
+        "outro": "Equip you with the knowledge to create a powerful, profitable business that doesn't rely on personal branding. Whether you are just starting or looking to expand, this resource provides the tools and strategies you need to build a faceless brand that grows successfully and stands out."
       }
     },
     {
@@ -731,7 +731,7 @@ export const books: Book[] = [
       "detailedDescription": {
         "intro": "This ebook equips you with essential knowledge to succeed as Amazon Associates and grow your business through affiliate marketing.",
         "whatsInside": [
-          "Step-by-step instructions for joining Amazon&apos;s affiliate program",
+          "Step-by-step instructions for joining Amazon's affiliate program",
           "Profitable niche selection strategies",
           "Tips for creating engaging content that drives traffic",
           "Conversion optimization techniques",
@@ -777,7 +777,7 @@ export const books: Book[] = [
           "The importance of authenticity and passion in content creation",
           "How to navigate challenges and setbacks in the creator journey"
         ],
-        "outro": "By offering this ebook, you&apos;ll provide your clients with valuable insights into succeeding in the creator economy. Whether you&apos;re just starting out or looking to refine your skills, this resource offers actionable strategies for building a successful career as a content creator."
+        "outro": "By offering this ebook, you'll provide your clients with valuable insights into succeeding in the creator economy. Whether you're just starting out or looking to refine your skills, this resource offers actionable strategies for building a successful career as a content creator."
       }
     },
     {
@@ -803,7 +803,7 @@ export const books: Book[] = [
           "Ways to track income and reduce costs",
           "Tips for scaling a side hustle into a full-time business"
         ],
-        "outro": "This ebook offers you a clear, actionable plan to start and grow a profitable side hustle. With these strategies, you&apos;ll be able to boost your income and work toward greater financial independence. By reselling this product, you provide a valuable resource that helps you build a successful side hustle and drive your financial growth."
+        "outro": "This ebook offers you a clear, actionable plan to start and grow a profitable side hustle. With these strategies, you'll be able to boost your income and work toward greater financial independence. By reselling this product, you provide a valuable resource that helps you build a successful side hustle and drive your financial growth."
       }
     },
     {
@@ -841,7 +841,7 @@ export const books: Book[] = [
       "image": "http://localhost:3000/eBook/Facebook-Marketing-Influence/cover.jpg",
       download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Business', 'Social media', 'Marketing'],
-      "description": "This ebook equips you with essential knowledge to master Facebook marketing and grow your business. It offers clear guidance on using Facebook&apos;s advertising tools, strategies to enhance brand visibility, and methods to engage target audiences effectively.",
+      "description": "This ebook equips you with essential knowledge to master Facebook marketing and grow your business. It offers clear guidance on using Facebook's advertising tools, strategies to enhance brand visibility, and methods to engage target audiences effectively.",
       "detailedDescription": {
         "intro": "This ebook equips you with essential knowledge to master Facebook marketing and grow your business.",
         "whatsInside": [
@@ -860,7 +860,7 @@ export const books: Book[] = [
           "Analyzing and leveraging competitor strategies",
           "Developing a tailored Facebook marketing plan"
         ],
-        "outro": "Give you an actionable plan to unlock the full potential of Facebook marketing. With the strategies in this ebook, you&apos;ll be able to drive more traffic, leads, and sales, helping your business grow. Whether you are new to Facebook marketing or looking to sharpen your approach, this resource will guide them in creating effective ads and engaging content for lasting success."
+        "outro": "Give you an actionable plan to unlock the full potential of Facebook marketing. With the strategies in this ebook, you'll be able to drive more traffic, leads, and sales, helping your business grow. Whether you are new to Facebook marketing or looking to sharpen your approach, this resource will guide them in creating effective ads and engaging content for lasting success."
       }
     },
     {
@@ -1026,7 +1026,7 @@ export const books: Book[] = [
           "Considerations for selecting the right AI tools for specific needs",
           "Next steps for continuing the AI productivity journey"
         ],
-        "outro": "Readers will be guided through the knowledge needed to harness AI&apos;s potential. The book offers ways to use AI tools and platforms in daily work and serves as a valuable resource for anyone looking to stay ahead in the continuously progressing world of work and productivity."
+        "outro": "Readers will be guided through the knowledge needed to harness AI's potential. The book offers ways to use AI tools and platforms in daily work and serves as a valuable resource for anyone looking to stay ahead in the continuously progressing world of work and productivity."
       }
     },
     {
@@ -1054,11 +1054,11 @@ export const books: Book[] = [
           "Strategies for identifying viable business opportunities",
           "Techniques for overcoming fears and self-doubt",
           "The importance of a well-crafted business plan",
-          "The ABC&apos;s of business success: Attitude, Belief, and Consistency",
+          "The ABC's of business success: Attitude, Belief, and Consistency",
           "How to turn failure into valuable learning experiences",
           "The power of vision, determination, and problem-solving skills"
         ],
-        "outro": "Gain a clear, practical plan to help you become successful entrepreneurs, equipped with the mindset and tools you need to thrive in business. Whether you&apos;re just starting out or looking to improve, this resource provides the guidance to help them succeed."
+        "outro": "Gain a clear, practical plan to help you become successful entrepreneurs, equipped with the mindset and tools you need to thrive in business. Whether you're just starting out or looking to improve, this resource provides the guidance to help them succeed."
       }
     },
     {
@@ -1084,7 +1084,7 @@ export const books: Book[] = [
           "How to build trust and credibility with targeted copy",
           "Practical ways to use psychology to boost page performance"
         ],
-        "outro": "Equip you to master the art of persuasive landing pages that don&apos;t just sell but also connect. With practical tips on psychology, word choice, and storytelling, this ebook helps users turn your landing pages into valuable marketing tools. Ideal for marketers, entrepreneurs, and content creators, this resource provides tools and insights needed to increase conversions and engagement for your business pages."
+        "outro": "Equip you to master the art of persuasive landing pages that don't just sell but also connect. With practical tips on psychology, word choice, and storytelling, this ebook helps users turn your landing pages into valuable marketing tools. Ideal for marketers, entrepreneurs, and content creators, this resource provides tools and insights needed to increase conversions and engagement for your business pages."
       }
     },
     {
@@ -1111,7 +1111,7 @@ export const books: Book[] = [
           "Managing taxes, payments, and order fulfillment efficiently",
           "Scaling an eCommerce business for long-term success"
         ],
-        "outro": "By offering this ebook, you&apos;ll give your clients a valuable resource that equips them with everything you need to succeed in the world of eCommerce. Whether you are new to Shopify or experienced online sellers, this guide will help them optimize your stores, grow your customer base, and boost your sales."
+        "outro": "By offering this ebook, you'll give your clients a valuable resource that equips them with everything you need to succeed in the world of eCommerce. Whether you are new to Shopify or experienced online sellers, this guide will help them optimize your stores, grow your customer base, and boost your sales."
       }
     },
     {
@@ -1137,7 +1137,7 @@ export const books: Book[] = [
           "Ways to streamline operations and delegate effectively",
           "How to track business growth and improve strategies for success"
         ],
-        "outro": "Gain a clear, actionable plan to help you build and scale your online business. With these strategies, you&apos;ll be able to create sustainable systems that drive growth and maximize profits. Whether new to online business or looking to refine your methods, this resource will guide them to long-term success."
+        "outro": "Gain a clear, actionable plan to help you build and scale your online business. With these strategies, you'll be able to create sustainable systems that drive growth and maximize profits. Whether new to online business or looking to refine your methods, this resource will guide them to long-term success."
       }
     },
     {
@@ -1215,7 +1215,7 @@ export const books: Book[] = [
           "How to track store growth and improve performance",
           "Strategies to build a recognizable brand on Etsy"
         ],
-        "outro": "By offering this product, you&apos;re giving valuable insights that will help you achieve long-term success on the platform. With these strategies, you&apos;ll be able to increase sales, build brand loyalty, and drive business growth. This resource offers clear steps to help you start and scale your Etsy business, making it perfect for those new to Etsy or looking to improve your current store."
+        "outro": "By offering this product, you're giving valuable insights that will help you achieve long-term success on the platform. With these strategies, you'll be able to increase sales, build brand loyalty, and drive business growth. This resource offers clear steps to help you start and scale your Etsy business, making it perfect for those new to Etsy or looking to improve your current store."
       }
     },
     {
@@ -1282,7 +1282,7 @@ export const books: Book[] = [
         "whatsInside": [
           "Detailed instructions for setting up a Google AdSense account",
           "Tips on placing ads in high-traffic areas to increase click-through rates",
-          "Guidance on selecting the right ad types and customizing them for the website&apos;s look and feel",
+          "Guidance on selecting the right ad types and customizing them for the website's look and feel",
           "Strategies for tracking performance and optimizing ads based on analytics",
           "Information on common pitfalls to avoid when using AdSense"
         ],
@@ -1309,13 +1309,13 @@ export const books: Book[] = [
           "Guidance on setting clear goals for Instagram ad campaigns",
           "Steps for identifying and targeting the right audience",
           "Tips for creating engaging ads that drive clicks and conversions",
-          "Insights on using Instagram&apos;s ad formats, such as Stories, Carousel, and Video ads",
+          "Insights on using Instagram's ad formats, such as Stories, Carousel, and Video ads",
           "Techniques for measuring ad performance and making improvements"
         ],
         "whatReadersWillLearn": [
           "How to create and optimize Instagram ad campaigns that boost brand awareness",
           "Best practices for designing ads that capture attention and increase engagement",
-          "How to use Instagram&apos;s advanced targeting tools to reach the right audience",
+          "How to use Instagram's advanced targeting tools to reach the right audience",
           "Strategies for using ads to drive traffic, sales, and follower growth",
           "How to analyze ad performance and make data-driven decisions to improve future campaigns."
         ],
