@@ -4,8 +4,8 @@ export const courses: Book[] = [
     {
         "id": 1,
         "title": "Affiliate Marketing School",
-        "image": "https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/Affiliate-Marketing-School/cover.jpg",
-        download: 'https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/Affiliate-Marketing-School/course.zip',
+        "image": "courses/Affiliate-Marketing-School/cover.jpg",
+        download: 'courses/Affiliate-Marketing-School/course.zip',
         "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing', 'eCommerce'],
         "description": "This course gives your clients the essential knowledge to succeed in affiliate marketing. It offers clear guidance on how to choose the right affiliate products, build a website, and effectively market products to maximize earnings. With practical tips on creating a strong sales page, selecting the best affiliate networks, and driving traffic to your offers, this resource gives you a clear plan to grow your business through affiliate marketing.",
         "detailedDescription": {
@@ -32,8 +32,8 @@ export const courses: Book[] = [
       {
         "id": 2,
         "title": "Mastering ChatGPT",
-        "image": "https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/Mastering-ChatGPT/cover.jpg",
-        download: 'https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/Mastering-ChatGPT/course.zip',
+        "image": "courses/Mastering-ChatGPT/cover.jpg",
+        download: 'courses/Mastering-ChatGPT/course.zip',
         "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing'],
         "description": "This video course gives you a 20-part guide to mastering ChatGPT for business, covering account setup, management, and feature optimization for business tasks. Customers will also learn to navigate and upgrade to Plus or Team plans for collaboration, with step-by-step guidance on using ChatGPT for productivity, automation, and communication.",
         "detailedDescription": {
@@ -58,8 +58,8 @@ export const courses: Book[] = [
       {
         "id": 3,
         "title": "Product Launch School",
-        "image": "https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/Product-Launch-School/cover.jpg",
-        download: 'https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/Product-Launch-School/course.zip',
+        "image": "courses/Product-Launch-School/cover.jpg",
+        download: 'courses/Product-Launch-School/course.zip',
         "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing', 'eCommerce'],
         "description": "This course equips you with essential knowledge for launching a product successfully. It offers step-by-step guidance on creating the perfect launch plan, from product development to post-launch tactics.",
         "detailedDescription": {
@@ -85,8 +85,8 @@ export const courses: Book[] = [
       {
         "id": 4,
         "title": "Sell Your Creations with Etsy",
-        "image": "https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/Sell-Your-Creations-with-Etsy/cover.jpg",
-        download: 'https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/Sell-Your-Creations-with-Etsy/course.zip',
+        "image": "courses/Sell-Your-Creations-with-Etsy/cover.jpg",
+        download: 'courses/Sell-Your-Creations-with-Etsy/course.zip',
         "tags": ['Entrepreneurship', 'Business', 'Marketing', 'eCommerce'],
         "description": "This video course gives you a step-by-step guide to selling on Etsy. Through 20 HD videos, it covers everything from opening an account to creating listings and handling payments, helping them build and grow a successful Etsy shop.",
         "detailedDescription": {
@@ -114,8 +114,8 @@ export const courses: Book[] = [
       {
         "id": 5,
         "title": "Social Marketing School",
-        "image": "https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/Social-Marketing-School/cover.jpg",
-        download: 'https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/Social-Marketing-School/course.zip',
+        "image": "courses/Social-Marketing-School/cover.jpg",
+        download: 'courses/Social-Marketing-School/course.zip',
         "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing'],
         "description": "This book is the ultimate guide for businesses looking to harness the power of social media marketing. It offers a comprehensive overview of strategies and tactics to grow your brand, engage customers, and drive sales through social platforms.",
         "detailedDescription": {
@@ -143,8 +143,8 @@ export const courses: Book[] = [
       {
         "id": 6,
         "title": "Influencer Marketing Mastery",
-        "image": "https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/Influencer-Marketing-Mastery/cover.jpg",
-        download: 'https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/Influencer-Marketing-Mastery/course.zip',
+        "image": "courses/Influencer-Marketing-Mastery/cover.jpg",
+        download: 'courses/Influencer-Marketing-Mastery/course.zip',
         "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing'],
         "description": "This course equips you with essential knowledge to master influencer marketing, offering clear instructions on how to collaborate with influencers to boost brand visibility, engagement, and sales. It provides guidance on finding the right influencers, creating successful campaigns, and avoiding common mistakes.",
         "detailedDescription": {
@@ -168,8 +168,8 @@ export const courses: Book[] = [
       {
         "id": 7,
         "title": "Launch Your Online Course",
-        "image": "https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/Launch-Your-Online-Course/cover.jpg",
-        download: 'https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/Launch-Your-Online-Course/course.zip',
+        "image": "courses/Launch-Your-Online-Course/cover.jpg",
+        download: 'courses/Launch-Your-Online-Course/course.zip',
         "tags": ['Entrepreneurship', 'Business'],
         "description": "This course gives you a step-by-step guide to creating and launching online courses, covering course planning, content creation, and marketing to attract the right audience and generate long-term revenue.",
         "detailedDescription": {
@@ -194,8 +194,8 @@ export const courses: Book[] = [
       {
         "id": 8,
         "title": "TikTok Ad Training Kit",
-        "image": "https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/TikTok-Ad-Training-Kit/cover.jpg",
-        download: 'https://gpotw-academy.s3.eu-west-2.amazonaws.com/courses/TikTok-Ad-Training-Kit/course.zip',
+        "image": "courses/TikTok-Ad-Training-Kit/cover.jpg",
+        download: 'courses/TikTok-Ad-Training-Kit/course.zip',
         "tags": ['Business', 'Social media', 'Marketing'],
         "description": "This course equips you with essential knowledge to create successful TikTok ad campaigns and grow your business. It provides step-by-step instructions on setting up ads, targeting the right audience, and optimizing performance for maximum results.",
         "detailedDescription": {

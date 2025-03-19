@@ -14,9 +14,12 @@ import { courses } from './courses';
 import { guides } from './guides';
 import Footer from '../public/footer';
 import { motion, useAnimation, useInView } from 'framer-motion';
-import AWS from 'aws-sdk';
+import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import { GetObjectCommandOutput } from "@aws-sdk/client-s3";
+
 
 import { ReactNode } from 'react';
+import AutoDownloadImage from './downloadImage';
 
 const AnimatedItem = ({ children }: { children: ReactNode }) => {
   const controls = useAnimation();
@@ -54,8 +57,6 @@ export default function Library() {
   const [downloadData, setDownloadData] = useState<{ downloads: number, subscription_renew: number } | null>(null);
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [booksDisplayed, setBooksDisplayed] = useState<number>(8);
-
-  console.log(subscription?.status);
 
   const subscribed = subscription && (subscription.status === 'active'  || subscription.status === 'complete' || subscription.status === 'life');
 
@@ -104,63 +105,69 @@ export default function Library() {
   };
 
   
-  const confirmAndDownload = async () => {
+  const confirmAndDownload = async (): Promise<void> => {
     if (!selectedBook) return;
-  
+
     const response = await fetch('/api/account/confirm-download', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': xsrfToken,
-      },
-      credentials: 'include',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': xsrfToken,
+        },
+        credentials: 'include',
     });
-  
+
     const data = await response.json();
-  
+
     if (data.confirm) {
-      const s3 = new AWS.S3({
-        region: process.env.NEXT_PUBLIC_AWS_REGION,
-      });
-  
-      const bucketName = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME;
-      if (!bucketName) {
-        console.error('Bucket name is not defined in environment variables');
-        alert('Download failed. Please try again later.');
-        return;
-      }
-  
-      const params = {
-        Bucket: bucketName,
-        Key: selectedBook.download, 
-      };
-  
-      s3.getObject(params, (err, data) => {
-        if (err) {
-          console.error(err);
-          alert('Download failed. Please try again later.');
-          return;
+        const s3 = new S3Client({
+            region: process.env.NEXT_PUBLIC_AWS_REGION,
+        });
+
+        const bucketName = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME;
+        if (!bucketName) {
+            console.error('Bucket name is not defined in environment variables');
+            alert('Download failed. Please try again later.');
+            return;
         }
-  
-        if (!data.Body) {
-          console.error('No data returned from S3');
-          alert('Download failed. Please try again later.');
-          return;
+
+        const params = {
+            Bucket: bucketName,
+            Key: selectedBook.download,
+        };
+
+        try {
+            const command = new GetObjectCommand(params);
+            const result: GetObjectCommandOutput = await s3.send(command);
+
+            if (result.Body instanceof ReadableStream) {
+                const reader = result.Body.getReader();
+                let chunks: Uint8Array[] = [];
+                let done, value;
+                while (({ done, value } = await reader.read()) && !done) {
+                    chunks.push(value);
+                }
+                const blob = new Blob(chunks, { type: result.ContentType || 'application/octet-stream' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = selectedBook.title;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                setDownloadModalOpen(false);
+            } else {
+                console.error('No data returned from S3');
+                alert('Download failed. Please try again later.');
+            }
+        } catch (err) {
+            console.error('Error fetching from S3:', err);
+            alert('Download failed. Please try again later.');
         }
-  
-        const blob = new Blob([data.Body as BlobPart], { type: data.ContentType });
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = selectedBook.title; 
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        setDownloadModalOpen(false);
-      });
     } else {
-      alert('Download could not be confirmed. Please try again later.');
+        alert('Download could not be confirmed. Please try again later.');
     }
-  };
+};
 
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
@@ -263,7 +270,7 @@ export default function Library() {
                   onClick={() => openModal(book)}
                   whileHover={{ scale: 1.05 }}
                 >
-                  <img src={book.image} alt={book.title} style={{ aspectRatio: '0.773' }} className="w-full object-cover" />
+                  <AutoDownloadImage imageKey={book.image} />
                 </motion.div>
               </AnimatedItem>
             ))}
@@ -295,7 +302,7 @@ export default function Library() {
                   onClick={() => openModal(course)}
                   whileHover={{ scale: 1.05 }}
                 >
-                  <img src={course.image} alt={course.title} style={{ aspectRatio: '0.773' }} className="w-full object-cover" />
+                   <AutoDownloadImage imageKey={course.image} />
                 </motion.div>
               </AnimatedItem>
             ))}
@@ -317,7 +324,7 @@ export default function Library() {
                   onClick={() => openModal(guide)}
                   whileHover={{ scale: 1.05 }}
                 >
-                  <img src={guide.image} alt={guide.title} style={{ aspectRatio: '0.773' }} className="w-full object-cover" />
+                 <AutoDownloadImage imageKey={guide.image} />
                 </motion.div>
               </AnimatedItem>
             ))}
