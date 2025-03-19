@@ -14,6 +14,7 @@ import { courses } from './courses';
 import { guides } from './guides';
 import Footer from '../public/footer';
 import { motion, useAnimation, useInView } from 'framer-motion';
+import AWS from 'aws-sdk';
 
 import { ReactNode } from 'react';
 
@@ -102,6 +103,7 @@ export default function Library() {
     setDownloadModalOpen(true);
   };
 
+  
   const confirmAndDownload = async () => {
     if (!selectedBook) return;
   
@@ -117,13 +119,44 @@ export default function Library() {
     const data = await response.json();
   
     if (data.confirm) {
-      const link = document.createElement('a');
-      link.href = selectedBook.download;
-      link.download = selectedBook.title; // Optional: Set the download attribute to suggest a filename
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setDownloadModalOpen(false);
+      const s3 = new AWS.S3({
+        region: process.env.NEXT_PUBLIC_AWS_REGION,
+      });
+  
+      const bucketName = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME;
+      if (!bucketName) {
+        console.error('Bucket name is not defined in environment variables');
+        alert('Download failed. Please try again later.');
+        return;
+      }
+  
+      const params = {
+        Bucket: bucketName,
+        Key: selectedBook.download, 
+      };
+  
+      s3.getObject(params, (err, data) => {
+        if (err) {
+          console.error(err);
+          alert('Download failed. Please try again later.');
+          return;
+        }
+  
+        if (!data.Body) {
+          console.error('No data returned from S3');
+          alert('Download failed. Please try again later.');
+          return;
+        }
+  
+        const blob = new Blob([data.Body as BlobPart], { type: data.ContentType });
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = selectedBook.title; 
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setDownloadModalOpen(false);
+      });
     } else {
       alert('Download could not be confirmed. Please try again later.');
     }
