@@ -4,8 +4,8 @@ export const books: Book[] = [
     {
       id: 5,
       title: 'Marketing Plan Simplified',
-      image: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/cover.jpg',
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      image: 'eBook/Marketing-Plan-Simplified/cover.jpg',
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       tags: ['Business','Marketing'],
       description: 'This ebook is crafted to help you create a streamlined marketing plan that makes reaching your target audience simple and effective. It provides clear guidance on defining an ideal customer, creating unique branding, setting achievable goals, and building a consistent marketing approach that evolves with your business.',
       detailedDescription: {
@@ -30,8 +30,8 @@ export const books: Book[] = [
     {
       id: 3,
       title: 'How to Build a Website',
-      image: 'http://localhost:3000/eBook/How-to-Build-a-Website/cover.jpg',
-      download: 'http://localhost:3000/eBook/How-to-Build-a-Website/book.pdf',
+      image: 'eBook/How-to-Build-a-Website/cover.jpg',
+      download: 'eBook/How-to-Build-a-Website/book.pdf',
       tags: ['Business'],
       description: 'This ebook is a complete guide to helping you create a professional website that attracts visitors and grows your business. With easy-to-follow instructions and real-world examples, this resource simplifies the website-building process, making it accessible to beginners and business owners alike.',
       detailedDescription: {
@@ -57,8 +57,8 @@ export const books: Book[] = [
     {
       id: 6,
       title: 'Online Business Launching Strategies',
-      image: 'http://localhost:3000/eBook/Online-Business-Launching-Strategies/cover.jpg',
-      download: 'http://localhost:3000/eBook/Online-Business-Launching-Strategies/book.pdf',
+      image: 'eBook/Online-Business-Launching-Strategies/cover.jpg',
+      download: 'eBook/Online-Business-Launching-Strategies/book.pdf',
       tags: ['Entrepreneurship', 'Business', 'Marketing'],
       description: 'This ebook provides you with proven strategies to successfully launch online businesses. It guides them through planning, building, and growing your ventures while avoiding common pitfalls that derail many new entrepreneurs. The book combines practical advice, real-world examples, and step-by-step techniques to help readers confidently bring your business ideas to life.',
       detailedDescription: {
@@ -83,8 +83,8 @@ export const books: Book[] = [
     {
       "id": 17,
       "title": "Side Hustles Done Right",
-      "image": "http://localhost:3000/eBook/Side-Hustles-Done-Right/cover.jpg",
-      download: 'http://localhost:3000/eBook/Side-Hustles-Done-Right/book.pdf',
+      "image": "eBook/Side-Hustles-Done-Right/cover.jpg",
+      download: 'eBook/Side-Hustles-Done-Right/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing', 'eCommerce'],
       "description": "This ebook is a detailed guide on turning passions into profits via side hustles. It offers proven strategies and tips for aspiring entrepreneurs who want to keep your day jobs.",
       "detailedDescription": {
@@ -112,8 +112,8 @@ export const books: Book[] = [
     {
       "id": 21,
       "title": "Mastery of Ecommerce",
-      "image": "http://localhost:3000/eBook/Mastery-of-Ecommerce/cover.jpg",
-      download: 'http://localhost:3000/eBook/Mastery-of-Ecommerce/book.pdf',
+      "image": "eBook/Mastery-of-Ecommerce/cover.jpg",
+      download: 'eBook/Mastery-of-Ecommerce/book.pdf',
       "tags": ['Business', 'eCommerce'],
       "description": "This ebook equips you with the essential tools to master eCommerce and drive sales growth. It offers clear, step-by-step instructions on setting up an online store, optimizing conversion rates, and amplifying content to boost sales.",
       "detailedDescription": {
@@ -142,8 +142,8 @@ export const books: Book[] = [
     {
       id: 1,
       title: 'Build Positive Digital Presence',
-      image: 'http://localhost:3000/eBook/Build-Positive-Digital-Presence/cover.jpg',
-      download: 'http://localhost:3000/eBook/Build-Positive-Digital-Presence/book.pdf',
+      image: 'eBook/Build-Positive-Digital-Presence/cover.jpg',
+      download: 'eBook/Build-Positive-Digital-Presence/book.pdf',
       tags: ['Business', 'Marketing',],
       description: 'This ebook is designed to help you build a positive digital presence that boosts brand reputation, encourages customer engagement, and effectively manages feedback and online crises. With simple, step-by-step guides, it teaches valuable skills to make a lasting impact, empowering businesses to shape your online image confidently and strategically.',
       detailedDescription: {
@@ -168,8 +168,8 @@ export const books: Book[] = [
     {
       id: 2,
       title: 'Building a Powerful Brand',
-      image: 'http://localhost:3000/eBook/Building-a-Powerful-Brand/cover.png',
-      download: 'http://localhost:3000/eBook/Building-a-Powerful-Brand/book.pdf',
+      image: 'eBook/Building-a-Powerful-Brand/cover.png',
+      download: 'eBook/Building-a-Powerful-Brand/book.pdf',
       tags: ['Business', 'Marketing'],
       description: 'This ebook helps you create a powerful brand that stands out and connects with your audience. It provides clear, step-by-step instructions on defining brand values, developing a unique brand identity, and crafting messages that resonate. Perfect for entrepreneurs and marketers, this guide offers practical strategies to build a memorable brand that drives business growth and customer loyalty.',
       detailedDescription: {
@@ -194,8 +194,8 @@ export const books: Book[] = [
     {
       id: 4,
       title: 'Keep Them Coming Back',
-      image: 'http://localhost:3000/eBook/Keep-Them-Coming-Back/cover.jpg',
-      download: 'http://localhost:3000/eBook/Keep-Them-Coming-Back/book.pdf',
+      image: 'eBook/Keep-Them-Coming-Back/cover.jpg',
+      download: 'eBook/Keep-Them-Coming-Back/book.pdf',
       tags: ['Business', 'Marketing'],
       description: 'This ebook teaches you how to build lasting customer relationships and boost retention with proven strategies. It provides easy-to-follow techniques for turning one-time buyers into loyal, repeat customers through personalization, engagement, and proactive service.',
       detailedDescription: {
@@ -220,8 +220,8 @@ export const books: Book[] = [
     {
       id: 7,
       title: 'TikTok Viral Marketing',
-      image: 'http://localhost:3000/eBook/TikTok-Viral-Marketing/cover.png',
-      download: 'http://localhost:3000/eBook/TikTok-Viral-Marketing/book.pdf',
+      image: 'eBook/TikTok-Viral-Marketing/cover.png',
+      download: 'eBook/TikTok-Viral-Marketing/book.pdf',
       tags: ['Business', 'Social media', 'Marketing'],
       description: "This ebook equips you with essential strategies for mastering TikTok marketing and growing your businesses. Packed with practical insights, it provides clear, step-by-step instructions for creating engaging content, building a strong presence on the platform, and leveraging TikTok's unique features for maximum impact.",
       detailedDescription: {
@@ -250,8 +250,8 @@ export const books: Book[] = [
     {
       "id": 51,
       "title": "Instagram Marketing Efficiency",
-      "image": "http://localhost:3000/eBook/Instagram-Marketing-Efficiency/cover.jpg",
-      download: 'http://localhost:3000/eBook/Instagram-Marketing-Efficiency/book.pdf',
+      "image": "eBook/Instagram-Marketing-Efficiency/cover.jpg",
+      download: 'eBook/Instagram-Marketing-Efficiency/book.pdf',
       "tags": ['Business', 'Social media', 'Marketing'],
       "description": "This ebook equips you with essential knowledge to improve your Instagram marketing strategies and grow your business. It offers clear instructions on optimizing Instagram profiles, creating engaging content, and running successful ad campaigns that increase visibility and attract more customers.",
       "detailedDescription": {
@@ -282,8 +282,8 @@ export const books: Book[] = [
     {
       id: 8,
       title: 'MicroSaaS Success Blueprint',
-      image: 'http://localhost:3000/eBook/MicroSaaS-Success-Blueprint/cover.jpg',
-      download: 'http://localhost:3000/eBook/MicroSaaS-Success-Blueprint/book.pdf',
+      image: 'eBook/MicroSaaS-Success-Blueprint/cover.jpg',
+      download: 'eBook/MicroSaaS-Success-Blueprint/book.pdf',
       tags: ['Entrepreneurship', 'Business'],
       description: 'This ebook teaches you how to build a successful MicroSaaS business by identifying niche markets, validating ideas, and creating solutions that generate steady income. It provides actionable steps and strategies to create software products with minimal resources, making it accessible for anyone ready to start your entrepreneurial journey.',
       detailedDescription: {
@@ -308,8 +308,8 @@ export const books: Book[] = [
     {
       id: 9,
       title: 'Affiliate Marketing Essentials',
-      image: 'http://localhost:3000/eBook/Affiliate-Marketing-Essentials/cover.png',
-      download: 'http://localhost:3000/eBook/Affiliate-Marketing-Essentials/book.pdf',
+      image: 'eBook/Affiliate-Marketing-Essentials/cover.png',
+      download: 'eBook/Affiliate-Marketing-Essentials/book.pdf',
       tags: ['Entrepreneurship', 'Business', 'Marketing', 'eCommerce'],
       description: 'This ebook equips you with essential knowledge to succeed in affiliate marketing by teaching them how to choose the best products, build an audience, and generate sales through various marketing techniques. It offers step-by-step guidance on creating sales pages, promoting products, and driving traffic to boost earnings.',
       detailedDescription: {
@@ -334,8 +334,8 @@ export const books: Book[] = [
     {
       id: 10,
       title: 'Behavioral Marketing',
-      image: 'http://localhost:3000/eBook/Behavioral-Marketing/cover.jpg',
-      download: 'http://localhost:3000/eBook/Behavioral-Marketing/book.pdf',
+      image: 'eBook/Behavioral-Marketing/cover.jpg',
+      download: 'eBook/Behavioral-Marketing/book.pdf',
       tags: ['Entrepreneurship', 'Business', 'Social media', 'Marketing'],
       description: 'This ebook teaches you how to use psychology and behavioral insights to create powerful marketing strategies that drive conversions and build stronger customer relationships. It offers practical techniques and step-by-step guidance to understand what motivates people, enabling businesses to connect with your audience on a deeper level and achieve lasting success.',
       detailedDescription: {
@@ -360,8 +360,8 @@ export const books: Book[] = [
     {
       id: 12,
       title: 'Google Search Ads Unlocked',
-      image: 'http://localhost:3000/eBook/Google-Search-Ads-Unlocked/cover.jpg',
-      download: 'http://localhost:3000/eBook/Google-Search-Ads-Unlocked/book.pdf',
+      image: 'eBook/Google-Search-Ads-Unlocked/cover.jpg',
+      download: 'eBook/Google-Search-Ads-Unlocked/book.pdf',
       tags: ['Business', 'Marketing'],
       description: 'This ebook teaches you how to create and manage profitable Google Search Ads campaigns that generate clicks, drive conversions, and grow your business. It offers easy-to-follow strategies for keyword research, ad copy creation, and campaign optimization, helping businesses maximize your return on investment.',
       detailedDescription: {
@@ -386,8 +386,8 @@ export const books: Book[] = [
     {
       id: 13,
       title: 'High Ticket Affiliate Marketing',
-      image: 'http://localhost:3000/eBook/High-Ticket-Affiliate-Marketing/cover.jpg',
-      download: 'http://localhost:3000/eBook/High-Ticket-Affiliate-Marketing/book.pdf',
+      image: 'eBook/High-Ticket-Affiliate-Marketing/cover.jpg',
+      download: 'eBook/High-Ticket-Affiliate-Marketing/book.pdf',
       tags: ['Business','Marketing', 'eCommerce'],
       description: 'This ebook teaches you how to succeed in high-ticket affiliate marketing by focusing on premium products and building trust with affluent buyers. It offers easy-to-follow strategies for choosing profitable programs, attracting high-quality leads, and crafting sales funnels that maximize commissions and drive long-term growth.',
       detailedDescription: {
@@ -412,8 +412,8 @@ export const books: Book[] = [
     {
       "id": 14,
       "title": "YouTube Business Studio",
-      "image": "http://localhost:3000/eBook/YouTube-Business-Studio/cover.jpg",
-      download: 'http://localhost:3000/eBook/YouTube-Business-Studio/book.pdf',
+      "image": "eBook/YouTube-Business-Studio/cover.jpg",
+      download: 'eBook/YouTube-Business-Studio/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'Social media'],
       "description": "This ebook gives you the tools you need to build a successful business on YouTube. It provides step-by-step guidance on creating and optimizing a YouTube channel, producing engaging videos, and using YouTube to drive traffic, increase sales, and build a loyal customer base.",
       "detailedDescription": {
@@ -442,8 +442,8 @@ export const books: Book[] = [
     {
       "id": 15,
       "title": "The Power of Prototypes",
-      "image": "http://localhost:3000/eBook/The-Power-of-Prototypes/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/The-Power-of-Prototypes/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business'],
       "description": "This ebook teaches you how to use prototypes to turn your ideas into reality by testing, refining, and gathering feedback before full development. It offers practical steps to create and improve prototypes, allowing businesses to reduce risk and build products that truly meet market demands.",
       "detailedDescription": {
@@ -468,8 +468,8 @@ export const books: Book[] = [
     {
       "id": 16,
       "title": "Social Media Marketing Influence",
-      "image": "http://localhost:3000/eBook/Social-Media-Marketing-Influence/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Social-Media-Marketing-Influence/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing'],
       "description": "This ebook equips you with powerful strategies to succeed in social media marketing by building influence and boosting engagement. It provides clear instructions on how to create content that captures attention, builds a loyal following, and effectively promotes products or services.",
       "detailedDescription": {
@@ -497,8 +497,8 @@ export const books: Book[] = [
     {
       "id": 18,
       "title": "Search Engine Optimization",
-      "image": "http://localhost:3000/eBook/Search-Engine-Optimization/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Search-Engine-Optimization/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Business', 'Marketing'],
       "description": "This ebook equips you with essential knowledge to master Search Engine Optimization (SEO) and boost your online presence. It provides clear, step-by-step guidance on how to improve search engine rankings, increase website traffic, and generate more leads through effective SEO strategies.",
       "detailedDescription": {
@@ -515,8 +515,8 @@ export const books: Book[] = [
     {
       "id": 19,
       "title": "Power Of User-Generated Content",
-      "image": "http://localhost:3000/eBook/Power-Of-User-Generated-Content/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Power-Of-User-Generated-Content/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Business', 'Social media', 'Marketing'],
       "description": "This ebook equips you with powerful strategies to harness the impact of user-generated content (UGC) to boost brand engagement, foster trust, and build a loyal community. It offers practical guidance on how to inspire customers to create and share authentic content that strengthens your business and deepens customer connections.",
       "detailedDescription": {
@@ -544,8 +544,8 @@ export const books: Book[] = [
     {
       "id": 20,
       "title": "Mastering Organic Traffic",
-      "image": "http://localhost:3000/eBook/Mastering-Organic-Traffic/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Mastering-Organic-Traffic/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing'],
       "description": "This ebook gives you proven strategies to boost organic traffic to your websites. It will help them grow online without relying on paid ads. The ebook offers step-by-step guidance on mastering SEO, leveraging social media, and optimizing content to increase visibility and attract more visitors.",
       "detailedDescription": {
@@ -569,8 +569,8 @@ export const books: Book[] = [
     {
       "id": 22,
       "title": "Mental Toughness",
-      "image": "http://localhost:3000/eBook/Mental-Toughness/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Mental-Toughness/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business'],
       "description": "This ebook helps you develop mental toughness, teaching them how to stay strong and focused even when facing the toughest challenges in business. It offers practical steps to build resilience, manage stress, and overcome setbacks, empowering entrepreneurs to lead with confidence and stay calm under pressure.",
       "detailedDescription": {
@@ -595,8 +595,8 @@ export const books: Book[] = [
     {
       "id": 23,
       "title": "Optimizing Email Open Rates",
-      "image": "http://localhost:3000/eBook/Optimizing-Email-Open-Rates/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Optimizing-Email-Open-Rates/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Business', 'Marketing'],
       "description": "This ebook equips you with the knowledge you need to boost your email marketing success. It provides easy-to-follow guidance on how to create emails that get opened and read. It's perfect for entrepreneurs, marketers, and anyone who wants to improve your email marketing results.",
       "detailedDescription": {
@@ -621,8 +621,8 @@ export const books: Book[] = [
     {
       "id": 24,
       "title": "Power of SMS Marketing",
-      "image": "http://localhost:3000/eBook/Power-of-SMS-Marketing/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Power-of-SMS-Marketing/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Business', 'Marketing'],
       "description": "This ebook shows you how to use SMS marketing to boost sales, connect with customers, and grow your business. It provides simple steps to create effective text message campaigns, personalize messages, and follow important rules, helping businesses reach more people right away.",
       "detailedDescription": {
@@ -647,8 +647,8 @@ export const books: Book[] = [
     {
       "id": 25,
       "title": "Mastering Digital Products",
-      "image": "http://localhost:3000/eBook/Mastering-Digital-Products/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Mastering-Digital-Products/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'Marketing', 'eCommerce'],
       "description": "This ebook provides you with essential strategies to create and sell digital products for passive income. It covers every step of the process, from identifying profitable niches to setting up sales funnels and automating customer support.",
       "detailedDescription": {
@@ -672,8 +672,8 @@ export const books: Book[] = [
     {
       "id": 26,
       "title": "Funnel Mastery",
-      "image": "http://localhost:3000/eBook/Funnel-Mastery/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Funnel-Mastery/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing', 'eCommerce'],
       "description": "This ebook is designed to help businesses master the art of building effective sales funnels, leading to higher conversions and more profitable outcomes. It provides clear, step-by-step guidance on creating funnels that turn leads into paying customers, ensuring you can grow your business with ease.",
       "detailedDescription": {
@@ -698,8 +698,8 @@ export const books: Book[] = [
     {
       "id": 28,
       "title": "Faceless Creator",
-      "image": "http://localhost:3000/eBook/Faceless-Creator/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Faceless-Creator/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing', 'eCommerce'],
       "description": "This ebook teaches you how to build a successful faceless brand by leveraging automation, anonymity, and customer-focused strategies. It offers simple and practical steps for building trust without a personal identity, scaling through automation, and creating a business that thrives on its values, not on public recognition.",
       "detailedDescription": {
@@ -724,8 +724,8 @@ export const books: Book[] = [
     {
       "id": 29,
       "title": "Amazon Associate Influence",
-      "image": "http://localhost:3000/eBook/Amazon-Associate-Influence/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Amazon-Associate-Influence/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing', 'eCommerce'],
       "description": "This ebook equips you with essential knowledge to succeed as Amazon Associates and grow your business through affiliate marketing. It offers clear, actionable instructions on how to choose the right products, build a strong online presence, and maximize earnings with the Amazon Affiliate program.",
       "detailedDescription": {
@@ -755,8 +755,8 @@ export const books: Book[] = [
     {
       "id": 30,
       "title": "The Creator Economy",
-      "image": "http://localhost:3000/eBook/The-Creator-Economy/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/The-Creator-Economy/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing'],
       "description": "This ebook equips you with the essential knowledge to thrive in the creator economy and turn your passions into profit. It provides step-by-step instructions on how to become a successful content creator, build an audience, and monetize your passion by leveraging modern platforms and strategies.",
       "detailedDescription": {
@@ -783,8 +783,8 @@ export const books: Book[] = [
     {
       "id": 31,
       "title": "The Side Hustlers Blueprint",
-      "image": "http://localhost:3000/eBook/The-Side-Hustlers-Blueprint/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/The-Side-Hustlers-Blueprint/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing', 'eCommerce'],
       "description": "This ebook gives you knowledge you need to start and grow a profitable side hustle. It provides step-by-step instructions for identifying lucrative opportunities, managing time efficiently, and increasing profits.",
       "detailedDescription": {
@@ -809,8 +809,8 @@ export const books: Book[] = [
     {
       "id": 32,
       "title": "Social Media Finetuning",
-      "image": "http://localhost:3000/eBook/Social-Media-Finetuning/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Social-Media-Finetuning/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Business', 'Social media', 'Marketing'],
       "description": "This ebook equips you with essential knowledge to improve your social media marketing strategies and build a successful online presence. It provides step-by-step guidance on creating, managing, and optimizing social media campaigns that engage audiences and grow brand awareness.",
       "detailedDescription": {
@@ -838,8 +838,8 @@ export const books: Book[] = [
     {
       "id": 33,
       "title": "Facebook Marketing Influence",
-      "image": "http://localhost:3000/eBook/Facebook-Marketing-Influence/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Facebook-Marketing-Influence/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Business', 'Social media', 'Marketing'],
       "description": "This ebook equips you with essential knowledge to master Facebook marketing and grow your business. It offers clear guidance on using Facebook's advertising tools, strategies to enhance brand visibility, and methods to engage target audiences effectively.",
       "detailedDescription": {
@@ -866,8 +866,8 @@ export const books: Book[] = [
     {
       "id": 34,
       "title": "Validate Business Ideas",
-      "image": "http://localhost:3000/eBook/Validate-Business-Ideas/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Validate-Business-Ideas/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'eCommerce'],
       "description": "This ebook helps you validate your business ideas before you invest too much time and money. It guides them through market research, testing assumptions, and using customer feedback to make smart decisions, ensuring your ideas are ready for success.",
       "detailedDescription": {
@@ -892,8 +892,8 @@ export const books: Book[] = [
     {
       "id": 35,
       "title": "Dropshipping Simplified",
-      "image": "http://localhost:3000/eBook/Dropshipping-Simplified/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Dropshipping-Simplified/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business','eCommerce'],
       "description": "This ebook equips you with essential knowledge on how to start and run a successful dropshipping business. It offers simple, easy-to-follow steps on finding the best dropshipping suppliers, choosing profitable niches, and driving traffic to your online store.",
       "detailedDescription": {
@@ -921,8 +921,8 @@ export const books: Book[] = [
     {
       "id": 36,
       "title": "Essential Business Branding",
-      "image": "http://localhost:3000/eBook/Essential-Business-Branding/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Essential-Business-Branding/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'Marketing'],
       "description": "This ebook equips you with essential strategies to create a powerful business brand. It offers step-by-step guidance on building a brand that resonates with customers and stands out in the market.",
       "detailedDescription": {
@@ -945,8 +945,8 @@ export const books: Book[] = [
     {
       "id": 37,
       "title": "How to Start a Freelance Business",
-      "image": "http://localhost:3000/eBook/How-to-Start-a-Freelance-Business/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/How-to-Start-a-Freelance-Business/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing', 'eCommerce'],
       "description": "This ebook gives you the essential tools to start and grow a successful freelance business. It offers step-by-step guidance on creating a business plan, finding clients, managing time, and overcoming challenges to achieve financial independence and flexibility.",
       "detailedDescription": {
@@ -972,8 +972,8 @@ export const books: Book[] = [
     {
       "id": 38,
       "title": "Power of Advertising",
-      "image": "http://localhost:3000/eBook/Power-of-Advertising/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Power-of-Advertising/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Business', 'Social media', 'Marketing'],
       "description": "This ebook provides you with the knowledge to create effective advertising campaigns that drive business success. It offers guidance on crafting advertisements, writing compelling content, and leveraging free and low-cost advertising methods to attract and retain customers.",
       "detailedDescription": {
@@ -1002,8 +1002,8 @@ export const books: Book[] = [
     {
       "id": 39,
       "title": "AI for Productivity",
-      "image": "http://localhost:3000/eBook/AI-for-Productivity/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/AI-for-Productivity/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business'],
       "description": "This book explains the power of AI to boost productivity in both personal and professional areas, providing a guide for using cutting-edge AI tools to overcome challenges and achieve more in less time.",
       "detailedDescription": {
@@ -1032,8 +1032,8 @@ export const books: Book[] = [
     {
       "id": 40,
       "title": "Powerful Entrepreneur",
-      "image": "http://localhost:3000/eBook/Powerful-Entrepreneur/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Powerful-Entrepreneur/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business'],
       "description": "This ebook is designed to help you grow as entrepreneurs by mastering key traits and strategies for business success. Through step-by-step guidance, readers will learn how to handle risks, seize opportunities, and build strong foundations for your businesses.",
       "detailedDescription": {
@@ -1064,8 +1064,8 @@ export const books: Book[] = [
     {
       "id": 41,
       "title": "Landing Page Persuasion",
-      "image": "http://localhost:3000/eBook/Landing-Page-Persuasion/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Landing-Page-Persuasion/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Business', 'Marketing'],
       "description": "This ebook equips you with the essential skills to create high-converting landing pages that draw attention, build trust, and drive action. Through clear steps, readers learn how to craft compelling headlines, persuasive calls-to-action (CTAs), and powerful body content that not only engages but also converts visitors into customers.",
       "detailedDescription": {
@@ -1090,8 +1090,8 @@ export const books: Book[] = [
     {
       "id": 42,
       "title": "Ecommerce With Shopify",
-      "image": "http://localhost:3000/eBook/Ecommerce-With-Shopify/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Ecommerce-With-Shopify/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Business', 'eCommerce'],
       "description": "This ebook provides you with the knowledge and tools needed to create successful eCommerce stores using Shopify. It offers clear, easy-to-follow instructions for setting up and managing an online store, helping your readers maximize your sales and grow your customer base.",
       "detailedDescription": {
@@ -1117,8 +1117,8 @@ export const books: Book[] = [
     {
       "id": 43,
       "title": "Online Business Freedom",
-      "image": "http://localhost:3000/eBook/Online-Business-Freedom/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Online-Business-Freedom/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business'],
       "description": "This ebook equips you with the essential knowledge to launch and grow a successful online business. It offers clear, step-by-step instructions for finding the right business model, scaling operations, and achieving financial freedom. Readers will learn how to promote your business using Google and Facebook ads, collaborations, and other marketing strategies.",
       "detailedDescription": {
@@ -1143,8 +1143,8 @@ export const books: Book[] = [
     {
       "id": 44,
       "title": "How To Become a Successful Influencer",
-      "image": "http://localhost:3000/eBook/How-to-Become-Successful-Influencer/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/How-to-Become-Successful-Influencer/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing'],
       "description": "This ebook equips you with the knowledge and tools to become successful influencers in your chosen niche. It offers clear guidance for building a strong online presence, creating engaging content, and connecting with brands to monetize your influence.",
       "detailedDescription": {
@@ -1168,8 +1168,8 @@ export const books: Book[] = [
     {
       "id": 45,
       "title": "Long-Form Content Mastery",
-      "image": "http://localhost:3000/eBook/Long-Form-Content-Mastery/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Long-Form-Content-Mastery/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing'],
       "description": "This ebook teaches you how to master the art of creating long-form content that attracts more traffic, engages readers, and converts them into loyal customers. It offers easy-to-follow strategies for planning, writing, and optimizing long-form articles, helping businesses stand out online and boost your success.",
       "detailedDescription": {
@@ -1194,8 +1194,8 @@ export const books: Book[] = [
     {
       "id": 46,
       "title": "Etsy Tips and Tricks",
-      "image": "http://localhost:3000/eBook/Etsy-Tips-and-Tricks/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Etsy-Tips-and-Tricks/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing', 'eCommerce'],
       "description": "This ebook provides you with practical steps to grow a successful Etsy business. It covers essential tips for choosing the right products, improving product listings, and leveraging SEO and social media to boost sales and customer engagement.",
       "detailedDescription": {
@@ -1221,8 +1221,8 @@ export const books: Book[] = [
     {
       "id": 47,
       "title": "Designing a Profitable Business Model",
-      "image": "http://localhost:3000/eBook/Designing-a-Profitable-Business-Model/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Designing-a-Profitable-Business-Model/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business'],
       "description": "This ebook helps you master the art of designing a profitable business model, focusing on creating value and optimizing resources for growth. It provides easy-to-follow strategies for identifying lucrative revenue streams, developing compelling value propositions, and managing resources effectively, allowing businesses to build sustainable and scalable models.",
       "detailedDescription": {
@@ -1247,8 +1247,8 @@ export const books: Book[] = [
     {
       "id": 48,
       "title": "Automation in Small Businesses",
-      "image": "http://localhost:3000/eBook/Automation-in-Small-Businesses/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Automation-in-Small-Businesses/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Entrepreneurship', 'Business'],
       "description": "This ebook helps you understand the power of automation and how it can transform small businesses by saving time and reducing costs. It provides easy-to-follow strategies for automating everyday tasks, making business operations more efficient and allowing you to focus on growth.",
       "detailedDescription": {
@@ -1273,8 +1273,8 @@ export const books: Book[] = [
     {
       "id": 49,
       "title": "AdSense Mastery",
-      "image": "http://localhost:3000/eBook/AdSense-Mastery/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/AdSense-Mastery/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": ['Business', 'Marketing'],
       "description": "This ebook gives you the tools to successfully use Google AdSense to monetize your websites. It provides step-by-step guidance on setting up AdSense, strategically placing ads, and maximizing revenue, helping them generate passive income and build a profitable online business.",
       "detailedDescription": {
@@ -1299,8 +1299,8 @@ export const books: Book[] = [
     {
       "id": 50,
       "title": "Instagram Ads Success",
-      "image": "http://localhost:3000/eBook/Instagram-Ads-Success/cover.jpg",
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      "image": "eBook/Instagram-Ads-Success/cover.jpg",
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       "tags": [ 'Business', 'Social media', 'Marketing'],
       "description": "This ebook equips you with the tools to run successful Instagram ad campaigns, helping them reach your target audience and boost your brand. It provides step-by-step instructions for creating engaging ads, setting goals, and optimizing campaigns to grow your business.",
       "detailedDescription": {
@@ -1325,8 +1325,8 @@ export const books: Book[] = [
     {
       id: 11,
       title: 'Understanding Business Metrics',
-      image: 'http://localhost:3000/eBook/Understanding-Business-Metrics/cover.jpg',
-      download: 'http://localhost:3000/eBook/Marketing-Plan-Simplified/book.pdf',
+      image: 'eBook/Understanding-Business-Metrics/cover.jpg',
+      download: 'eBook/Marketing-Plan-Simplified/book.pdf',
       tags: ['Entrepreneurship', 'Business'],
       description: 'This ebook teaches you how to master business metrics to make better decisions, track success, and grow your business. It offers easy-to-follow strategies for selecting and analyzing key metrics, using data to solve problems, and building a metrics-driven approach to scale effectively.',
       detailedDescription: {

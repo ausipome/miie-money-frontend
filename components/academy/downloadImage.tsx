@@ -1,56 +1,62 @@
-import AWS from 'aws-sdk';
-import { useEffect } from 'react';
-import { Book } from "@/types";
+import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import { useEffect, useState } from "react";
 
 interface AutoDownloadImageProps {
-  book: Book;
+  imageKey: string;
 }
 
-const AutoDownloadImage: React.FC<AutoDownloadImageProps> = ({ book }) => {
+const AutoDownloadImage: React.FC<AutoDownloadImageProps> = ({ imageKey }) => {
+  const [imageUrl, setImageUrl] = useState<string>("");
+
   useEffect(() => {
-    const downloadImage = async () => {
+    const fetchImage = async () => {
+      const s3 = new S3Client({
+        region: process.env.NEXT_PUBLIC_AWS_REGION,
+      });
+
+      const params = {
+        Bucket: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME || '',
+        Key: imageKey,
+      };
+
       try {
-        const s3 = new AWS.S3({
-            region: process.env.NEXT_PUBLIC_AWS_REGION,
-            accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID || 'your-access-key-id',
-            secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY || 'your-secret-access-key',
-            // Other AWS configuration might be necessary depending on your setup
-          });
+        const command = new GetObjectCommand(params);
+        const { Body } = await s3.send(command);
 
-        const params = {
-          Bucket: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME || '',
-          Key: book.download,
-        };
+        if (Body instanceof ReadableStream) {
+          const reader = Body.getReader();
+          const chunks: Uint8Array[] = [];
 
-        const data = await s3.getObject(params).promise();
+          const processText = async (): Promise<void> => {
+            const { done, value } = await reader.read();
+            if (done) {
+              const blob = new Blob(chunks); // Combine all chunks into a blob
+              const url = window.URL.createObjectURL(blob);
+              setImageUrl(url);
+              return;
+            }
+            if (value) {
+              chunks.push(value);
+            }
+            return processText(); // Recursively read the next chunk
+          };
 
-        if (data.Body) {
-          const url = window.URL.createObjectURL(new Blob([data.Body as Buffer]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', params.Key.split('/').pop() || 'default_filename'); // Use the file name from the key as the download name
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+          processText();
         } else {
-          console.error('No data returned from S3');
-          alert('Download failed. Please try again later.');
+          console.error('No data returned from S3 or the Body is not a ReadableStream');
         }
       } catch (err) {
-        console.error(err);
-        alert('Download failed. Please try again later.');
+        console.error('Error fetching image from S3:', err);
       }
     };
 
-    if (book && book.download) {
-      downloadImage();
-    }
-  }, [book]); // Dependency array includes book to react to changes
+    fetchImage();
+  }, [imageKey]);
 
-  // This component can still show the image if needed
   return (
-    <img src={book.image} alt={book.title} style={{ aspectRatio: '0.773' }} className="w-full object-cover" />
+    <img src={imageUrl} alt="Downloaded from S3" style={{ aspectRatio: '0.773' }} className="w-full object-cover" />
   );
 };
 
 export default AutoDownloadImage;
+

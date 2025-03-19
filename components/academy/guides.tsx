@@ -4,8 +4,8 @@ export const guides: Book[] = [
     {
         "id": 1,
         "title": "How to Build a Website",
-        "image": "http://localhost:3000/guides/How-to-Build-a-Website/cover.jpg",
-        download: 'http://localhost:3000/guides/How-to-Build-a-Website/guide.zip',
+        "image": "guides/How-to-Build-a-Website/cover.jpg",
+        download: 'guides/How-to-Build-a-Website/guide.zip',
         "tags": ['Entrepreneurship', 'Business','eCommerce'],
         "description": "This guide helps you create and optimize professional websites by offering step-by-step instructions on planning, designing, and launching a fully functional site. It provides a structured approach to building an engaging online presence, ensuring every essential element is in place for success.",
         "detailedDescription": {
@@ -30,8 +30,8 @@ export const guides: Book[] = [
       {
         "id": 2,
         "title": "Marketing Plan Simplified",
-        "image": "http://localhost:3000/guides/Marketing-Plan-Simplified/cover.jpg",
-        download: 'http://localhost:3000/guides/Marketing-Plan-Simplified/guide.pdf',
+        "image": "guides/Marketing-Plan-Simplified/cover.jpg",
+        download: 'guides/Marketing-Plan-Simplified/guide.pdf',
         "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing'],
         "description": "This guide helps you build a strong marketing plan with easy steps for identifying your ideal customers, setting clear goals, and creating a consistent brand voice. It offers a roadmap to help them simplify your marketing strategy and connect with your audience effectively.",
         "detailedDescription": {
@@ -58,8 +58,8 @@ export const guides: Book[] = [
       {
         "id": 3,
         "title": "Your Business Plan Playbook",
-        "image": "http://localhost:3000/guides/Your-Business-Plan-Playbook/cover.jpg",
-        download: 'http://localhost:3000/guides/Your-Business-Plan-Playbook/guide.pdf',
+        "image": "guides/Your-Business-Plan-Playbook/cover.jpg",
+        download: 'guides/Your-Business-Plan-Playbook/guide.pdf',
         "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing', 'eCommerce'],
         "description": "This guide helps you develop focused and effective business strategies with actionable steps for planning, implementation, and growth. It simplifies complex planning processes, giving them the tools to build clear, results-driven strategies for long-term success.",
         "detailedDescription": {
@@ -85,8 +85,8 @@ export const guides: Book[] = [
       {
         "id": 4,
         "title": "Faceless Creator",
-        "image": "http://localhost:3000/guides/Faceless-Creator/cover.jpg",
-        download: 'http://localhost:3000/guides/Faceless-Creator/guide.pdf',
+        "image": "guides/Faceless-Creator/cover.jpg",
+        download: 'guides/Faceless-Creator/guide.pdf',
         "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing', 'eCommerce'],
         "description": "This guide helps you build a successful faceless brand by offering clear steps for developing trust, automating processes, and creating a strong, anonymous business. It provides practical strategies to help them grow your business without relying on personal branding.",
         "detailedDescription": {
@@ -111,8 +111,8 @@ export const guides: Book[] = [
       {
         "id": 5,
         "title": "High-Ticket Affiliate Marketing",
-        "image": "http://localhost:3000/guides/High-Ticket-Affiliate-Marketing/cover.jpg",
-        download: 'http://localhost:3000/guides/High-Ticket-Affiliate-Marketing/guide.zip',
+        "image": "guides/High-Ticket-Affiliate-Marketing/cover.jpg",
+        download: 'guides/High-Ticket-Affiliate-Marketing/guide.zip',
         "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing', 'eCommerce'],
         "description": "This guide helps you build and refine profitable high-ticket affiliate marketing businesses by providing clear, actionable steps for selecting programs, building authority, and optimizing sales funnels. It offers a strategic roadmap to attract premium buyers, maximize commissions, and create a scalable, long-term business.",
         "detailedDescription": {
@@ -137,8 +137,8 @@ export const guides: Book[] = [
       {
         "id": 6,
         "title": "Personal Branding Expertise",
-        "image": "http://localhost:3000/guides/Personal-Branding-Expertise/cover.jpg",
-        download: 'http://localhost:3000/guides/Personal-Branding-Expertise/guide.pdf',
+        "image": "guides/Personal-Branding-Expertise/cover.jpg",
+        download: 'guides/Personal-Branding-Expertise/guide.pdf',
         "tags": ['Entrepreneurship', 'Business'],
         "description": "This guide helps you create and grow a powerful personal brand by offering clear, actionable steps for defining your unique value, creating engaging content, and building credibility in your industry. It provides a strategic roadmap to help entrepreneurs stand out, attract new opportunities, and establish themselves as trusted thought leaders.",
         "detailedDescription": {
@@ -163,8 +163,8 @@ export const guides: Book[] = [
       {
         "id": 7,
         "title": "Creating Focus Environment",
-        "image": "http://localhost:3000/guides/Creating-Focus-Environmet/cover.jpg",
-        download: 'http://localhost:3000/guides/Creating-Focus-Environmet/guide.pdf',
+        "image": "guides/Creating-Focus-Environmet/cover.jpg",
+        download: 'guides/Creating-Focus-Environmet/guide.pdf',
         "tags": ['Entrepreneurship', 'Business'],
         "description": "This guide helps you create a workspace that improves focus, reduces distractions, and boosts productivity. It provides step-by-step strategies for organizing a workspace, managing noise and lighting, and incorporating natural elements to support better concentration and efficiency.",
         "detailedDescription": {
@@ -190,8 +190,8 @@ export const guides: Book[] = [
       {
         "id": 8,
         "title": "Build Positive Digital Presence",
-        "image": "http://localhost:3000/guides/Build-Positive-Digital-Presence/cover.jpg",
-        download: 'http://localhost:3000/guides/Build-Positive-Digital-Presence/guide.pdf',
+        "image": "guides/Build-Positive-Digital-Presence/cover.jpg",
+        download: 'guides/Build-Positive-Digital-Presence/guide.pdf',
         "tags": ['Entrepreneurship', 'Business', 'Social media', 'Marketing', 'eCommerce'],
         "description": "This guide helps you build a strong digital presence and manage your online reputation with practical, step-by-step strategies. From establishing a consistent brand persona to engaging with social media and handling customer reviews, this guide offers actionable advice to help businesses grow trust and protect your brand image.",
         "detailedDescription": {
