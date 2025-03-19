@@ -1,3 +1,4 @@
+// This component downloads an image from S3 and displays it in the browser.
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { useEffect, useState } from "react";
 
