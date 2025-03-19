@@ -65,7 +65,7 @@ export default function LandingPage() {
           </p>
           <div className="space-x-4">
             <Link href="/signup">
-              <button className="px-6 py-3 text-lg font-semibold bg-white text-blue-500 rounded-full shadow hover:bg-blue-100 mt-8">
+              <button className="px-6 py-3 text-lg font-semibold bg-white text-blue-700 rounded-full shadow hover:bg-blue-100 mt-8">
                 Sign Up
               </button>
             </Link>
@@ -129,7 +129,7 @@ export default function LandingPage() {
           </motion.ul>
           <motion.div className="space-x-4">
             <Link href="/signup">
-              <motion.button className="px-6 py-3 text-lg font-semibold bg-white text-blue-500 rounded-full shadow hover:bg-blue-100 mt-8">
+              <motion.button className="px-6 py-3 text-lg font-semibold bg-white text-blue-700 rounded-full shadow hover:bg-blue-100 mt-8">
                 Sign Up
               </motion.button>
             </Link>
@@ -147,9 +147,132 @@ export default function LandingPage() {
       </div>
     </section>
 
+{/* Business Academy Section */}
+<section className="py-16 bg-white text-center">
+  <motion.div
+    className="max-w-[80%] mx-auto px-6"
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, amount: 0.3 }}
+    variants={staggerContainer}
+  >
+    <motion.h2
+      className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6"
+      variants={textItem}
+    >
+      Unlock Your Online Business Potential
+    </motion.h2>
+    <motion.p
+      className="text-xl md:text-2xl font-light mb-6"
+      variants={textItem}
+    >
+      Explore our extensive library of eBooks, audio courses, and step-by-step video guides designed to help you master ecommerce, marketing, branding, and more.
+    </motion.p>
+    <motion.div
+      className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start"
+      variants={staggerContainer}
+    >
+      <motion.div className="bg-blue-100 p-6 rounded-lg shadow-lg" variants={boxVariants}>
+        <h3 className="text-2xl font-bold mb-4">Ecommerce & Affiliate Marketing</h3>
+        <p className="text-lg">
+          Dive into the world of online sales and learn the secrets of successful affiliate marketing directly from seasoned experts.
+        </p>
+      </motion.div>
+      <motion.div className="bg-purple-100 p-6 rounded-lg shadow-lg" variants={boxVariants}>
+        <h3 className="text-2xl font-bold mb-4">Marketing & Social Media</h3>
+        <p className="text-lg">
+          Boost your visibility and engagement through powerful marketing strategies and social media insights.
+        </p>
+      </motion.div>
+      <motion.div className="bg-green-100 p-6 rounded-lg shadow-lg" variants={boxVariants}>
+        <h3 className="text-2xl font-bold mb-4">Branding & Faceless Business</h3>
+        <p className="text-lg">
+          Build a distinctive brand and learn how to operate a faceless creator model effectively.
+        </p>
+      </motion.div>
+    </motion.div>
+    <motion.div className="mt-8">
+      <Link href="/learn">
+        <motion.button
+          className="px-6 py-3 bg-blue-500 text-white rounded-full font-semibold shadow hover:bg-blue-600 transition-colors duration-300"
+          variants={textItem}
+        >
+          Start Learning Today
+        </motion.button>
+      </Link>
+    </motion.div>
+  </motion.div>
+</section>
 
-              {/* About Section */}
-        <section className="py-16 bg-gray-100 text-center">
+
+      {/* AI-Powered Demo Section */}
+<section className="py-16 bg-gradient-to-r from-gray-900 to-gray-700 text-white relative overflow-hidden">
+  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-gray-800 opacity-20 pointer-events-none"></div>
+  <div className="max-w-full 2xl:max-w-[80%] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 lg:gap-10 h-full flex items-center justify-center">
+    {/* Left Side: AI-Powered Demo Component */}
+    <div className="flex justify-center mt-10 lg:mt-0 text-black mb-10">
+      <div className="w-full relative overflow-hidden">
+        <div className="relative z-10">
+          <LinkBuilderDemo />
+        </div>
+      </div>
+    </div>
+
+    {/* Right Side: Description */}
+    <motion.div
+      className="bg-gradient-to-br from-gray-800 to-gray-900 p-10 rounded-lg shadow-lg flex flex-col justify-between"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={staggerContainer}
+      style={{ height: 'fit-content' }}
+    >
+      <motion.h2
+        className="text-4xl md:text-5xl font-extrabold leading-tight drop-shadow-md"
+        variants={textItem}
+      >
+        Save Time and Elevate Your Communication with AI
+      </motion.h2>
+      <motion.p
+        className="mt-6 text-lg font-light"
+        variants={textItem}
+      >
+        Harness the power of AI to generate payment links and communications that are not only professional but also personalized for your customers. Let AI handle the tedious details, so you can focus on running your business.
+      </motion.p>
+      <motion.h3
+        className="mt-10 text-2xl font-semibold text-blue-300"
+        variants={textItem}
+      >
+        Why Choose AI-Powered Solutions?
+      </motion.h3>
+      <motion.ul
+        className="mt-6 space-y-2 text-lg"
+        variants={staggerContainer}
+      >
+        {[
+          'Save valuable time by automating repetitive tasks.',
+          'Ensure consistent and professional messaging.',
+          'Improve customer satisfaction with tailored communication.',
+          'Boost your brand image with polished and error-free interactions.',
+        ].map((benefit, index) => (
+          <motion.li key={index} variants={textItem}>
+            {benefit}
+          </motion.li>
+        ))}
+      </motion.ul>
+      <motion.div className="space-x-4">
+            <Link href="/signup">
+              <motion.button className="px-6 py-3 text-lg font-semibold bg-white text-blue-700 rounded-full shadow hover:bg-blue-100 mt-8">
+                Sign Up
+              </motion.button>
+            </Link>
+          </motion.div>
+    </motion.div>
+  </div>
+</section>
+
+{/* About Section */}
+<section className="py-16 bg-gray-100 text-center">
         <motion.h2
           className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-12"
           initial="hidden"
@@ -218,72 +341,6 @@ export default function LandingPage() {
           </motion.div>
         </motion.div>
       </section>
-
-      {/* AI-Powered Demo Section */}
-<section className="py-16 bg-gradient-to-r from-gray-900 to-gray-700 text-white relative overflow-hidden">
-  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-gray-800 opacity-20 pointer-events-none"></div>
-  <div className="max-w-full 2xl:max-w-[80%] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 lg:gap-10 h-full flex items-center justify-center">
-    {/* Left Side: AI-Powered Demo Component */}
-    <div className="flex justify-center mt-10 lg:mt-0 text-black mb-10">
-      <div className="w-full relative overflow-hidden">
-        <div className="relative z-10">
-          <LinkBuilderDemo />
-        </div>
-      </div>
-    </div>
-
-    {/* Right Side: Description */}
-    <motion.div
-      className="bg-gradient-to-br from-gray-800 to-gray-900 p-10 rounded-lg shadow-lg flex flex-col justify-between"
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
-      variants={staggerContainer}
-      style={{ height: 'fit-content' }}
-    >
-      <motion.h2
-        className="text-4xl md:text-5xl font-extrabold leading-tight drop-shadow-md"
-        variants={textItem}
-      >
-        Save Time and Elevate Your Communication with AI
-      </motion.h2>
-      <motion.p
-        className="mt-6 text-lg font-light"
-        variants={textItem}
-      >
-        Harness the power of AI to generate payment links and communications that are not only professional but also personalized for your customers. Let AI handle the tedious details, so you can focus on running your business.
-      </motion.p>
-      <motion.h3
-        className="mt-10 text-2xl font-semibold text-blue-300"
-        variants={textItem}
-      >
-        Why Choose AI-Powered Solutions?
-      </motion.h3>
-      <motion.ul
-        className="mt-6 space-y-2 text-lg"
-        variants={staggerContainer}
-      >
-        {[
-          'Save valuable time by automating repetitive tasks.',
-          'Ensure consistent and professional messaging.',
-          'Improve customer satisfaction with tailored communication.',
-          'Boost your brand image with polished and error-free interactions.',
-        ].map((benefit, index) => (
-          <motion.li key={index} variants={textItem}>
-            {benefit}
-          </motion.li>
-        ))}
-      </motion.ul>
-      <motion.div className="space-x-4">
-            <Link href="/signup">
-              <motion.button className="px-6 py-3 text-lg font-semibold bg-white text-blue-500 rounded-full shadow hover:bg-blue-100 mt-8">
-                Sign Up
-              </motion.button>
-            </Link>
-          </motion.div>
-    </motion.div>
-  </div>
-</section>
 
 {/* Community Subscription Section */}
 <section className="py-16 bg-gradient-to-r from-teal-600 to-green-500 text-white relative overflow-hidden">

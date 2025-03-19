@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import StripeSubscriptionCheckout from '@/components/gpotw/subscriptions/SecureSubscription';
 import Cookies from 'js-cookie';
+import Link from 'next/link';
 
 // Define a type for the expected session data
 interface SessionData {
@@ -78,11 +79,14 @@ const SubscriptionReceipt: React.FC = () => {
       );
     } else if (session.session_status === 'complete') {
       return (
-        <div>
-          <h1>Payment Successful!</h1>
-          <p>Thank you for your purchase, {session.customer_name}.</p>
-          <p>Your email: {session.customer_email}</p>
-        </div>
+        <div className="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-4 rounded-md shadow-md my-2 text-xl w-3/4 mx-auto text-center mt-6">
+       <h1>Payment Successful!</h1>
+       <p>Thank you for your purchase, {session.customer_name}.</p>
+       <p>You are now welcome to explore our full resources at the <Link href="/academy" className="text-pink-200 underline">Business Academy</Link></p>
+    </div>
+
+
+        
       );
     }
   }

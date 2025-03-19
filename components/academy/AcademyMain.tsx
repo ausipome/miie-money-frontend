@@ -54,6 +54,8 @@ export default function Library() {
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [booksDisplayed, setBooksDisplayed] = useState<number>(8);
 
+  console.log(subscription?.status);
+
   const subscribed = subscription && (subscription.status === 'active'  || subscription.status === 'complete' || subscription.status === 'life');
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -190,10 +192,11 @@ export default function Library() {
         </div>
       )}
 
-        <div className="bg-gradient-to-r from-blue-900 to-blue-700 py-8 px-4 w-full pt-12"> 
+        <div className="bg-gradient-to-r from-blue-950 to-blue-600 py-8 px-4 w-full pt-12"> 
           <div className="flex flex-col items-center space-y-4 max-w-6xl mx-auto border-b-1 pb-6">
             <h2 className="text-2xl font-semibold text-black bg-white px-4 py-2 rounded-full">eBooks</h2> 
           </div>
+          <p className="text-lg text-white mb-6 leading-relaxed text-center text-xl">Explore our collection of eBooks designed to help you succeed in the online business world.</p>
           <div className="flex flex-col items-center space-y-4 max-w-6xl mx-auto border-b-1 pb-6 mt-6"> 
             <input
               type="text"
@@ -244,11 +247,13 @@ export default function Library() {
           )}
         </div>
 
-        {/* Courses Section */}
-        <div className="bg-gradient-to-r from-teal-600 to-green-500 py-8 px-4 w-full pt-12">
-          <div className="flex flex-col items-center space-y-4 max-w-6xl mx-auto border-b-1 pb-6">
-            <h2 className="text-2xl font-semibold text-black bg-white px-4 py-2 rounded-full">Courses</h2>
+        <div className="flex flex-col items-center space-y-4 max-w-6xl mx-auto border-b-1 mt-10">
+            <h2 className="text-4xl font-semibold text-black bg-white px-4 py-2 rounded-full">Courses</h2>
           </div>
+          <p className="text-xl text-black mb-6 leading-relaxed text-center">Discover our audio and video courses to enhance your online business skills.</p>
+
+        {/* Courses Section */}
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 py-8 px-4 w-full pt-12 mt-4">
           <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-12 gap-y-6 mt-6 lg:w-5/6 mx-auto`}>
             {courses.map(course => (
               <AnimatedItem key={course.id}>
@@ -264,11 +269,13 @@ export default function Library() {
           </div>
         </div>
 
-        {/* Guides Section */}
-        <div className="bg-gradient-to-r from-gray-700 to-gray-500 py-8 px-4 w-full pt-12">
-          <div className="flex flex-col items-center space-y-4 max-w-6xl mx-auto border-b-1 pb-6">
-            <h2 className="text-2xl font-semibold text-black bg-white px-4 py-2 rounded-full">Guides</h2>
+        <div className="flex flex-col items-center space-y-4 max-w-6xl mx-auto border-b-1 mt-10">
+            <h2 className="text-4xl font-semibold text-black bg-white px-4 py-2 rounded-full">Guides</h2>
           </div>
+          <p className="text-xl text-black mb-6 leading-relaxed text-center">Browse our comprehensive guides to master the essentials of online business.</p>
+
+        {/* Guides Section */}
+        <div className="bg-gradient-to-r from-gray-900 to-gray-700 py-8 px-4 w-full pt-12 mt-4">
           <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-12 gap-y-6 mt-6 lg:w-5/6 mx-auto`}>
             {guides.map(guide => (
               <AnimatedItem key={guide.id}>

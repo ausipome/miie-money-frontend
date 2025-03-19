@@ -31,7 +31,7 @@ export default function Learn() {
      } else {
        return (
          <div>
-           <p className="text-lg md:text-4xl font-bold mb-6 text-pink-300">
+           <p className="text-lg md:text-4xl font-bold mb-6 text-red-700">
              Offer ends in {days} days, {hours} hours, {minutes} minutes, and {seconds} seconds.
            </p>
          </div>
@@ -69,7 +69,7 @@ export default function Learn() {
     </p>
     {isClient && <CountdownTimer endDate="2025-03-30" />}
     <Link href="/signup">
-          <button className="px-6 py-3 text-lg font-semibold bg-white text-blue-500 rounded-full shadow hover:bg-blue-100">
+          <button className="px-6 py-3 text-lg font-semibold bg-white text-blue-700 rounded-full shadow hover:bg-blue-100">
             Sign Up
           </button>
     </Link>

@@ -123,6 +123,17 @@ export default function AccountMain() {
 
     return (
         <>
+
+        <div className="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-4 rounded-md shadow-md my-2 text-xl w-3/4 mx-auto">
+                <p className="text-center">
+                    Enhance your business skills by visiting our new Business Academy. <br />
+                    Please visit the link below to access valuable resources and courses. <br />
+                    <Link href="/academy" className="text-pink-200 underline">
+                        Business Academy
+                    </Link>
+                </p>
+            </div>
+
             {stripeAccountId && disabled && (
                 <div className="bg-orange-500 text-white p-4 rounded-md shadow-md my-2 text-xl w-3/4 mx-auto">
                     <p className="text-center">
