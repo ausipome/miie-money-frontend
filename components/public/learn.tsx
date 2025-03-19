@@ -47,14 +47,28 @@ export default function Learn() {
    setModalOpen(true);
  };
 
- const handleDownloadClick = () => {
+ const handleDownloadClick = async () => {
    if (selectedBook) {
-     const link = document.createElement('a');
-     link.href = selectedBook.download;
-     link.download = selectedBook.title; // Optional: Set the download attribute to suggest a filename
-     document.body.appendChild(link);
-     link.click();
-     document.body.removeChild(link);
+     
+    const fileResponse = await fetch(selectedBook.download, {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    if (!fileResponse.ok) {
+      alert('Failed to download the file. Please try again later.');
+      return;
+    }
+
+    const blob = await fileResponse.blob();
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = selectedBook.title; // Optional: Set the download attribute to suggest a filename
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+
    }
  };
 
