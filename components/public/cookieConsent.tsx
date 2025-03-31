@@ -14,12 +14,12 @@ export default function CookieConsent() {
   }, []);
 
   const handleAccept = () => {
-    Cookies.set('cookieConsent', 'accepted all', { expires: 365 }); // Expires in 1 year
+    Cookies.set('cookieConsent', 'Accept All', { expires: 365 }); // Expires in 1 year
     setIsVisible(false);
   };
 
   const handleDecline = () => {
-    Cookies.set('cookieConsent', 'accepted essential', { expires: 365 }); // Expires in 1 year
+    Cookies.set('cookieConsent', 'Decline Non-essential', { expires: 365 }); // Expires in 1 year
     setIsVisible(false);
   };
 
