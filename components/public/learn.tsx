@@ -72,6 +72,7 @@ export default function Learn() {
        <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-12 gap-y-6 mt-6 lg:w-5/6 mx-auto`}>
          {guides.map(guide => (
            <motion.div
+             key={guide.id}
              className="cursor-pointer transform transition duration-500 hover:scale-105 shadow-lg rounded-lg overflow-hidden"
              onClick={() => openModal(guide)}
              whileHover={{ scale: 1.05 }}
