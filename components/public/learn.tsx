@@ -6,41 +6,15 @@ import CustomSubscriptionForm from "@/components/public/subscribe";
 import { Modal, ModalContent, ModalBody, ModalFooter } from '@nextui-org/modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { byPrefixAndName } from '@awesome.me/kit-515ba5c52c/icons';
-import Countdown from 'react-countdown';
 import { guides } from '@/components/academy/guides';
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Book } from "@/types";
 
 export default function Learn() {
 
  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
  const [isModalOpen, setModalOpen] = useState<boolean>(false);
- const [isClient, setIsClient] = useState(false);
-
- useEffect(() => {
-   setIsClient(true);
- }, []);
-
- const Completionist = () => <span>This offer has now expired!</span>;
-
- const CountdownTimer = ({ endDate }: { endDate: string }) => {
-   const countdownRenderer = ({ days, hours, minutes, seconds, completed }: { days: number, hours: number, minutes: number, seconds: number, completed: boolean }) => {
-     if (completed) {
-       return <Completionist />;
-     } else {
-       return (
-         <div>
-           <p className="text-lg md:text-4xl font-bold mb-6 text-red-700">
-             Offer ends in {days} days, {hours} hours, {minutes} minutes, and {seconds} seconds.
-           </p>
-         </div>
-       );
-     }
-   };
-
-   return <Countdown date={new Date(endDate)} renderer={countdownRenderer} />;
- };
 
  const openModal = (book: Book) => {
    setSelectedBook(book);
@@ -77,11 +51,11 @@ export default function Learn() {
     {/* Header Section */}
 <section className="text-center bg-gradient-to-r from-blue-800 to-blue-500 text-white py-12 mt-6">
   <div className="md:w-2/3 sm:w-full m-auto">
-    <p className="text-2xl md:text-4xl font-semibold mb-6 text-yellow-300">Academy Launches March 31</p>
+    <p className="text-2xl md:text-4xl font-semibold mb-6 text-yellow-300">Join the Academy</p>
     <p className="text-lg md:text-2xl font-light mb-6">
-      Sign up now and receive instant lifetime access to our entire content library for free. Offer ends March 30, 2025.
+      Sign up now and receive instant access to our entire content library FREE, for 1 month.
     </p>
-    {isClient && <CountdownTimer endDate="2025-03-30" />}
+   
     <Link href="/signup">
           <button className="px-6 py-3 text-lg font-semibold bg-white text-blue-700 rounded-full shadow hover:bg-blue-100">
             Sign Up
