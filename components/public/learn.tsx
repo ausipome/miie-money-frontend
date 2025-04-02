@@ -69,18 +69,18 @@ export default function Learn() {
        <h2 className="text-2xl text-white px-4 py-2 w-full text-center">
     Here are a selection of free guide books to start you on your journey. Our library is full of resources to help you start and grow your online business.
   </h2>
-        <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-12 gap-y-6 mt-6 lg:w-5/6 mx-auto`}>
-        {guides.map((guide, index) => (
-          <motion.div
-            key={index} // Add key prop here
-            className="cursor-pointer transform transition duration-500 hover:scale-105 shadow-lg rounded-lg overflow-hidden"
-            onClick={() => openModal(guide)}
-            whileHover={{ scale: 1.05 }}
-          >
-            <img src={guide.image} alt={guide.title} style={{ aspectRatio: '0.773' }} className="w-full object-cover" />
-          </motion.div>
-        ))}
-      </div>
+       <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-12 gap-y-6 mt-6 lg:w-5/6 mx-auto`}>
+         {guides.map(guide => (
+           <motion.div
+             key={guide.id}
+             className="cursor-pointer transform transition duration-500 hover:scale-105 shadow-lg rounded-lg overflow-hidden"
+             onClick={() => openModal(guide)}
+             whileHover={{ scale: 1.05 }}
+           >
+             <img src={guide.image} alt={guide.title} style={{ aspectRatio: '0.773' }} className="w-full object-cover" />
+           </motion.div>
+         ))}
+       </div>
      </div>
 
      {/* Community Subscription Section */}
