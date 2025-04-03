@@ -53,7 +53,7 @@ export default function Library() {
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [booksDisplayed, setBooksDisplayed] = useState<number>(8);
 
-  const subscribed = subscription && (subscription.status === 'active'  || subscription.status === 'complete' || subscription.status === 'life');
+  const subscribed = subscription && (subscription.status === 'active'  || subscription.status === 'complete' || subscription.status === 'life' || subscription.status === 'trialing');
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value.toLowerCase();
